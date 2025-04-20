@@ -80,24 +80,44 @@ class pySimpleVoiceRecognition():
             if term in self.audio_data:
                 return True
 
+    @classmethod
+    def only_exist(self, term:str) -> bool:
+        """
+        Verify the existence of a term in the list
+        """   
+        if term.lower() == self.audio_data.lower():
+            return True
+            
+    @classmethod
+    def assitent_call(self) -> bool:
+        """
+        Verify for assistent call.
+        """
+        if self.only_exist("lucas"):
+            print("::Call Accepted")
+            return True
+        
+        else:
+            return False
+
     @classmethod      
     def action(self) -> bool:
         """
         Verify the audio recognized and return true in case of understand
         """
-        if self.exist(terms=["clipe", "clip"]) and self.exist(terms=["sofia", "guria"]):
+        if self.exist(terms=["clipe", "clip"]):# and self.exist(terms=["lucas"]):
             print(">> Ok, making clip\n")
             #self.response("Ok, making a clip")
 
             return True
         
-        if self.exist(terms=["clipe", "clip"]) and not self.exist(terms=["sofia", "guria"]):
+        if self.exist(terms=["clipe", "clip"]):# and not self.exist(terms=["lucas"]):
             print(">> Sorry, I don't understand what you said\n")
             #self.response("Sorry, I don't understand what you said")
 
             return False
         
-        if not self.exist(["clipe", "clip"]) and self.exist(["sofia", "guria"]):
+        if not self.exist(["clipe", "clip"]):# and self.exist(["lucas"]):
             print(">> Sorry, I don't understand what you said\n")
             #self.response("Sorry, I don't understand what you said")
             

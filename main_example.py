@@ -35,7 +35,7 @@ while True:
 
     api = TwitchClipAPI(client_id, token)
 
-    user_info = api.users_info(['DannyJones'])
+    user_info = api.users_info(['ojoojao'])
     broadcaster_id = user_info[0]["id"]
     sender_id = "459116718"
     print("Getting user id")
@@ -46,21 +46,34 @@ while True:
         # Read voice
         rec = pySimpleVoiceRecognition.rec()
         print("::rec")
-        # Get response
-        result = pySimpleVoiceRecognition.action()
+        # Criar uma logica para ver se qro fazer um clipe só quando chamar ela
+        # Será um metodo que gera um resultado e dependo do resultado ele faz o resto
+        # O metodo deve ver se chamei o nome da assistente e somente ele
 
-        # Logica para se em determinado tempo não sair desse loop, verificar o token novamente
-    
-        # Break loop
-        if result == True:
-            msg = "Make a clip"     
-            break
-        else:
-            api.send_chat_message(broadcaster_id, sender_id, "Tá querendo um clipe e não ta sabendo pedir")
+        # Ver como esta saindo a leitura do lucas para melhorar a chamada
+        calling = pySimpleVoiceRecognition.assitent_call()
+
+        if calling:
+            api.send_chat_message(broadcaster_id, sender_id, "Oi, me chamou?")
+
+            rec = pySimpleVoiceRecognition.rec()
+            print("::rec")
+            # Get response
+            result = pySimpleVoiceRecognition.action()
+
+            # Logica para se em determinado tempo não sair desse loop, verificar o token novamente
+            
+            # Break loop
+            if result == True:
+                msg = "Make a clip"     
+                break
+            else:
+                api.send_chat_message(broadcaster_id, sender_id, "Tá querendo um clipe e não ta sabendo pedir")
 
     api.send_chat_message(broadcaster_id, sender_id, "Criando clipe...")
     print("Criando clipe...")
 
+    # Talvez botar um delay
     created_clip_info = api.create_clip(broadcaster_id)
     clip_id = created_clip_info["id"]
 
