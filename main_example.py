@@ -8,20 +8,6 @@ from simple_twitch_api import TwitchClipAPI
 auth = AuthorizationCodeGrantFlow()
 
 while True:
-    print("::main while")
-    while True:
-        print("::voice while")
-        # Read voice
-        rec = pySimpleVoiceRecognition.rec()
-        print("::rec")
-        # Get response
-        result = pySimpleVoiceRecognition.action()
-    
-        # Break loop
-        if result == True:
-            msg = "Make a clip"     
-            break
-
     token_file_data = None
 
     if os.path.exists("credentials.json"):
@@ -49,10 +35,31 @@ while True:
 
     api = TwitchClipAPI(client_id, token)
 
-    user_info = api.users_info(['ojoojao'])
+    user_info = api.users_info(['DannyJones'])
     broadcaster_id = user_info[0]["id"]
+    sender_id = "459116718"
+    print("Getting user id")
 
-    api.send_chat_message(broadcaster_id, broadcaster_id, "Criando clipe...")
+    print("::main while")
+    while True:
+        print("::voice while")
+        # Read voice
+        rec = pySimpleVoiceRecognition.rec()
+        print("::rec")
+        # Get response
+        result = pySimpleVoiceRecognition.action()
+
+        # Logica para se em determinado tempo não sair desse loop, verificar o token novamente
+    
+        # Break loop
+        if result == True:
+            msg = "Make a clip"     
+            break
+        else:
+            api.send_chat_message(broadcaster_id, sender_id, "Tá querendo um clipe e não ta sabendo pedir")
+
+    api.send_chat_message(broadcaster_id, sender_id, "Criando clipe...")
+    print("Criando clipe...")
 
     created_clip_info = api.create_clip(broadcaster_id)
     clip_id = created_clip_info["id"]
@@ -65,8 +72,13 @@ while True:
         new_time = time.time()
 
         if (new_time - init_time) > 15:
-            api.send_chat_message(broadcaster_id, broadcaster_id, "Não foi possivel criar o clipe...")
+            api.send_chat_message(broadcaster_id, sender_id, "Não foi possivel criar o clipe...")
+            print("Não foi possivel criar o clipe...")
             break
 
     if (new_time - init_time) < 15:
-        api.send_chat_message(broadcaster_id, broadcaster_id, clip_info[0]["url"])
+        api.send_chat_message(broadcaster_id, sender_id, clip_info[0]["url"])
+        print(clip_info[0]["url"])
+
+    # Danny Jones me descobriu
+    # https://www.twitch.tv/dannyjones/clip/CourageousSpookyFriseeTheTarFu-qCyokS5h_4KsNCDq
