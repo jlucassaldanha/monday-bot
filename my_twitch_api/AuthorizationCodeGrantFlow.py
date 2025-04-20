@@ -1,52 +1,24 @@
 import requests
-import os, json
+import json
 import webbrowser
 
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
-
-PSEUDO_HTML = [
-"""
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tudo certo!</title>
-</head>
-<body>
-    <a>
-        Agora você já pode fechar esta guia...
-    </a>
-</body>
-</html>
-""".encode()
-            ]
-# OU
-PSEUDO_HTML = ["Agora você já pode fechar esta guia...".encode()]
+from PSEUDO_HTML import PSEUDO_HTML
 
 
-OAUTH2_HEADERS = {'Content-Type' : 'application/x-www-form-urlencoded'}
-
-OAUTH2_URL_BASE = "https://id.twitch.tv/oauth2"
-
-oauth_authorize_params = "/authorize?response_type=code&client_id={}&redirect_uri={}&scope={}"
-
-oauth_new_token_data = "client_id={}&client_secret={}&code={}&grant_type=authorization_code&redirect_uri={}"
-oauth_refresh_token_data = "grant_type=refresh_token&refresh_token={}&client_id={}&client_secret={}"
-
-
-class AuthorizationCodeGrantFlow():
+class Credentials():
     redirect_uri = ""
     url = ""
     client_id = ""
     client_secrets = ""
     query_url = ""
-    token_file_data = ""
-    access_token = ""
-    refresh_token = ""
 
+    OAUTH2_URL_BASE = "https://id.twitch.tv/oauth2"
+    oauth_authorize_params = "/authorize?response_type=code&client_id={}&redirect_uri={}&scope={}"
+
+    @classmethod
     def read_credentials_file(self, credentials_json: str) -> None:
         """
         Creates a :class:`AuthorizationCodeGrantFlow`.
@@ -77,35 +49,7 @@ class AuthorizationCodeGrantFlow():
 
         else:
             raise Exception("Credentials file missing keys")
-    
-    def read_token_file(self, token_json: str) -> dict:
-        """
-        Read token file:
-
-        Args:
-            token_json (str): Path to the token json file.
-
-        Returns:
-            Token data.
-        """
-        # Read token
-        with open(token_json, 'r') as json_file:
-            self.token_file_data = json.load(json_file)
-        json_file.close()
         
-        # Verify if has necessary keys and save in variables
-        if ("access_token" in list(self.token_file_data) and
-            "refresh_token" in list(self.token_file_data) and
-            "token_type" in list(self.token_file_data)):
-            self.access_token = self.token_file_data["access_token"]
-            self.refresh_token = self.token_file_data["refresh_token"]
-
-            self.valid_token = self.validate_token(self.access_token)
-
-            return self.token_file_data
-        else:
-            raise Exception("Token file missing keys")
-     
     def _localServerApp(self, environ, start_response):
         """
         Creat local server app.
@@ -122,6 +66,7 @@ class AuthorizationCodeGrantFlow():
 
         return PSEUDO_HTML
 
+    @classmethod
     def local_server_authorization(self) -> str:
         """
         Runs a local server to got the code from teh authorization request
@@ -146,7 +91,7 @@ class AuthorizationCodeGrantFlow():
             scopes += "%20" + scope
 
         # construct the link to the authorization page.
-        self.url = OAUTH2_URL_BASE + oauth_authorize_params.format(self.client_id, self.redirect_uri, scopes)
+        self.url = self.OAUTH2_URL_BASE + self.oauth_authorize_params.format(self.client_id, self.redirect_uri, scopes)
 
         try:
             # Open the link
@@ -178,7 +123,56 @@ class AuthorizationCodeGrantFlow():
                 
                 return self.oauth_code
 
-    def create_refresh_token(self, code: str = None, refresh_token: str = None) -> dict:
+class Token():
+    token_file_data = ""
+    access_token = ""
+    refresh_token = ""
+
+    OAUTH2_URL_BASE = "https://id.twitch.tv/oauth2"
+    OAUTH2_HEADERS = {
+    'Content-Type' : 
+    'application/x-www-form-urlencoded'
+    }
+    oauth_new_token_data = "client_id={}&client_secret={}&code={}&grant_type=authorization_code&redirect_uri={}"
+    oauth_refresh_token_data = "grant_type=refresh_token&refresh_token={}&client_id={}&client_secret={}"
+
+    @classmethod
+    def read_token_file(self, token_json: str) -> dict:
+        """
+        Read token file:
+
+        Args:
+            token_json (str): Path to the token json file.
+
+        Returns:
+            Token data.
+        """
+        # Read token
+        with open(token_json, 'r') as json_file:
+            self.token_file_data = json.load(json_file)
+        json_file.close()
+        
+        # Verify if has necessary keys and save in variables
+        if ("access_token" in list(self.token_file_data) and
+            "refresh_token" in list(self.token_file_data) and
+            "token_type" in list(self.token_file_data)):
+
+            self.access_token = self.token_file_data["access_token"]
+            self.refresh_token = self.token_file_data["refresh_token"]
+
+            self.valid_token = self.validate_token(self.access_token)
+
+            return self.token_file_data
+        else:
+            raise Exception("Token file missing keys")
+
+    @classmethod
+    def create_refresh_token(self, 
+                             client_id: str, 
+                             client_secrets: str, 
+                             code: str = None, 
+                             redirect_uri: str = None, 
+                             refresh_token: str = None) -> dict:
         """
         Create a new token:
         
@@ -193,16 +187,16 @@ class AuthorizationCodeGrantFlow():
             New token data.
         """
         # Construct links to request
-        url = OAUTH2_URL_BASE + "/token"
+        url = self.OAUTH2_URL_BASE + "/token"
 
         # Verify if its a token creation or refresh
         if code != None and refresh_token == None:
-            data = oauth_new_token_data.format(self.client_id, self.client_secrets, code, self.redirect_uri)
+            data = self.oauth_new_token_data.format(client_id, client_secrets, code, redirect_uri)
 
         if refresh_token != None and code == None:
-            data = oauth_refresh_token_data.format(refresh_token, self.client_id, self.client_secrets)
+            data = self.oauth_refresh_token_data.format(refresh_token, client_id, client_secrets)
 
-        r = requests.post(url, data, headers=OAUTH2_HEADERS)
+        r = requests.post(url, data, headers=self.OAUTH2_HEADERS)
 
         # Verify if request succed, case True, verify keys and so on
         # save data in the token.json file
@@ -223,7 +217,8 @@ class AuthorizationCodeGrantFlow():
             
         else:
             raise Exception("HTTPS response error:\nError getting authorization token")            
-        
+
+    @classmethod
     def validate_token(self, token: str) -> dict:
         """
         Validate the token:
@@ -236,7 +231,7 @@ class AuthorizationCodeGrantFlow():
             else, return False.
         """
         # URL
-        url = OAUTH2_URL_BASE + "/validate"
+        url = self.OAUTH2_URL_BASE + "/validate"
         # params
         headers = {"Authorization": f"OAuth {token}"}
 

@@ -1,6 +1,6 @@
 import os, time
-from simple_twitch_api import AuthorizationCodeGrantFlow
-from simple_twitch_api import TwitchClipAPI
+from antigos import AuthorizationCodeGrantFlow
+from antigos import TwitchClipAPI
 
 auth = AuthorizationCodeGrantFlow()
 

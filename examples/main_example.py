@@ -2,8 +2,8 @@ import os, time
 
 from voice_reader import pySimpleVoiceRecognition
 
-from simple_twitch_api import AuthorizationCodeGrantFlow
-from simple_twitch_api import TwitchClipAPI
+from antigos import AuthorizationCodeGrantFlow
+from antigos import TwitchClipAPI
 
 auth = AuthorizationCodeGrantFlow()
 
