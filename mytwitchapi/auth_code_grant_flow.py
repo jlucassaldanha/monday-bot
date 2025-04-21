@@ -1,6 +1,4 @@
-import requests
-import json
-import webbrowser
+import requests, json, webbrowser
 
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
@@ -257,6 +255,3 @@ class Token():
 # validate_token - OK
 
 
-class TwitchOAuth():
-    def __init__(self):  
-        pass

@@ -1,7 +1,7 @@
 import requests
 # Da para melhorar get_clip depois igual o de users, mas são muitos parametros, então vou com calma
 
-class TwitchClipAPI():
+class Basics():
     url = ""
     headers = {}
     params = {}

@@ -1,19 +1,17 @@
+PSEUDO_HTML = [
+"""
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tudo certo!</title>
-    <style>
-        h1 {text-align: center;}
-        p {text-align: center;}
-        div {text-align: center;}
-        a {text-align: center;}
-    </style>
 </head>
-<body style="background-color: rgb(255, 255, 255); font-family: Arial; ">
+<body style="font-family: Candara;">
     <a>
         Autenticação realizada. Agora você já pode fechar esta guia...
     </a>
 </body>
 </html>
+""".encode()
+            ]
