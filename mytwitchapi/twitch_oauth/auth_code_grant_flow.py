@@ -16,7 +16,7 @@ class Credentials():
     OAUTH2_URL_BASE = "https://id.twitch.tv/oauth2"
     oauth_authorize_params = "/authorize?response_type=code&client_id={}&redirect_uri={}&scope={}"
 
-    @classmethod
+    
     def read_credentials_file(self, credentials_json: str) -> None:
         """
         Creates a :class:`AuthorizationCodeGrantFlow`.
@@ -47,7 +47,8 @@ class Credentials():
 
         else:
             raise Exception("Credentials file missing keys")
-        
+
+            
     def _localServerApp(self, environ, start_response):
         """
         Creat local server app.
@@ -64,7 +65,7 @@ class Credentials():
 
         return PSEUDO_HTML
 
-    @classmethod
+    
     def local_server_authorization(self) -> str:
         """
         Runs a local server to got the code from teh authorization request
