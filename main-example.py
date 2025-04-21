@@ -14,7 +14,7 @@ while True:
     oauth.access_token("token.json")
     token = oauth.token
 
-    user_info = Basics.users_info(client_id, token, ['ojoojao'])
+    user_info = Basics.users_info(client_id, token, ['pokimane'])
     broadcaster_id = user_info[0]["id"]
     sender_id = "459116718"
     

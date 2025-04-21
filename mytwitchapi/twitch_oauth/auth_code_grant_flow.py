@@ -1,4 +1,6 @@
-import requests, json, webbrowser
+import os, json, requests, webbrowser
+
+from dotenv import load_dotenv
 
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
@@ -15,9 +17,8 @@ class Credentials():
 
     OAUTH2_URL_BASE = "https://id.twitch.tv/oauth2"
     oauth_authorize_params = "/authorize?response_type=code&client_id={}&redirect_uri={}&scope={}"
-
     
-    def read_credentials_file(self, credentials_json: str) -> None:
+    def read_credentials_file(self, credentials_json: str) -> dict:
         """
         Creates a :class:`AuthorizationCodeGrantFlow`.
 
@@ -47,7 +48,24 @@ class Credentials():
 
         else:
             raise Exception("Credentials file missing keys")
+    
+    def read_credentials_dotenv(self) -> dict:
+        load_dotenv()
+        try:
+            self.client_id = os.environ["CLIENT_ID"]
+            self.client_secrets = os.environ["CLIENT_SECRETS"]
+            self.scopes = os.environ["SCOPES"]
+            self.redirect_uri = os.environ["REDIRECT_URI"]
+            
+            return {
+                "client_id" : self.client_id,
+                "client_secrets" : self.client_secrets,
+                "scopes" : self.scopes,
+                "redirect_uri" : self.redirect_uri
+            }
 
+        except KeyError:
+            raise Exception(".env missing keys")
             
     def _localServerApp(self, environ, start_response):
         """

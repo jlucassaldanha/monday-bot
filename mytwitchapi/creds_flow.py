@@ -2,7 +2,7 @@ import os
 from .twitch_oauth.auth_code_grant_flow import Credentials, Token
 
 class OAuth(Credentials):
-
+    
     def credentials(self, credentials_file: str) -> None:  
         if os.path.exists(credentials_file):
             self.read_credentials_file(credentials_file)
@@ -11,6 +11,9 @@ class OAuth(Credentials):
         
         else:
             raise Exception("Credentials json file missing")
+        
+    def dotenv_credentials(self) -> None:
+        self.read_credentials_dotenv()
         
     def access_token(self, token_file: str) -> None:
         token_file_data = None
