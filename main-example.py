@@ -1,7 +1,6 @@
 import time
 
 from voice_reader import pySimpleVoiceRecognition
-#from mytwitchapi.auth_code_grant_flow import Credentials, Token
 from mytwitchapi.creds_flow import OAuth
 from mytwitchapi.twich_api_client import Basics
 
