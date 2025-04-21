@@ -45,7 +45,7 @@ class pySimpleVoiceRecognition():
 
             self.audio_data = audio_data.lower()
 
-            #print(">>", self.audio_data)
+            print(">>", self.audio_data)
 
             return self.audio_data # return value
     
