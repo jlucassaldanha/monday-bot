@@ -1,5 +1,5 @@
 import os
-from .auth_code_grant_flow import Credentials, Token
+from .twitch_oauth.auth_code_grant_flow import Credentials, Token
 
 class OAuth(Credentials):
 

@@ -3,7 +3,7 @@ import requests, json, webbrowser
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
-from PSEUDO_HTML import PSEUDO_HTML
+from .src.webpage import PSEUDO_HTML
 
 
 class Credentials():
