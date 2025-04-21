@@ -32,4 +32,4 @@ flow de autenticação:
 - pega o token
 - valida o token?
 
-# Criar nova branch a partir de agora
+# Estudar sobre o .env e melhorar o reconhecimento de fala
