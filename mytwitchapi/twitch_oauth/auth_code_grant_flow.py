@@ -206,7 +206,7 @@ class Token():
                 "token_type" in list(token_data)):
 
                 with open("token.json", 'w') as token_json:
-                    json.dump(token_data, token_json)
+                    json.dump(token_data, token_json, indent=4)
                 token_json.close()
 
                 return token_data # return
