@@ -18,7 +18,7 @@ class Transcrib():
             }
         }
 
-    def __init__(self, model_path: str = r".\teste-vosk\vosk-model-small-pt-0.3"):
+    def __init__(self, model_path: str = r".\teste_vosk\vosk-model-small-pt-0.3"):
         """Inicia o modelo e o objeto de captura do microfone"""
         model = Model(model_path)
         self.recognizer = KaldiRecognizer(model, 16000)
