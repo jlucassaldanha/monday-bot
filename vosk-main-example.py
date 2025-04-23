@@ -50,7 +50,9 @@ while True:
             token = oauth.token
 
         if calling:
-            Basics.send_chat_message(client_id, token, broadcaster_id, sender_id, "Oi, me chamou?")
+            Basics.send_chat_message(
+                client_id, token, broadcaster_id, sender_id, "Oi, me chamou?"
+                )
 
             print("::rec")
 
@@ -67,11 +69,15 @@ while True:
                     break
 
                 else:
-                    Basics.send_chat_message(client_id, token, broadcaster_id, sender_id, 
-                                         "Tá querendo um clipe e não ta sabendo pedir")
+                    Basics.send_chat_message(
+                        client_id, token, broadcaster_id, sender_id, 
+                        "Tá querendo um clipe e não ta sabendo pedir"
+                        )
 
 
-    Basics.send_chat_message(client_id, token, broadcaster_id, sender_id, "Criando clipe...")
+    Basics.send_chat_message(
+        client_id, token, broadcaster_id, sender_id, "Criando clipe..."
+        )
     
     print("Criando clipe...")
 
@@ -95,7 +101,9 @@ while True:
             break
 
     if (new_clip_time - init_clip_time) < 15:
-        Basics.send_chat_message(client_id, token, broadcaster_id, sender_id, clip_info[0]["url"])
+        Basics.send_chat_message(
+            client_id, token, broadcaster_id, sender_id, clip_info[0]["url"]
+            )
     
         print(clip_info[0]["url"])
 
