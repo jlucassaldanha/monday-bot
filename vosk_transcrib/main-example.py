@@ -2,28 +2,24 @@ import time
 from transcrib import Transcrib
 
 tc = Transcrib()
-
-while True:
-    print("::main while")
-    
+msg = ""
+while True:    
     calling = False
     init_voice_time = time.time()
 
     while True: 
-        print("::voice while")
-    
         # Read voice
         tc.listen_bigbrain()
         pvd = tc.partial
         
-        print("::rec")
-
+        #if not calling:
         if (
             "segunda" in pvd["partial"]['list'][1] and
             "feira" in pvd["partial"]['list'][1]
         ):
             print(pvd["partial"]['str'])
             calling = True
+            tc.reset()
 
         if calling:
             if (
@@ -35,10 +31,12 @@ while True:
                 ):
                     print(pvd["partial"]['str'])
 
-                    msg = "Make a clip"     
+                    msg = "Make a clip" 
+                    tc.reset()    
                     break
-           
-            print("::rec")
+
+    if msg == "Make a clip":
+        break    
     
 
 # Vosky

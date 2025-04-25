@@ -18,7 +18,7 @@ class Transcrib():
             }
         }
 
-    def __init__(self, model_path: str = r".\teste_vosk\vosk-model-small-pt-0.3"):
+    def __init__(self, model_path: str = r".\vosk_transcrib\vosk-model-small-pt-0.3"):
         """Inicia o modelo e o objeto de captura do microfone"""
         model = Model(model_path)
         self.recognizer = KaldiRecognizer(model, 16000)
@@ -123,6 +123,9 @@ class Transcrib():
                 }
             
             return self.partial
+        
+    def reset(self):
+        self.recognizer.Reset()
 
 
 if __name__ == "__main__":
@@ -155,15 +158,7 @@ if __name__ == "__main__":
                     ok = True
                     break
 
-            if (
-                "manda" in pd["partial"]['list'][1]   
-            ):
-                if (
-                    pd["partial"]['list'][0] > 2
-                ):
-                    print(pd["partial"]['str'])
-                    ok = True
-                    break
+
                     
     #while True:
     #    tc.listen_bigbrain()

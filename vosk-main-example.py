@@ -34,12 +34,14 @@ while True:
     
         print("::rec")
 
+        #if not calling:
         if (
             "segunda" in pvd["partial"]['list'][1] and
             "feira" in pvd["partial"]['list'][1]
         ):
             print(pvd["partial"]['str'])
             calling = True
+            tc.reset()
 
         new_voice_time = time.time()
         if (new_voice_time - init_voice_time) > 3600:
@@ -65,7 +67,8 @@ while True:
                 ):
                     print(pvd["partial"]['str'])
 
-                    msg = "Make a clip"     
+                    msg = "Make a clip" 
+                    tc.reset()    
                     break
 
                 else:
