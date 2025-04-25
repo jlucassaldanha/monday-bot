@@ -248,6 +248,46 @@ class Basics():
         if r.status_code == 422:
             raise Exception("HTTPS response error:\n Message too large to send")
         
+    @classmethod
+    def get_user_follows(self, 
+                 client_id: str, 
+                 token: str, 
+                 user_id: str) -> dict:
+        """
+        Get a user followes:
+        
+        Args:
+            client_id (str): Client aplication id.
+            token (str): User oauth token.
+            user_id (str): Must be id of the user. 
+
+        Returns:
+            follow info.
+        """
+        
+        self.url = self.API_URL_BASE + "/streams/followed"
+        # cosntruct params
+        self.params = {
+            'user_id' : user_id
+        }
+
+        # Create header to requests
+        self.headers = {
+            'Authorization': f'Bearer {token}',
+            'Client-Id': client_id}
+
+        r = requests.get(self.url, params=self.params, headers=self.headers)
+        
+        # Return data in case of success
+        if r.status_code == 200:
+            self.clip_data = r.json()
+            return self.clip_data['data']
+        
+        # Error codes
+        if r.status_code == 400:
+            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
+        if r.status_code == 401:
+            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
     
 # Checklist das funções:
 # __init__ - OK
