@@ -10,13 +10,13 @@ class Basics():
     chat_message_data = {}
     created_clip_data = {}
 
-    API_URL_BASE = "https://api.twitch.tv/helix"
-    CHAT_URL_SCOPE = "/chat/messages" # Não são os scopes
-    CLIP_URL_SCOPE = "/clips"
-    USER_URL_SCOPE = "/users"
+    API_URL_BASE = "https://api.twitch.tv/helix/"
+    CHAT_URL_SCOPE = "chat/messages" # Não são os scopes
+    CLIP_URL_SCOPE = "clips"
+    USER_URL_SCOPE = "users"
         
     @classmethod
-    def users_info(self, 
+    def Get_Users(self, 
                    client_id: str, 
                    token: str, 
                    usernames: list = None, 
@@ -101,7 +101,7 @@ class Basics():
             raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
     
     @classmethod
-    def create_clip(self, 
+    def Create_Clip(self, 
                     client_id: str, 
                     token: str, 
                     broadcaster_id: str, 
@@ -153,7 +153,7 @@ class Basics():
             raise Exception("HTTPS response error:\n Broadcaster must be in live")
     
     @classmethod
-    def get_clip(self, 
+    def Get_Clip(self, 
                  client_id: str, 
                  token: str, 
                  clip_id: str) -> dict:
@@ -194,7 +194,7 @@ class Basics():
             raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
 
     @classmethod    
-    def send_chat_message(self, 
+    def Send_Chat_Message(self, 
                           client_id: str, 
                           token: str, 
                           broadcaster_id: str, 
@@ -249,7 +249,7 @@ class Basics():
             raise Exception("HTTPS response error:\n Message too large to send")
         
     @classmethod
-    def get_user_follows(self, 
+    def Get_Followed_Streams(self, 
                  client_id: str, 
                  token: str, 
                  user_id: str) -> dict:
@@ -265,11 +265,145 @@ class Basics():
             follow info.
         """
         
-        self.url = self.API_URL_BASE + "/streams/followed"
+        self.url = self.API_URL_BASE + "streams/followed"
         # cosntruct params
         self.params = {
             'user_id' : user_id
         }
+
+        # Create header to requests
+        self.headers = {
+            'Authorization': f'Bearer {token}',
+            'Client-Id': client_id}
+
+        r = requests.get(self.url, params=self.params, headers=self.headers)
+        
+        # Return data in case of success
+        if r.status_code == 200:
+            self.clip_data = r.json()
+            return self.clip_data['data']
+        
+        # Error codes
+        if r.status_code == 400:
+            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
+        if r.status_code == 401:
+            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
+
+    @classmethod  
+    def Get_Chatters(self, 
+                     client_id: str, 
+                     token: str, 
+                     broadcaster_id: str,
+                     moderator_id: str) -> dict:
+        """
+        Get users in the chat:
+        
+        Args:
+            client_id (str): Client aplication id.
+            token (str): User oauth token.
+            broadcaster_id (str): Must be id of the user. 
+            moderator_id (str): Moderator of channel with the app.
+
+        Returns:
+            Chatters.
+        """
+        
+        self.url = self.API_URL_BASE + "chat/chatters"
+        # cosntruct params
+        self.params = {
+            'broadcaster_id' : broadcaster_id,
+            'moderator_id' : moderator_id
+        } # Aprender a usar pagination
+
+        # Create header to requests
+        self.headers = {
+            'Authorization': f'Bearer {token}',
+            'Client-Id': client_id}
+
+        r = requests.get(self.url, params=self.params, headers=self.headers)
+        
+        # Return data in case of success
+        if r.status_code == 200:
+            self.clip_data = r.json()
+            return self.clip_data['data']
+        
+        # Error codes
+        if r.status_code == 400:
+            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
+        if r.status_code == 401:
+            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
+        if r.status_code == 403:
+            raise Exception("HTTPS response error:\n Not a moderator of thos channel")
+        
+    @classmethod  
+    def Get_Moderatos(self, 
+                     client_id: str, 
+                     token: str, 
+                     broadcaster_id: str,
+                     user_id: str) -> dict:
+        """
+        Get users in the chat:
+        
+        Args:
+            client_id (str): Client aplication id.
+            token (str): User oauth token.
+            broadcaster_id (str): Must be id of the user. 
+            moderator_id (str): Moderator of channel with the app.
+
+        Returns:
+            Chatters.
+        """
+        
+        self.url = self.API_URL_BASE + "moderation/moderators"
+        # cosntruct params
+        self.params = {
+            'broadcaster_id' : broadcaster_id,
+            'user_id' : user_id
+        } # Aprender a usar pagination
+
+        # Create header to requests
+        self.headers = {
+            'Authorization': f'Bearer {token}',
+            'Client-Id': client_id}
+
+        r = requests.get(self.url, params=self.params, headers=self.headers)
+        
+        # Return data in case of success
+        if r.status_code == 200:
+            self.clip_data = r.json()
+            return self.clip_data['data']
+        
+        # Error codes
+        if r.status_code == 400:
+            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
+        if r.status_code == 401:
+            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
+    
+    @classmethod  
+    def Get_VIPs(self, 
+                     client_id: str, 
+                     token: str, 
+                     broadcaster_id: str,
+                     user_id: str) -> dict:
+        """
+        Get users in the chat:
+        
+        Args:
+            client_id (str): Client aplication id.
+            token (str): User oauth token.
+            broadcaster_id (str): Must be id of the user. 
+            moderator_id (str): Moderator of channel with the app.
+
+        Returns:
+            Chatters.
+        """
+        
+        self.url = self.API_URL_BASE + "channels/vips"
+        # cosntruct params
+        self.params = {
+            'broadcaster_id' : broadcaster_id,
+            'user_id' : user_id
+        } # Aprender a usar pagination
 
         # Create header to requests
         self.headers = {
