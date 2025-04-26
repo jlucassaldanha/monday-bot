@@ -9,8 +9,11 @@ client_id = oauth.client_id
 oauth.access_token("token.json")
 token = oauth.token
 
-user_info = Basics.users_info(client_id, token, ['ojoojao'])
+user_info = Basics.Get_Users(client_id, token, ['ojoojao'])
 print(user_info)
 
-follows = Basics.get_user_follows(client_id, token, user_info[0]["id"])
+follows = Basics.Get_Followed_Streams(client_id, token, user_info[0]["id"])
 print(follows)
+
+clip = Basics.Create_Clip(client_id, token, user_info[0]["id"])
+print(clip)

@@ -11,16 +11,22 @@ class Basics():
     created_clip_data = {}
 
     API_URL_BASE = "https://api.twitch.tv/helix/"
-    CHAT_URL_SCOPE = "chat/messages" # Não são os scopes
-    CLIP_URL_SCOPE = "clips"
-    USER_URL_SCOPE = "users"
+    MESSAGES_URL = "chat/messages" # Não são os scopes
+    CHATTERS_URL = "chat/chatters"
+    CLIP_URL = "clips"
+    USERS_URL = "users"
+    FOLLOWS_URL = "streams/followed" 
+    MODERATORS_URL = "moderation/moderators" 
+    VIPS_URL = "channels/vips"
         
     @classmethod
-    def Get_Users(self, 
-                   client_id: str, 
-                   token: str, 
-                   usernames: list = None, 
-                   ids: list = None) -> dict:
+    def Get_Users(
+        self, 
+        client_id: str, 
+        token: str, 
+        usernames: list = None, 
+        ids: list = None
+        ) -> dict:
         """
         Search for users:
         
@@ -80,7 +86,7 @@ class Basics():
             else:
                 raise Exception("Number of usernames and ids exced the maximum")
 
-        self.url = self.API_URL_BASE + self.USER_URL_SCOPE + url_data
+        self.url = self.API_URL_BASE + self.USERS_URL + url_data
 
         # Create header to requests
         self.headers = {
@@ -121,7 +127,7 @@ class Basics():
         Returns:
             Createed clip info.
         """
-        self.url = self.API_URL_BASE + self.CLIP_URL_SCOPE
+        self.url = self.API_URL_BASE + self.CLIP_URL
 
         # Construc params
         self.params = {
@@ -152,6 +158,9 @@ class Basics():
         if r.status_code == 404:
             raise Exception("HTTPS response error:\n Broadcaster must be in live")
     
+
+
+    
     @classmethod
     def Get_Clip(self, 
                  client_id: str, 
@@ -169,7 +178,7 @@ class Basics():
             Clip info.
         """
         
-        self.url = self.API_URL_BASE + self.CLIP_URL_SCOPE
+        self.url = self.API_URL_BASE + self.CLIP_URL
         # cosntruct params
         self.params = {
             'id' : clip_id
@@ -215,7 +224,7 @@ class Basics():
         Returns:
             Send message info.
         """
-        self.url = self.API_URL_BASE + self.CHAT_URL_SCOPE
+        self.url = self.API_URL_BASE + self.MESSAGES_URL
         
         # Construct params
         self.params = {
@@ -308,7 +317,7 @@ class Basics():
             Chatters.
         """
         
-        self.url = self.API_URL_BASE + "chat/chatters"
+        self.url = self.API_URL_BASE + "chat/chatters" 
         # cosntruct params
         self.params = {
             'broadcaster_id' : broadcaster_id,
