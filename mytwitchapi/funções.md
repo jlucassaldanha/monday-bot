@@ -13,12 +13,6 @@
 - Send a Shoutout
 - Get Uset Chat Color
 
-- Get Conduits ?
-- Create Conduits ?
-- Update ||
-- Delete ||
-- Get || Shards
-
 Send Extension Message
 EventSub
 
