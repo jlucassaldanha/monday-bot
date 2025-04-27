@@ -308,11 +308,11 @@ if __name__ == "__main__":
     f = get_info(l)
     print(len(f.keys()))
 
-    with open("./docs/errors docs/index.html", "w", encoding="UTF-8") as file:
+    with open("./docs/docstrings/index.html", "w", encoding="UTF-8") as file:
         file.write(l[9])
     file.close()
 
-    with open("./docs/errors docs/infos.json", "w", encoding="UTF-8") as file:
+    with open("./docs/docstrings/infos.json", "w", encoding="UTF-8") as file:
         json.dump(f, file, indent=4, ensure_ascii=False)
     file.close()
 
