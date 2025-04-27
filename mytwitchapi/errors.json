@@ -1,0 +1,2737 @@
+{
+    "start-commercial": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully started the commercial."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *length* query parameter is required.\n* The ID in *broadcaster\\_id* is not valid.\n* To start a commercial, the broadcaster must be streaming live.\n* The broadcaster may not run another commercial until the cooldown period expires. The `retry_after` field in the previous start commercial response specifies the amount of time the broadcaster must wait between running commercials."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in `broadcaster_id` must match the user ID found in the request’s OAuth token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:edit:commercial** scope.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The ID in `broadcaster_id` was not found."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The broadcaster may not run another commercial until the cooldown period expires. The `retry_after` field in the previous start commercial response specifies the amount of time the broadcaster must wait between running commercials."
+            ]
+        }
+    },
+    "get-ad-schedule": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Returns the ad schedule information for the channel."
+            ],
+            "400": [
+                "400 Bad Request",
+                "The broadcaster ID is not valid."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "snooze-next-ad": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "User’s next ad is successfully snoozed. Their *snooze\\_count* is decremented and *snooze\\_refresh\\_time* and *next\\_ad\\_at* are both updated."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The channel is not currently live.\n* The broadcaster ID is not valid.\n* Channel does not have an upcoming scheduled ad break."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "Channel has no snoozes left."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "get-extension-analytics": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster's analytics reports."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The start and end dates are optional but if you specify one, you must specify the other.\n* The end date must be equal to or later than the start date.\n* The cursor specified in the *after* query parameter is not valid.\n* The resource supports only forward pagination (use the *after* query parameter).\n* The *first* query parameter is outside the allowed range of values."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **analytics:read:extensions** scope.\n* The OAuth token is not valid.\n* The Client-Id header is required.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The extension specified in the *extension\\_id* query parameter was not found."
+            ]
+        }
+    },
+    "get-game-analytics": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s analytics reports."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The start and end dates are optional but if you specify one, you must specify the other.\n* The end date must be equal to or later than the start date.\n* The cursor specified in the *after* query parameter is not valid.\n* The resource supports only forward pagination (use the *after* query parameter).\n* The *first* query parameter is outside the allowed range of values."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **analytics:read:games** scope.\n* The OAuth token is not valid.\n* The Client-Id header is required.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The game specified in the *game\\_id* query parameter was not found."
+            ]
+        }
+    },
+    "get-bits-leaderboard": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s Bits leaderboard."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The time period specified in the *period* query parameter is not valid.\n* The *started\\_at* query parameter is required if *period* is not set to *all*.\n* The value in the *count* query parameter is outside the range of allowed values."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a user access token.\n* The user access token must include the the **bits:read** scope.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                " "
+            ]
+        }
+    },
+    "get-cheermotes": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the Cheermotes."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-extension-transactions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of transactions."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *extension\\_id* query parameter is required.\n* The request specified too many *id* query parameters.\n* The pagination cursor is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token.\n* The access token is not valid.\n* The ID in the *extension\\_id* query parameter must match the client ID in the access token.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* One or more of the transaction IDs specified using the *id* query parameter were not found."
+            ]
+        }
+    },
+    "get-channel-information": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of channels."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The broadcaster ID is not valid.\n* The number of *broadcaster\\_id* query parameters exceeds the maximum allowed."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The application exceeded the number of calls it may make per minute. For details, see [Rate Limits](https://dev.twitch.tv/docs/api/guide#twitch-rate-limits)."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "modify-channel-information": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully updated the channel’s properties."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The request must update at least one property.\n* The `title` field may not contain an empty string.\n* The ID in `game_id` is not valid.\n* To update the `delay` field, the broadcaster must have partner status.\n* The list in the `tags` field exceeds the maximum number of tags allowed.\n* A tag in the `tags` field exceeds the maximum length allowed.\n* A tag in the `tags` field is empty.\n* A tag in the `tags` field contains special characters or spaces.\n* One or more tags in the `tags` field failed AutoMod review.\n* Game restricted for user's age and region"
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* User requests CCL for a channel they don’t own\n* The ID in *broadcaster\\_id* must match the user ID found in the OAuth token.\n* The Authorization header is required and must specify a user access token.\n* The OAuth token must include the **channel:manage:broadcast** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* User requested gaming CCLs to be added to their channel\n* Unallowed CCLs declared for underaged authorized user in a restricted country"
+            ],
+            "409": [
+                "409 Too Many Requests",
+                "User set the Branded Content flag too frequently"
+            ],
+            "500": [
+                "500 Internal server error",
+                " "
+            ]
+        }
+    },
+    "get-channel-editors": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster's list of editors."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID found in the OAuth token.\n* The Authorization header is required and must specify a user access token.\n* The OAuth token must include the **channel:read:editors** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-followed-channels": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster's list of followers."
+            ],
+            "400": [
+                "400 Bad Request",
+                "Possible reasons:\n\n* The *user\\_id* query parameter is required.\n* The *broadcaster\\_id* query parameter is not valid.\n* The *user\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "Possible reasons:\n\n* The ID in the *user\\_id* query parameter must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token is missing the **user:read:follows** scope.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ]
+        }
+    },
+    "get-channel-followers": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s list of followers."
+            ],
+            "400": [
+                "400 Bad Request",
+                "Possible reasons:\n\n* The *broadcaster\\_id* query parameter is required.\n* The *broadcaster\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "Possible reasons:\n\n* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token or the user must be a moderator for the specified broadcaster.\n* The Authorization header is required and must contain a user access token.\n* The user access token is missing the **moderator:read:followers** scope.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token.\n* The *user\\_id* parameter was specified but either the user access token is missing the **moderator:read:followers** scope or the user is not the broadcaster or moderator for the specified channel"
+            ]
+        }
+    },
+    "create-custom-rewards": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully created the custom reward."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The request exceeds the maximum number of rewards allowed per channel.\n* The *broadcaster\\_id* query parameter is required.\n* The `title` field is required.\n* The `title` must contain a minimum of 1 character and a maximum of 45 characters.\n* The `title` must be unique amongst all of the broadcaster's custom rewards.\n* The `cost` field is required.\n* The `cost` field must contain a minimum of 1 point.\n* The `prompt` field is limited to a maximum of 200 characters.\n* If `is_max_per_stream_enabled` is **true**, the minimum value for `max_per_stream` is 1.\n* If `is_max_per_user_per_stream_enabled` is **true**, the minimum value for `max_per_user_per_stream` is 1.\n* If `is_global_cooldown_enabled` is **true**, the minimum value for `global_cooldown_seconds` is 1."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a user access token.\n* The user access token is missing the **channel:manage:redemptions** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The broadcaster is not a partner or affiliate."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "delete-custom-reward": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully deleted the custom reward."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a user access token.\n* The user access token must include the **channel:manage:redemptions** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The ID in the Client-Id header must match the client ID used to create the custom reward.\n* The broadcaster is not a partner or affiliate."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The custom reward specified in the *id* query parameter was not found."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "get-custom-reward": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s list of custom rewards."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The request exceeds the maximum number of *id* query parameters that you may specify."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header must specify a user access token.\n* The user access token must include the **channel:read:redemptions** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The broadcaster is not a partner or affiliate."
+            ],
+            "404": [
+                "404 Not Found",
+                "* All of the custom rewards specified using the *id* query parameter were not found."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "get-custom-reward-redemption": {
+        "errors": {
+            "200": [
+                "200 Ok",
+                "Successfully retrieved the list of redeemed custom rewards."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *reward\\_id* query parameter is required.\n* The *status* query parameter is required if you didn't specify the *id* query parameter.\n* The value in the *status* query parameter is not valid.\n* The value in the *sort* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a user access token.\n* The user access token must include the **channel:read:redemptions** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The ID in the Client-Id header must match the client ID used to create the custom reward.\n* The broadcaster is not a partner or affiliate."
+            ],
+            "404": [
+                "404 Not Found",
+                "* All of the redemptions specified using the *id* query parameter were not found."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "update-custom-reward": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully updated the custom reward."
+            ],
+            "400": [
+                "400 Bad Request",
+                "ul>- The *broadcaster\\_id* query parameter is required.\n- The *id* query parameter is required.\n- The `title` must contain a minimum of 1 character and a maximum of 45 characters.\n- The `title` must be unique amongst all of the broadcaster's custom rewards.\n- The `cost` field must contain a minimum of 1 point.\n- The `prompt` field is limited to a maximum of 200 characters.\n- If `is_max_per_stream_enabled` is **true**, the minimum value for `max_per_stream` is 1.\n- If `is_max_per_user_per_stream_enabled` is **true**, the minimum value for `max_per_user_per_stream` is 1.\n- If `is_global_cooldown_enabled` is **true**, the minimum value for `global_cooldown_seconds` is 1 and the maximum is 604800."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a user access token.\n* The user access token must include the **channel:manage:redemptions** scope.\n* The OAuth token is not valide.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The ID in the Client-Id header must match the client ID used to create the custom reward.\n* The broadcaster is not a partner or affiliate."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The custom reward specified in the *id* query parameter was not found."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "update-redemption-status": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully updated the redemption’s status."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *reward\\_id* query parameter is required.\n* The *id* query parameter is required.\n* The value in the *status* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a user access token.\n* The user access token must include the **channel:manage:redemptions** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The ID in the Client-Id header must match the client ID used to create the custom reward.\n* The broadcaster is not a partner or affiliate."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The custom reward specified in the *reward\\_id* query parameter was not found.\n* The redemptions specified using the *id* query parameter were not found or their statuses weren't marked as UNFULFILLED."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                " "
+            ]
+        }
+    },
+    "get-charity-campaign": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved information about the broadcaster’s active charity campaign."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *broadcaster\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:charity** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header must match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The broadcaster is not a partner or affiliate."
+            ]
+        }
+    },
+    "get-charity-campaign-donations": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of donations that users contributed to the broadcaster’s charity campaign."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *broadcaster\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:charity** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header must match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The broadcaster is not a partner or affiliate."
+            ]
+        }
+    },
+    "get-chatters": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s list of chatters."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The *moderator\\_id* query parameter is required.\n* The ID in the *moderator\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *moderator\\_id* query parameter must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:read:chatters** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in the *moderator\\_id* query parameter is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "get-channel-emotes": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved broadcaster's list of custom emotes."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a valid app access token or user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-global-emotes": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved Twitch's list of global emotes."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a valid app access token or user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-emote-sets": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the emotes for the specified emote sets."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *emote\\_set\\_id* query parameter is required.\n* The number of *emote\\_set\\_id* query parameters exceeds the maximum allowed."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a valid app access token or user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-channel-chat-badges": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s custom chat badges."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a valid app access token or user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-global-chat-badges": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of global chat badges."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a valid app access token or user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-chat-settings": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s chat settings."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a valid app access token or user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "get-shared-chat-session": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the shared chat session. Returns an empty array if the broadcaster\\_id in the request isn’t in a shared chat session."
+            ],
+            "400": [
+                "400 Bad Request",
+                "The ID in the `broadcaster_id` query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The OAuth token is not valid.\n* The Authorization header is required and must contain a user access token."
+            ],
+            "500": [
+                "500 Internal Error",
+                "Internal Server Error."
+            ]
+        }
+    },
+    "get-user-emotes": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the emotes."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *user\\_id* query parameter is required.\n* The ID in the *user\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *user\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:read:emotes** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "update-chat-settings": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully updated the broadcaster’s chat settings."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required.\n* If *slow\\_mode* is **true**, the `slow_mode_wait_time` field must be set to a valid value.\n* If `follower_mode` is **true**, the `follower_mode_duration` field must be set to a valid value.\n* If `non_moderator_chat_delay` is **true**, the `non_moderator_chat_delay_duration` field must be set to a valid value."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *moderator\\_id* query parameter must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:chat\\_settings** scope.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in the *moderator\\_id* query parameter must have moderator privileges in the broadcaster's channel."
+            ]
+        }
+    },
+    "send-chat-announcement": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully sent the announcement."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `message` field in the request's body is required.\n* The `message` field may not contain an empty string.\n* The string in the `message` field failed review.\n* The specified color is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token is missing the **moderator:manage:announcements** scope.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "The sender has exceeded the number of announcements they may send to this **broadcaster\\_id** within a given window."
+            ]
+        }
+    },
+    "send-a-shoutout": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully sent the specified broadcaster a Shoutout."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *from\\_broadcaster\\_id* query parameter is required.\n* The ID in the *from\\_broadcaster\\_id* query parameter is not valid.\n* The *to\\_broadcaster\\_id* query parameter is required.\n* The ID in the *to\\_broadcaster\\_id* query parameter is not valid.\n* The broadcaster may not give themselves a Shoutout.\n* The broadcaster is not streaming live or does not have one or more viewers."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:shoutouts** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators.\n* The broadcaster may not send the specified broadcaster a Shoutout."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The broadcaster exceeded the number of Shoutouts they may send within a given window. See the endpoint's Rate Limits.\n* The broadcaster exceeded the number of Shoutouts they may send the same broadcaster within a given window. See the endpoint's Rate Limits."
+            ]
+        }
+    },
+    "send-chat-message": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully sent the specified broadcaster a message."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The *sender\\_id* query parameter is required.\n* The ID in the *sender\\_id* query parameter is not valid.\n* The *text* query parameter is required.\n* The ID in the *reply\\_parent\\_message\\_id* query parameter is not valid.\n* Cannot set \\*for\\_source\\_only\\* if User Access Token is used."
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "* The ID in the user\\_id query parameter must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the user:write:chat scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "The sender is not permitted to send chat messages to the broadcaster’s chat room."
+            ],
+            "422": [
+                "422 Unprocessable Entity",
+                "The message is too large."
+            ]
+        }
+    },
+    "get-user-chat-color": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the chat color used by the specified users."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in the *user\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain an app access token or user access token.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ]
+        }
+    },
+    "update-user-chat-color": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully updated the user's chat color."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in the *user\\_id* query parameter is not valid.\n* The *color* query parameter is required.\n* The named color in the *color* query parameter is not valid.\n* To specify a Hex color code, the user must be a Turbo or Prime user."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:manage:chat\\_color** scope.\n* The OAuth token is not valid.\n* The ID in the *user\\_id* query parameter must match the user ID in the access token.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ]
+        }
+    },
+    "create-clip": {
+        "errors": {
+            "OK CODE": "202",
+            "202": [
+                "202 Accepted",
+                "Successfully started the clip process."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter was not found."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify user access token.\n* The user access token must include the **clips:edit** scope.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The broadcaster has restricted the ability to capture clips to followers and/or subscribers only.\n* The specified broadcaster has not enabled clips on their channel."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The broadcaster in the *broadcaster\\_id* query parameter must be broadcasting live."
+            ]
+        }
+    },
+    "get-clips": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of video clips."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *id* or *game\\_id* or *broadcaster\\_id* query parameter is required.\n* The *id*, *game\\_id*, and *broadcaster\\_id* query parameters are mutually exclusive; you may specify only one of them."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain an app access token or user access token.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The ID in *game\\_id* was not found."
+            ]
+        }
+    },
+    "get-conduits": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved conduits."
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "Authorization header required with an app access token."
+            ]
+        }
+    },
+    "create-conduits": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Conduit created."
+            ],
+            "400": [
+                "400 Bad Request",
+                "Invalid shard count."
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "Authorization header required with an app access token."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "Conduit limit reached."
+            ]
+        }
+    },
+    "update-conduits": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Conduit updated."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* Invalid shard count\n* The id query parameter is required."
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "Authorization header required with an app access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* Conduit not found.\n* Conduit’s owner must match the client ID in the access token."
+            ]
+        }
+    },
+    "delete-conduit": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully deleted the conduit."
+            ],
+            "400": [
+                "400 Bad Request",
+                "The id query parameter is required."
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "Authorization header required with an app access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* Conduit not found.\n* Conduit’s owner must match the client ID in the access token."
+            ]
+        }
+    },
+    "get-conduit-shards": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved shards."
+            ],
+            "400": [
+                "400 Bad Request",
+                "The id query parameter is required."
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "Authorization header required with an app access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* Conduit not found.\n* Conduit’s owner must match the client ID in the access token."
+            ]
+        }
+    },
+    "update-conduit-shards": {
+        "errors": {
+            "OK CODE": "202",
+            "202": [
+                "202 Accepted",
+                "Successfully retrieved shards."
+            ],
+            "400": [
+                "400 Bad Request",
+                "The id query parameter is required."
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "Authorization header required with an app access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* Conduit not found.\n* Conduit’s owner must match the client ID in the access token."
+            ]
+        }
+    },
+    "get-content-classification-labels": {
+        "errors": {
+            "OK CODE": ""
+        }
+    },
+    "get-drops-entitlements": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the entitlements."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The value in the *fulfillment\\_status* query parameter is not valid.\n* The ID in the *user\\_id* query parameter must match the user ID in the user access token.\n* The client in the access token is not associated with a known organization.\n* The owner of the client in the access token is not a member of the organization."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the Client-Id header must match the Client ID in the access token.\n* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid."
+            ],
+            "403": [
+                "403 Fobidden",
+                "* The organization associated with the client in the access token must own the game specified in the *game\\_id* query parameter.\n* The organization associated with the client in the access token must own the entitlements specified in the *id* query parameter."
+            ],
+            "500": [
+                "500 Internal server error",
+                " "
+            ]
+        }
+    },
+    "update-drops-entitlements": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully requested the updates. Check the response to determine which updates succeeded."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The value in the `fulfillment_status` field is not valid.\n* The client in the access token is not associated with a known organization.\n* The owner of the client in the access token is not a member of the organization."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the Client ID in the access token."
+            ],
+            "500": [
+                "500 Internal server error",
+                " "
+            ]
+        }
+    },
+    "get-extension-configuration-segment": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the configurations."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *extension\\_id* query parameter is required.\n* The value in the *segment* query parameter is not valid.\n* The *broadcaster\\_id* query parameter is required if the *segment* query parameter is set to broadcaster or developer."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a JWT token.\n* The JWT token is not valid.\n* The Client-Id header is required."
+            ],
+            "429": [
+                "429 Too many requests",
+                "* The app exceeded the number of requests that it may make per minute. See Rate Limits above."
+            ]
+        }
+    },
+    "set-extension-configuration-segment": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully updated the configuration."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `broadcaster_id` field is required if `segment` is set to developer or broadcaster."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a JWT token.\n* The JWT token is not valid.\n* The Client-Id header is required."
+            ]
+        }
+    },
+    "set-extension-required-configuration": {
+        "errors": {
+            "204": [
+                "204 Not Found",
+                "Successfully updated the extension’s required\\_configuration string."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The `extension_id` field is required.\n* The `extension_version` field is required.\n* The `required_configuration` field is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a JWT token.\n* The JWT token is not valid.\n* The Client-Id header is required."
+            ]
+        }
+    },
+    "send-extension-pubsub-message": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully sent the message."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `broadcaster_id` field in the request's body may only be set if the `is_global_broadcast` field is set to **false**."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a JWT token.\n* The JWT token is not valid.\n* The Client-Id header is required."
+            ],
+            "422": [
+                "422 Unprocessable Entity",
+                "* The message is too large."
+            ]
+        }
+    },
+    "get-extension-live-channels": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of broadcasters."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *extension\\_id* query parameter is required.\n* The pagination cursor is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The extension specified in the *extension\\_id* query parameter was not found or it's not being used in a live stream."
+            ]
+        }
+    },
+    "get-extension-secrets": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of secrets."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *extension\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a JWT token.\n* The JWT token is not valid.\n* The Client-Id header is required."
+            ]
+        }
+    },
+    "create-extension-secret": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully created the new secret."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *extension\\_id* query parameter is required.\n* The delay specified in the *delay* query parameter is too short."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a JWT token.\n* The JWT token is not valid.\n* The Client-Id header is required."
+            ]
+        }
+    },
+    "send-extension-chat-message": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully sent the chat message."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The `extension_id` field in the request's body is required.\n* The `extension_version` field in the request's body is required.\n* The `text` field in the request's body is required.\n* The message is too long."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a JWT token.\n* The ID in the *broadcaster\\_id* query parameter must match the `channel_id` claim in the JWT.\n* The JWT token is not valid.\n* The Client-Id header is required."
+            ]
+        }
+    },
+    "get-extensions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of extensions."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *extension\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The request must specify the Authorization header.\n* The Authorization header is required and must specify a JWT token.\n* The JWT token is not valid.\n* The request must specify the Client-Id header."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The extension in the *extension\\_id* query parameter was not found."
+            ]
+        }
+    },
+    "get-released-extensions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the extension."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *extension\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The extension specified in the *extension\\_id* query parameter was not found or is not released."
+            ]
+        }
+    },
+    "get-extension-bits-products": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of products."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in the Client-Id header must belong to an extension."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token; you may not specify a user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "update-extension-bits-product": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully created the product."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `sku` field is required.\n* The value in the `sku` field is not valid. The SKU may contain only alphanumeric characters, dashes (-), underscores (\\_), and periods (.).\n* The `cost` object's `amount` field is required.\n* The value in the `cost` object's `amount` field is not valid.\n* The <cost>cost</cost> object's `type` field is required.\n* The value in the `cost` object's `type` field is not valid.\n* The `display_name` field is required.\n* The ID in the Client-Id header must belong to the extension."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token; you may not specify a user access token.\n* The OAuth token is not valid.\n* The ID in the Client-Id header must match the Client ID in the OAuth token."
+            ]
+        }
+    },
+    "create-eventsub-subscription": {
+        "errors": {
+            "OK CODE": "202",
+            "202": [
+                "202 Accepted",
+                "Successfully accepted the subscription request."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `condition` field is required.\n* The user specified in the `condition` object does not exist.\n* The `condition` object is missing one or more required fields.\n* The combination of values in the `version` and `type` fields is not valid.\n* The length of the string in the `secret` field is not valid.\n* The URL in the transport's `callback` field is not valid. The URL must use the HTTPS protocol and the 443 port number.\n* The value specified in the `method` field is not valid.\n* The `callback` field is required if you specify the webhook transport method.\n* The `session_id` field is required if you specify the WebSocket transport method.\n* The combination of subscription type and version is not valid.\n* The `conduit_id` field is required if you specify the Conduit transport method."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token if the transport method is webhook.\n* The Authorization header is required and must specify a user access token if the transport method is WebSocket.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "The access token is missing the required scopes."
+            ],
+            "409": [
+                "409 Conflict",
+                "A subscription already exists for the specified event type and `condition` combination."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "The request exceeds the number of subscriptions that you may create with the same combination of `type` and `condition` values."
+            ]
+        }
+    },
+    "delete-eventsub-subscription": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully deleted the subscription."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The subscription was not found."
+            ]
+        }
+    },
+    "get-eventsub-subscriptions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the subscriptions."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The request may specify only one filter query parameter. For example, either *type* or *status* or *user\\_id*.\n* The value in the *type* query parameter is not valid.\n* The value in the *status* query parameter is not valid.\n* The cursor specified in the *after* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ]
+        }
+    },
+    "get-top-games": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of broadcasts."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The value in the *first* query parameter is not valid.\n* The cursor in the *after* or *before* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ]
+        }
+    },
+    "get-games": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the specified games."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The request must specify the *id* or *name* or *igdb\\_id* query parameter.\n* The combined number of game IDs (*id* and *igdb\\_id*) and game names that you specify in the request must not exceed 100."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ]
+        }
+    },
+    "get-creator-goals": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s goals."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:goals** scope.\n* The ID in *broadcaster\\_id* must match the user ID in the user access token.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "get-channel-guest-star-settings": {
+        "errors": {
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *moderator\\_id*"
+            ],
+            "403": [
+                "403 Forbidden",
+                "Insufficient authorization for viewing channel’s Guest Star settings"
+            ]
+        }
+    },
+    "update-channel-guest-star-settings": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully updated channel settings"
+            ],
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Invalid *slot\\_count*\n* Invalid *group\\_layout*"
+            ]
+        }
+    },
+    "get-guest-star-session": {
+        "errors": {
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *moderator\\_id*"
+            ],
+            "401": [
+                "401 Unauthenticated",
+                "*moderator\\_id* and user token do not match"
+            ]
+        }
+    },
+    "create-guest-star-session": {
+        "errors": {
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Session limit reached (1 active call)"
+            ],
+            "401": [
+                "401 Unauthorized",
+                "Phone verification missing"
+            ],
+            "403": [
+                "403 Forbidden",
+                "Insufficient authorization for creating session"
+            ]
+        }
+    },
+    "end-guest-star-session": {
+        "errors": {
+            "400": [
+                "400 Bad Request",
+                "* Missing or invalid *broadcaster\\_id*\n* Missing or invalid *session\\_id*\n* Session has already been ended"
+            ],
+            "403": [
+                "403 Forbidden",
+                "Insufficient authorization for ending session"
+            ]
+        }
+    },
+    "get-guest-star-invites": {
+        "errors": {
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *session\\_id*"
+            ]
+        }
+    },
+    "send-guest-star-invite": {
+        "errors": {
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *moderator\\_id*\n* Missing *session\\_id*\n* Missing *guest\\_id*\n* Invalid *session\\_id*"
+            ],
+            "403": [
+                "403 Forbidden",
+                "* Unauthorized guest invited\n* Guest already invited"
+            ]
+        }
+    },
+    "delete-guest-star-invite": {
+        "errors": {
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *session\\_id*\n* Missing *guest\\_id*\n* Invalid *session\\_id*"
+            ],
+            "404": [
+                "404 Not Found",
+                "No invite exists for specified *guest\\_id*"
+            ]
+        }
+    },
+    "assign-guest-star-slot": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfuly assigned guest to slot"
+            ],
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *moderator\\_id*\n* Missing *guest\\_id*\n* Missing or invalid *session\\_id*\n* Missing or invalid *slot\\_id*"
+            ],
+            "401": [
+                "401 Unauthorized",
+                "*moderator\\_id* is not a guest star moderator"
+            ],
+            "403": [
+                "403 Forbidden",
+                "* Cannot assign host slot\n* Guest not invited to session\n* Guest already assigned to slot\n* Guest is not ready to join"
+            ]
+        }
+    },
+    "update-guest-star-slot": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfuly updated slot(s)"
+            ],
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing or invalid *session\\_id*\n* Missing or invalid *slot\\_id*"
+            ]
+        }
+    },
+    "delete-guest-star-slot": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfuly removed user from slot"
+            ],
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *moderator\\_id*\n* Missing or invalid *session\\_id*\n* Missing or invalid *slot\\_id*"
+            ],
+            "403": [
+                "403 Forbidden",
+                "* *moderator\\_id* is not a Guest Star moderator\n* The request is attempting to modify a restricted slot"
+            ],
+            "404": [
+                "404 Not Found",
+                "*guest\\_id* or *slot\\_id* not found"
+            ]
+        }
+    },
+    "update-guest-star-slot-settings": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfuly updated slot settings"
+            ],
+            "400": [
+                "400 Bad Request",
+                "* Missing *broadcaster\\_id*\n* Missing *moderator\\_id*\n* Missing or invalid *session\\_id*\n* Missing or invalid *slot\\_id*"
+            ],
+            "403": [
+                "403 Forbidden",
+                "* *moderator\\_id* is not a Guest Star moderator\n* The request is attempting to modify a restricted slot"
+            ]
+        }
+    },
+    "get-hype-train-events": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s Hype Train events."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the *user\\_id* in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:hype\\_train** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "check-automod-status": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully checked the messages."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The `data` field is required and the list must contain one or more messages to check.\n* The `msg_id` field is required.\n* The `msg_text` field is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderation:read** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The ID in *broadcaster\\_id* must match the user ID in the user access token."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The broadcaster exceeded the number of chat message checks that they may make. See the endpoint's rate limits."
+            ]
+        }
+    },
+    "manage-held-automod-messages": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully approved or denied the message."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The value in the `action` field is not valid.\n* The `user_id` field is required.\n* The `msg_id` field is required.\n* The `action` field is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in `user_id` must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:automod** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *user\\_id* is not one of the broadcaster's moderators."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The message specified in the `msg_id` field was not found."
+            ]
+        }
+    },
+    "get-automod-settings": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s AutoMod settings."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:read:automod\\_settings** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "update-automod-settings": {
+        "errors": {
+            "200": [
+                "200 Ok",
+                "Successfully updated the broadcaster’s AutoMod settings."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* is required.\n* The *moderator\\_id* is required.\n* The `overall_level` setting or one or more individual settings like `aggression` is required; the overall and individual settings are mutually exclusive, so don't set both.\n* The value of one or more AutoMod settings is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:automod\\_settings** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "get-banned-users": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of banned users."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderation:read** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "ban-user": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully banned the user or placed them in a timeout."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required.\n* The `user_id` field is required.\n* The text in the `reason` field is too long.\n* The value in the `duration` field is not valid.\n* The user specified in the `user_id` field may not be banned.\n* The user specified in the `user_id` field may not be put in a timeout.\n* The user specified in the `user_id` field is already banned."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:banned\\_users** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ],
+            "409": [
+                "409 Conflict",
+                "* You may not update the user's ban state while someone else is updating the state. For example, someone else is currently banning the user or putting them in a timeout, moving the user from a timeout to a ban, or removing the user from a ban or timeout. Please retry your request."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The app has exceeded the number of requests it may make per minute for this broadcaster."
+            ]
+        }
+    },
+    "unban-user": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully removed the ban or timeout."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required.\n* The *user\\_id* query parameter is required.\n* The user specified in the *user\\_id* query parameter is not banned."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:banned\\_users** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ],
+            "409": [
+                "409 Conflict",
+                "* You may not update the user's ban state while someone else is updating the state. For example, someone else is currently removing the ban or timeout, or they're moving the user from a timeout to a ban. Please retry your request."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The app has exceeded the number of requests it may make per minute for this broadcaster."
+            ]
+        }
+    },
+    "get-unban-requests": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of unban requests."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The *moderator\\_id* query parameter is required.\n* The ID in the *moderator\\_id* query parameter is not valid.\n* The pagination cursor is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:read:unban\\_requests** or **moderator:manage:unban\\_requests** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "resolve-unban-requests": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully resolved the unban request."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The *moderator\\_id* query parameter is required.\n* The ID in the *moderator\\_id* query parameter is not valid.\n* The pagination cursor is not valid.\n* The broadcaster is not receiving unban requests\n* Invalid requested update"
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:unban\\_requests** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "The unban request ID was not found."
+            ]
+        }
+    },
+    "get-blocked-terms": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of blocked terms."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header must contain a user access token.\n* The user access token must include the **moderator:read:blocked\\_terms** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "add-blocked-term": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of blocked terms."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required.\n* The `text` field is required.\n* The length of the term in the `text` field is either too short or too long."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:blocked\\_terms** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "remove-blocked-term": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully removed the blocked term. Also returned if the ID is not found."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required.\n* The *id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:blocked\\_terms** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "delete-chat-messages": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully removed the specified messages."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* You may not delete another moderator's messages.\n* You may not delete the broadcaster's messages."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token is missing the **moderator:manage:chat\\_messages** scope.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The ID in *message\\_id* was not found.\n* The specified message was created more than 6 hours ago."
+            ]
+        }
+    },
+    "get-moderated-channels": {
+        "errors": {
+            "OK CODE": ""
+        }
+    },
+    "get-moderators": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of moderators."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID found in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderation:read** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "add-channel-moderator": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully added the moderator."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in *broadcaster\\_id* was not found.\n* The ID in *user\\_id* was not found.\n* The user in *user\\_id* is already a moderator in the broadcaster's chat room.\n* The user in *user\\_id* cannot become a moderator because they're banned from the channel."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:moderators** scope.\n* The access token is not valid.\n* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "422": [
+                "422 Unprocessable Entity",
+                "* The user in *user\\_id* is a VIP. To make them a moderator, you must first remove them as a VIP (see [Remove Channel VIP](/docs/api/reference#remove-channel-vip))."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The broadcaster has exceeded the number of requests allowed within a 10-second window. See this endpoint's rate limits."
+            ]
+        }
+    },
+    "remove-channel-moderator": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully removed the moderator."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in *broadcaster\\_id* was not found.\n* The ID in *user\\_id* was not found.\n* The user in *user\\_id* is not a moderator in the broadcaster's chat room."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:moderators** scope.\n* The access token is not valid.\n* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The broadcaster has exceeded the number of requests allowed within a 10-second window. See this endpoint's rate limits."
+            ]
+        }
+    },
+    "get-vips": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s list of VIPs."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *user\\_id* query parameter is not valid.\n* The number of *user\\_id* query parameters exceeds the maximum allowed."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:vips** or **channel:manage:vips** scope.\n* The OAuth token is not valid.\n* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ]
+        }
+    },
+    "add-channel-vip": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully added the VIP."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The user in the *user\\_id* query parameter is blocked from the broadcaster's channel.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The ID in the *user\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:vips** scope.\n* The OAuth token is not valid.\n* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The ID in *broadcaster\\_id* was not found.\n* The ID in *user\\_id* was not found."
+            ],
+            "409": [
+                "409 Conflict",
+                "The broadcaster doesn’t have available VIP slots. [Read More](https://help.twitch.tv/s/article/Managing-Roles-for-your-Channel?language=en_US#types)"
+            ],
+            "422": [
+                "422 Unprocessable Entity",
+                "* The user in *user\\_id* is a moderator. To make them a VIP, you must first remove them as a moderator (see [Remove Channel Moderator](https://dev.twitch.tv/docs/api/reference#remove-channel-moderator)).\n* The user in the *user\\_id* query parameter is already a VIP."
+            ],
+            "425": [
+                "425 Too Early",
+                "The broadcaster must complete the Build a Community requirement before they may assign VIPs."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "The broadcaster exceeded the number of VIP that they may add within a 10-second window. See Rate Limits for this endpoint above."
+            ]
+        }
+    },
+    "remove-channel-vip": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully removed the VIP status from the user."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in *broadcaster\\_id* is not valid.\n* The ID in *user\\_id* is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:vips** scope.\n* The OAuth token is not valid.\n* The ID in the *broadcaster\\_id* query parameter must match the user ID in the access token.\n* The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *broadcaster\\_id* doesn't have permission to remove the user's VIP status."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The ID in *broadcaster\\_id* was not found.\n* The ID in *user\\_id* was not found."
+            ],
+            "422": [
+                "422 Unprocessable Entity",
+                "* The user in *user\\_id* is not a VIP in the broadcaster's channel."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "The broadcaster exceeded the number of VIPs that they may remove within a 10-second window. See Rate Limits for this endpoint above."
+            ]
+        }
+    },
+    "update-shield-mode-status": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully updated the broadcaster’s Shield Mode status."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The `is_active` field is required.\n* The value in the `is_active` field is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:shield\\_mode** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "get-shield-mode-status": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s Shield Mode activation status."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:read:shield\\_mode** or **moderator:manage:shield\\_mode** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in *moderator\\_id* is not one of the broadcaster's moderators."
+            ]
+        }
+    },
+    "warn-chat-user": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully warn a user."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *moderator\\_id* query parameter is required.\n* The *user\\_id* query parameter is required.\n* The *reason* query parameter is required.\n* The text in the *reason* field is too long.\n* The user specified in the *user\\_id* may not be warned."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *moderator\\_id* must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **moderator:manage:warnings** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "The user in *moderator\\_id* is not one of the broadcaster’s moderators."
+            ],
+            "409": [
+                "409 Conflict",
+                "You may not update the user’s warning state while someone else is updating the state. For example, someone else is currently warning the user or the user is acknowledging an existing warning. Please retry your request."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "The app has exceeded the number of requests it may make per minute for this broadcaster."
+            ],
+            "500": [
+                "500 Internal Server Error",
+                "Internal Server Error."
+            ]
+        }
+    },
+    "get-polls": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster's polls."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token is missing the **channel:read:polls** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header must match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* None of the IDs in the *id* query parameters were found."
+            ]
+        }
+    },
+    "create-poll": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully created the poll."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `broadcaster_id` field is required.\n* The `title` field is required.\n* The `choices` field is required.\n* The `duration` field is required.\n* The value in `duration` is outside the allowed range of values.\n* The value in `channel_points_per_vote` is outside the allowed range of values.\n* The value in `bits_per_vote` is outside the allowed range of values.\n* The poll's `title` is too long.\n* The choice's `title` is too long.\n* The choice's `title` failed AutoMod checks.\n* The number of choices in the poll may not be less than 2 or greater that 5.\n* The broadcaster already has a poll that's running; you may not create another poll until the current poll completes."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in `broadcaster_id` must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token is missing the **channel:manage:polls** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "end-poll": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully ended the poll."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `broadcaster_id` field is required.\n* The `id` field is required.\n* The `status` field is required.\n* The value in the `status` field is not valid.\n* The poll must be active to terminate or archive it."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in `broadcaster_id` must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:polls** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header must match the client ID specified in the access token."
+            ]
+        }
+    },
+    "get-predictions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of predictions."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:predictions** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "create-prediction": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully created the Channel Points Prediction."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `broadcaster_id` field is required.\n* The `title` field is required.\n* The `outcomes` field is required.\n* The `prediction_window` field is required.\n* The value in `prediction_window` is outside the allowed range of values.\n* The prediction's `title` is too long.\n* The outcome's `title` is too long.\n* The outcome's `title` failed AutoMod checks.\n* There must be 2 outcomes in the prediction.\n* The broadcaster already has a prediction that's running; you may not create another prediction until the current prediction is resolved or canceled."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in `broadcaster_id` must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:predictions** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                " "
+            ]
+        }
+    },
+    "end-prediction": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully ended the prediction."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `broadcaster_id` field is required.\n* The `id` field is required.\n* The `status` field is required.\n* The `winning_outcome_id` field is required if `status` is RESOLVED.\n* The value in the `status` field is not valid.\n* To update the prediction's status to RESOLVED or CANCELED, its current status must be ACTIVE or LOCKED.\n* To update the prediction's status to LOCKED, its current status must be ACTIVE."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in `broadcaster_id` must match the user ID in the OAuth token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:predictions** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The prediction in the `id` field was not found.\n* The outcome in the `winning_outcome_id` field was not found."
+            ]
+        }
+    },
+    "start-a-raid": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully requested to start a raid. To determine whether the raid successfully occurred (that is, the broadcaster clicked **Raid Now** or the countdown expired), you must subscribe to the [Channel Raid](/docs/eventsub/eventsub-subscription-types#channelraid) event."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The raiding broadcaster is blocked from the targeted channel.\n* The targeted channel doesn't accept raids from this broadcaster.\n* There are too many viewers in the raiding party.\n* The IDs in *from\\_broadcaster\\_id* and *to\\_broadcaster\\_id* cannot be the same ID.\n* The ID in the *from\\_broadcaster\\_id* query parameter is not valid.\n* The ID in the *to\\_broadcaster\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *from\\_broadcaster\\_id* must match the user ID found in the request’s OAuth token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:raids** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The targeted channel was not found."
+            ],
+            "409": [
+                "409 Conflict",
+                "* The broadcaster is already in the process of raiding another channel."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The broadcaster exceeded the number of raid requests that they may make. The limit is 10 requests within a 10-minute window."
+            ]
+        }
+    },
+    "cancel-a-raid": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "The pending raid was successfully canceled."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in the *broadcaster\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID found in the request’s OAuth token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:raids** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The broadcaster doesn't have a pending raid to cancel."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The broadcaster exceeded the number of raid requests that they may make. The limit is 10 requests within a 10-minute window."
+            ]
+        }
+    },
+    "get-channel-stream-schedule": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s streaming schedule."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The ID in the *id* query parameter is not valid.\n* The format of the date and time in the *start\\_time* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify a valid app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the Client ID in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* Only partners and affiliates may add non-recurring broadcast segments."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The broadcaster has not created a streaming schedule."
+            ]
+        }
+    },
+    "get-channel-icalendar": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s schedule as an iCalendar."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid."
+            ]
+        }
+    },
+    "update-channel-stream-schedule": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully updated the broadcaster’s schedule settings."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The format of the string in *vacation\\_start\\_time* is not valid.\n* The format of the string in *vacation\\_end\\_time* is not valid.\n* The date in *vacation\\_end\\_time* must be later than the date in *vacation\\_start\\_time*."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:schedule** scope.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The broadcaster's schedule was not found."
+            ]
+        }
+    },
+    "create-channel-stream-schedule-segment": {
+        "errors": {
+            "200": [
+                "200 Ok",
+                "Successfully added the broadcast segment."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The format of the date and time in the `start_time` field is not valid.\n* The value in the `timezone` field is not valid.\n* The value in the `duration` field is not valid.\n* The ID in the `category_id` field is not valid.\n* The string in the `title` field is too long."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:schedule** scope.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* Only partners and affiliates may add non-recurring broadcast segments."
+            ]
+        }
+    },
+    "update-channel-stream-schedule-segment": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully updated the broadcast segment."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The *id* query parameter is required.\n* The ID in the *id* query parameter is not valid.\n* The format of the date and time in the `start_time` field is not valid.\n* The value in the `timezone` field is not valid.\n* The value in the `duration` field is not valid.\n* The ID in the `category_id` field is not valid.\n* The string in the `title` field is too long."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:schedule** scope.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The specified broadcast segment was not found."
+            ]
+        }
+    },
+    "delete-channel-stream-schedule-segment": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully removed the broadcast segment."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The ID in the *broadcaster\\_id* query parameter is not valid.\n* The *id* query parameter is required.\n* The ID in the *id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in the *broadcaster\\_id* query parameter must match the user ID in the user access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:schedule** scope.\n* The access token is not valid.\n* The ID in the Client-Id header must match the client ID in the OAuth token."
+            ]
+        }
+    },
+    "search-categories": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of category names that matched the specified query string."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *query* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain an app access token or user access token.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "search-channels": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of category names that matched the specified query string."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *query* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain an app access token or user access token.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "get-stream-key": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the stream’s key."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* field is required.\n* The ID in the *broadcaster\\_id* field is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:stream\\_key** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header must match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "The user must complete additional steps in order to stream. Present the user with the returned error message."
+            ]
+        }
+    },
+    "get-streams": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of streams."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The value in the *type* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the Client ID in the access token."
+            ]
+        }
+    },
+    "get-followed-streams": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of broadcasters that the user follows and that are streaming live."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *user\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *user\\_id* must match the user ID found in the access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:read:follows** scope.\n* The OAuth token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "create-stream-marker": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully created the marker."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The `user_id` field is required.\n* The length of the string in the `description` field is too long."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:manage:broadcast** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in the access token is not authorized to create video markers for the user in the `user_id` field. The user in the access token must own the video or they must be one of the broadcaster's editors."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The user in the `user_id` field is not streaming live.\n* The ID in the user\\_id field is not valid.\n* The user hasn't enabled video on demand (VOD)."
+            ]
+        }
+    },
+    "get-stream-markers": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of markers."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The request must specify either the *user\\_id* or *video\\_id* query parameter, but not both."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:read:broadcast** or **user:manage:broadcast** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* The user in the access token is not authorized to get the video's markers. The user in the access token must own the video or be one of the broadcaster's editors."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The user specified in the *user\\_id* query parameter doesn't have videos."
+            ]
+        }
+    },
+    "get-broadcaster-subscriptions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster’s list of subscribers."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID found in the request’s OAuth token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:read:subscriptions** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "check-user-subscription": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "The user subscribes to the broadcaster."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required.\n* The *user\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *user\\_id* must match the user ID found in the request’s OAuth token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:read:subscriptions** scope.\n* The access token is not valid.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The user in *user\\_id* does not subscribe to the broadcaster in *broadcaster\\_id*."
+            ]
+        }
+    },
+    "get-all-stream-tags": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of tags."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *tag\\_id* query parameter is empty (for example, `&tag_id=`).\n* The list of tag IDs is too long."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the Client ID in the access token."
+            ]
+        }
+    },
+    "get-stream-tags": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of tags."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* field is required.\n* The ID in the *broadcaster\\_id* field is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must specify an app access token or user access token.\n* The access token is not valid.\n* The ID in the Client-Id header must match the Client ID in the access token."
+            ]
+        }
+    },
+    "get-channel-teams": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of teams."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is missing or invalid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header must contain an app access token or user access token.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The broadcaster was not found."
+            ]
+        }
+    },
+    "get-teams": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the team's information."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *name* or *id* query parameter is required.\n* Specify either the *name* or *id* query parameter but not both.\n* The ID in the *id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header must contain an app access token or user access token.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The specified team was not found."
+            ]
+        }
+    },
+    "get-users": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the specified users’ information."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The \\*id\\* or \\*login\\* query parameter is required unless the request uses a user access token.\n* The request exceeded the maximum allowed number of \\*id\\* and/or \\*login\\* query parameters."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain an app access token or user access token.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "update-user": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully updated the specified user's information."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The string in the *description* query parameter is too long."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:edit** scope.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "The app exceeded the number of requests that it may make. "
+            ]
+        }
+    },
+    "get-user-block-list": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the broadcaster's list of blocked users."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *broadcaster\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The ID in *broadcaster\\_id* must match the user ID found in the request’s access token.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:read:blocked\\_users** scope.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "block-user": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully blocked the user."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *target\\_user\\_id* query parameter is required.\n* The ID in *target\\_user\\_id* cannot be the same as the user ID in the access token.\n* The value in *source\\_context* is not valid.\n* The value in *reason* is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:manage:blocked\\_users** scope.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "unblock-user": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully removed the block."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *target\\_user\\_id* query parameter is required."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:read:blocked\\_users** scope.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "get-user-extensions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the user's installed extensions."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:read:broadcast** scope.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "get-user-active-extensions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the user's active extensions."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *user\\_id* query parameter is required if you specify an app access token."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain an app access token or user access token.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "update-user-extensions": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully updated the active extensions."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The JSON payload is malformed."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:edit:broadcast** scope.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* An extension with the specified `id` and `version` values was not found."
+            ]
+        }
+    },
+    "get-videos": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully retrieved the list of videos."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The request must specify either the *id* or *user\\_id* or *game\\_id* query parameter.\n* The *id*, *user\\_id*, and *game\\_id* query parameters are mutually exclusive; you must specify only one of them.\n* The value in the *id* query parameter is not valid.\n* The ID in the *game\\_id* query parameter is not valid.\n* The value in the *type* query parameter is not valid.\n* The value in the *period* query parameter is not valid.\n* The value in the *sort* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The Authorization header is required and must contain an app access token or user access token.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The ID in the *game\\_id* query parameter was not found.\n* The ID in the *id* query parameter was not found. Returned only if all the IDs were not found; otherwise, the ID is ignored."
+            ]
+        }
+    },
+    "delete-videos": {
+        "errors": {
+            "OK CODE": "200",
+            "200": [
+                "200 OK",
+                "Successfully deleted the list of videos."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The *id* query parameter is required.\n* The request exceeded the number of allowed *id* query parameters."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The caller is not authorized to delete the specified video.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **channel:manage:videos** scope.\n* The access token is not valid.\n* The ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ]
+        }
+    },
+    "send-whisper": {
+        "errors": {
+            "204": [
+                "204 No Content",
+                "Successfully sent the whisper message or the message was silently dropped."
+            ],
+            "400": [
+                "400 Bad Request",
+                "* The ID in the *from\\_user\\_id* and *to\\_user\\_id* query parameters must be different.\n* The `message` field must not contain an empty string.\n* The user that you're sending the whisper to doesn't allow whisper messages (see the **Block Whispers from Strangers** setting in your [Security and Privacy](https://www.twitch.tv/settings/security) settings).\n* Whisper messages may not be sent to suspended users.\n* The ID in the *from\\_user\\_id* query parameter is not valid.\n* The ID in the *to\\_user\\_id* query parameter is not valid."
+            ],
+            "401": [
+                "401 Unauthorized",
+                "* The user in the *from\\_user\\_id* query parameter must have a verified phone number.\n* The Authorization header is required and must contain a user access token.\n* The user access token must include the **user:manage:whispers** scope.\n* The access token is not valid.\n* This ID in *from\\_user\\_id* must match the user ID in the user access token.\n* The client ID specified in the Client-Id header does not match the client ID specified in the access token."
+            ],
+            "403": [
+                "403 Forbidden",
+                "* Suspended users may not send whisper messages.\n* The account that's sending the message doesn't allow sending whispers."
+            ],
+            "404": [
+                "404 Not Found",
+                "* The ID in *to\\_user\\_id* was not found."
+            ],
+            "429": [
+                "429 Too Many Requests",
+                "* The sending user exceeded the number of whisper requests that they may make. See Rate Limits for this endpoint above."
+            ]
+        }
+    }
+}
