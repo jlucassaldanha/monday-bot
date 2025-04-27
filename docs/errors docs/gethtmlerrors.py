@@ -1,5 +1,6 @@
 import requests
 from html.parser import HTMLParser
+import markdownify
 import json
 
 class HTMLFilter(HTMLParser):
@@ -140,8 +141,3 @@ if __name__ == "__main__":
         json.dump(f, file, indent=4, ensure_ascii=False)
     file.close()
 
-    
-
-    
-    
-    
