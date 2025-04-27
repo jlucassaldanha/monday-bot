@@ -23,9 +23,11 @@ class Credentials():
         """
         Creates a :class:`AuthorizationCodeGrantFlow`.
 
-        Args:
-            credentials_json (str): The path to the credentials.json
-            file that have client information.       
+        Parameters:
+            credentials_json (str) : The path to the credentials.json file that have client information.  
+
+        Returns:
+            A dict of credentials data.     
         """
 
         # Read the credentials file data and check keys    
@@ -214,8 +216,13 @@ class Token():
             self.valid_token = self.validate_token(self.access_token)
 
             return self.token_file_data
+        
         else:
-            raise Exception("Token file missing keys")
+            missing_keys = ""
+            for k in list(self.token_file_data):
+                if not k in ["access_token", "refresh_token", "token_type"]:
+                    missing_keys += "'" + k + "', "
+                    raise APIOAuthErrors("Token file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
 
     @classmethod
     def create_refresh_token(self, 
@@ -225,18 +232,21 @@ class Token():
                              redirect_uri: str = None, 
                              refresh_token: str = None) -> dict:
         """
-        Create a new token:
+        Create new or refresh a token:
         
-        Args:
-            code (str) = None: Code give by the authorization screen 
-            when run ´openLocalServerAuthorization´.
-            refresh_token (str) = None: Code to refresh the token.
+        Parameters:
+            client_id (str) : Client id key from credentials.
+            client_secrets (str) : Client secrets from credentials.
+            code (str) = None : Code give by the authorization screen when run ´openLocalServerAuthorization´.
+            redirect_uri (str) : Default = None. Uri to redirect client after authorization.
+            refresh_token (str) : Default = None. Code to refresh the token.
 
         Save data in token.json.
 
         Returns:
             New token data.
         """
+
         # Construct links to request
         url = self.OAUTH2_URL_BASE + "/token"
 
@@ -263,24 +273,31 @@ class Token():
 
                 return token_data # return
             
+        #### REVISAR ERRO PARA REFRESH TOKEN ####
             else:
-                raise Exception("Token data missing keys")
-            
+                missing_keys = ""
+                for k in list(self.token_file_data):
+                    if not k in ["access_token", "refresh_token", "token_type"]:
+                        missing_keys += "'" + k + "', "
+                        raise APIOAuthErrors("Refreshed or created token file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
         else:
-            raise Exception("HTTPS response error:\nError getting authorization token")            
+            try:
+                r.raise_for_status()
+            except requests.exceptions.HTTPError as error:
+                raise APIOAuthErrors("Faield to refresh or create a new token using authorization code: {}".format(error))            
 
     @classmethod
     def validate_token(self, token: str) -> dict:
         """
         Validate the token:
 
-        Args:
+        Parameters:
             token (str): Token provided by the oauth.
 
         Returns:
-            If token is valid, return client data, 
-            else, return False.
+            If token is valid, return client data, else, return False.
         """
+
         # URL
         url = self.OAUTH2_URL_BASE + "/validate"
         # params
@@ -295,7 +312,7 @@ class Token():
                 return token_data
             
             else:
-                raise Exception("Token file missing keys")
+                raise APIOAuthErrors("Token file missing client_id key.")
             
         if r.status_code == 401:
             return False
