@@ -79,114 +79,220 @@ def get_info(functions: list):
 
         f = f[_i:]
 
-        inicio = '<p>'
-        final = '<h3>Request Body</h3>'
-
-        i = f.find(inicio)
-        f = f[i:]
-        _i = f.find(final)
-
-        if _i == -1:
-            final = '<h3>Request Query Parameters</h3>'
-            _i = f.find(final)
-
-        f_info = f[:_i]
-
-        h = markdownify.markdownify(f_info, heading_style="ATX")
-
-        out[f_id]['info'] = h
-
-        f = f[_i:]
-
-        inicio = final
-        final = '</tbody>'
+        inicio = f'<a class="editor-link" href="cloudcannon:#content_blocks[{i_f}]" data-cms-editor-link-style="modal">&#x270E;</a>'
+        final = '<h3>Request Query'
 
         i = f.find(inicio) + len(inicio)
         f = f[i:]
         _i = f.find(final)
 
-        f_body = f[:_i]
+        query = True
+        if _i == -1:
+            query = False
+            _i = f.find('<h3>Request Body')
 
-        inicio = '<thead>'
-        final = '</thead>'
+        f_info = f[:_i]
 
-        i = f_body.find(inicio) + len(inicio)
-        f_body = f_body[i:]
-        _i = f_body.find(final)
-
-        heads = f_body[:_i]
-
-        h_inicio = '<th>'
-    
-        head_count = 0
-        while heads.find(h_inicio) != -1:
-            h_i = heads.find(h_inicio) + len(h_inicio)
-            heads = heads[h_i:]
-
-            head_count += 1
-
-        f_body = f_body[_i:]
+        h = markdownify.markdownify(f_info, heading_style="ATX")
         
+        out[f_id]['info'] = h
+
+        out[f_id]['query'] = {}
+        
+        if query:
+            f = f[_i:]
+
+            inicio = final
+            final = '</tbody>'
+
+            i = f.find(inicio) + len(inicio)
+            f = f[i:]
+            _i = f.find(final)
+
+            f_query = f[:_i]
+
+            inicio = '<thead>'
+            final = '</thead>'
+
+            i = f_query.find(inicio) + len(inicio)
+            f_query = f_query[i:]
+            _i = f_query.find(final)
+
+            heads = f_query[:_i]
+
+            h_inicio = '<th>'
+        
+            head_count = 0
+            while heads.find(h_inicio) != -1:
+                h_i = heads.find(h_inicio) + len(h_inicio)
+                heads = heads[h_i:]
+
+                head_count += 1
+
+            f_query = f_query[_i:]
+
+            inicio = '<tr>'
+            final = '</tr>'
+            b_inicio = '<td>'
+            b_final = '</td>'
+
+            while f_query.find(inicio) != -1:
+                i = f_query.find(inicio) + len(inicio)
+                f_query = f_query[i:]
+                _i = f_query.find(final)
+
+                b = f_query[:_i]
+
+                f_query = f_query[_i+len(final):]
+
+                for __i in range(0, head_count):
+                    i = b.find(b_inicio) + len(b_inicio)
+                    b = b[i:]
+                    _i = b.find(b_final)
+
+                    if __i == 0:
+
+                        var = b[:_i]
+
+                        b = b[_i+len(b_final):]
+                    if __i == 1:
+
+                        tipo = b[:_i]
+
+                        b = b[_i+len(b_final):]
+
+                    if head_count > 3:
+                        if __i == 2:
+                            outro = b[:_i]
+
+                            b = b[_i+len(b_final):]
+                        if __i == 3:
+
+                            descr = b[:_i]
+
+                            b = b[_i+len(b_final):]
+                    else:
+                        if __i == 2:
+
+                            descr = b[:_i]
+
+                            b = b[_i+len(b_final):]
+                        
+                        outro = ''
+
+                h = markdownify.markdownify(descr, heading_style="ATX")
+
+                v = HTMLFilterRaw()
+                v.feed(var)
+                var = v.text.strip()
+
+                out[f_id]['query'][var] = [var, tipo, outro, h] 
+
+                f = f_query
+        else:
+            out[f_id]['query']["None"] = ""
+
+        _i = f.find('<h3>Request Body')
+
+        body = True
+        if _i == -1:
+            body = False
+            
         out[f_id]['body'] = {}
 
-        inicio = '<tr>'
-        final = '</tr>'
-        b_inicio = '<td>'
-        b_final = '</td>'
+        if body:
+            f = f[_i:]
 
-        while f_body.find(inicio) != -1:
+            inicio = final
+            final = '</tbody>'
+
+            i = f.find(inicio) + len(inicio)
+            f = f[i:]
+            _i = f.find(final)
+
+            f_body = f[:_i]
+
+            inicio = '<thead>'
+            final = '</thead>'
+
             i = f_body.find(inicio) + len(inicio)
             f_body = f_body[i:]
             _i = f_body.find(final)
 
-            b = f_body[:_i]
+            heads = f_body[:_i]
 
-            f_body = f_body[_i+len(final):]
+            h_inicio = '<th>'
+        
+            head_count = 0
+            while heads.find(h_inicio) != -1:
+                h_i = heads.find(h_inicio) + len(h_inicio)
+                heads = heads[h_i:]
 
-            for __i in range(0, head_count):
-                i = b.find(b_inicio) + len(b_inicio)
-                b = b[i:]
-                _i = b.find(b_final)
+                head_count += 1
 
-                if __i == 0:
+            f_body = f_body[_i:]
 
-                    var = b[:_i]
+            inicio = '<tr>'
+            final = '</tr>'
+            b_inicio = '<td>'
+            b_final = '</td>'
 
-                    b = b[_i+len(b_final):]
-                if __i == 1:
+            while f_body.find(inicio) != -1:
+                i = f_body.find(inicio) + len(inicio)
+                f_body = f_body[i:]
+                _i = f_body.find(final)
 
-                    tipo = b[:_i]
+                b = f_body[:_i]
 
-                    b = b[_i+len(b_final):]
+                f_body = f_body[_i+len(final):]
 
-                if head_count > 3:
-                    if __i == 2:
-                        outro = b[:_i]
+                for __i in range(0, head_count):
+                    i = b.find(b_inicio) + len(b_inicio)
+                    b = b[i:]
+                    _i = b.find(b_final)
+
+                    if __i == 0:
+
+                        var = b[:_i]
 
                         b = b[_i+len(b_final):]
-                    if __i == 3:
+                    if __i == 1:
 
-                        descr = b[:_i]
-
-                        b = b[_i+len(b_final):]
-                else:
-                    if __i == 2:
-
-                        descr = b[:_i]
+                        tipo = b[:_i]
 
                         b = b[_i+len(b_final):]
-                    
-                    outro = ''
 
-            h = markdownify.markdownify(descr, heading_style="ATX")
+                    if head_count > 3:
+                        if __i == 2:
+                            outro = b[:_i]
 
-            v = HTMLFilterRaw()
-            v.feed(var)
-            var = v.text.strip()
+                            b = b[_i+len(b_final):]
+                        if __i == 3:
 
-            out[f_id]['body'][var] = [var, tipo, outro, h] 
+                            descr = b[:_i]
 
-            f = f_body
+                            b = b[_i+len(b_final):]
+                    else:
+                        if __i == 2:
+
+                            descr = b[:_i]
+
+                            b = b[_i+len(b_final):]
+                        
+                        outro = ''
+
+                h = markdownify.markdownify(descr, heading_style="ATX")
+
+                v = HTMLFilterRaw()
+                v.feed(var)
+                var = v.text.strip()
+
+                out[f_id]['body'][var] = [var, tipo, outro, h] 
+
+                f = f_body
+        else:
+            out[f_id]['body']["None"] = ""
+
 
     return out
 
@@ -196,10 +302,11 @@ if __name__ == "__main__":
     l = get_functions(page)
 
     f = get_info(l)
+    print(len(f.keys()))
 
-    #with open("./docs/errors docs/index.html", "w", encoding="UTF-8") as file:
-    #    file.write(l[0])
-    #file.close()
+    with open("./docs/errors docs/index.html", "w", encoding="UTF-8") as file:
+        file.write(l[9])
+    file.close()
 
     with open("./docs/errors docs/infos.json", "w", encoding="UTF-8") as file:
         json.dump(f, file, indent=4, ensure_ascii=False)

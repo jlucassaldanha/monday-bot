@@ -149,10 +149,6 @@ class Basics():
             self.created_clip_data = r.json()
             return self.created_clip_data['data'][0]
 
-        else:
-            raise HTTPError("teste erro")
-
-        """
         # Error codes
         if r.status_code == 400: 
             raise Exception("HTTPS response error:\n Bad request with wrong parameters")
@@ -162,9 +158,6 @@ class Basics():
             raise Exception("HTTPS response error:\n Can't make clips of this broadcaster")
         if r.status_code == 404:
             raise Exception("HTTPS response error:\n Broadcaster must be in live")
-    """
-
-
 
     @classmethod
     def Get_Clip(self, 

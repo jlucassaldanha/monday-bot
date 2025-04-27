@@ -1,28 +1,25 @@
 
-			<h2 id="start-commercial">Start Commercial</h2>
-			<a class="editor-link" href="cloudcannon:#content_blocks[0]" data-cms-editor-link-style="modal">&#x270E;</a>
+			<h2 id="modify-channel-information">Modify Channel Information</h2>
+			<a class="editor-link" href="cloudcannon:#content_blocks[9]" data-cms-editor-link-style="modal">&#x270E;</a>
 			
-				<p>Starts a commercial on the specified channel.</p>
-
-<p><strong>NOTE</strong>: Only partners and affiliates may run commercials and they must be streaming live at the time.</p>
-
-<p><strong>NOTE</strong>: Only the broadcaster may start a commercial; the broadcaster’s editors and moderators may not start commercials on behalf of the broadcaster.</p>
+				<p>Updates a channel’s properties.</p>
 
 <h3>Authorization</h3>
 
-<p>Requires a <a href="/docs/authentication#user-access-tokens">user access token</a> that includes the <strong>channel:edit:commercial</strong> scope.</p>
+<p>Requires a <a href="/docs/authentication#user-access-tokens">user access token</a> that includes the <strong>channel:manage:broadcast</strong> scope.</p>
 
 <h3>URL</h3>
 
-<p><code class="highlighter-rouge">POST https://api.twitch.tv/helix/channels/commercial</code></p>
+<p><code class="highlighter-rouge">PATCH https://api.twitch.tv/helix/channels</code></p>
 
-<h3>Request Body</h3>
+<h3>Request Query Parameters</h3>
 
 <table>
   <thead>
     <tr>
-      <th>Field</th>
+      <th>Parameter</th>
       <th>Type</th>
+      <th>Required?</th>
       <th>Description</th>
     </tr>
   </thead>
@@ -30,53 +27,119 @@
     <tr>
       <td>broadcaster_id</td>
       <td>String</td>
-      <td>The ID of the partner or affiliate broadcaster that wants to run the commercial. This ID must match the user ID found in the OAuth token.</td>
-    </tr>
-    <tr>
-      <td>length</td>
-      <td>Integer</td>
-      <td>The length of the commercial to run, in seconds. Twitch tries to serve a commercial that’s the requested length, but it may be shorter or longer. The maximum length you should request is 180 seconds.</td>
+      <td>Yes</td>
+      <td>The ID of the broadcaster whose channel you want to update. This ID must match the user ID in the user access token.</td>
     </tr>
   </tbody>
 </table>
 
-<h3>Response Body</h3>
+<h3>Request Body</h3>
+
+<p>All fields are optional, but you must specify at least one field.</p>
 
 <table>
   <thead>
     <tr>
       <th>Field</th>
       <th>Type</th>
+      <th>Required?</th>
       <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>data</td>
-      <td>Object[]</td>
-      <td>An array that contains a single object with the status of your start commercial request.</td>
-    </tr>
-    <tr>
-      <td>   length</td>
-      <td>Integer</td>
-      <td>The length of the commercial you requested. If you request a commercial that’s longer than 180 seconds, the API uses 180 seconds.</td>
-    </tr>
-    <tr>
-      <td>   message</td>
+      <td>game_id</td>
       <td>String</td>
-      <td>A message that indicates whether Twitch was able to serve an ad.</td>
+      <td>No</td>
+      <td>The ID of the game that the user plays. The game is not updated if the ID isn’t a game ID that Twitch recognizes. To unset this field, use “0” or “” (an empty string).</td>
     </tr>
     <tr>
-      <td>   retry_after</td>
+      <td>broadcaster_language</td>
+      <td>String</td>
+      <td>No</td>
+      <td>The user’s preferred language. Set the value to an ISO 639-1 two-letter language code (for example, <em>en</em> for English). Set to “other” if the user’s preferred language is not a Twitch supported language. The language isn’t updated if the language code isn’t a Twitch supported language.</td>
+    </tr>
+    <tr>
+      <td>title</td>
+      <td>String</td>
+      <td>No</td>
+      <td>The title of the user’s stream. You may not set this field to an empty string.</td>
+    </tr>
+    <tr>
+      <td>delay</td>
       <td>Integer</td>
-      <td>The number of seconds you must wait before running another commercial.</td>
+      <td>No</td>
+      <td>The number of seconds you want your broadcast buffered before streaming it live. The delay helps ensure fairness during competitive play. Only users with Partner status may set this field. The maximum delay is 900 seconds (15 minutes).</td>
+    </tr>
+    <tr>
+      <td>tags</td>
+      <td>String[]</td>
+      <td>No</td>
+      <td>A list of channel-defined tags to apply to the channel. To remove all tags from the channel, set tags to an empty array. Tags help identify the content that the channel streams. <a href="https://help.twitch.tv/s/article/guide-to-tags" target="_blank">Learn More</a><br><br>A channel may specify a maximum of 10 tags. Each tag is limited to a maximum of 25 characters and may not be an empty string or contain spaces or special characters. Tags are case insensitive. For readability, consider using camelCasing or PascalCasing.</td>
+    </tr>
+    <tr>
+      <td>content_classification_labels</td>
+      <td>Label[]</td>
+      <td>No</td>
+      <td>List of labels that should be set as the Channel’s CCLs.</td>
+    </tr>
+    <tr>
+      <td>   id</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>ID of the <a href="https://help.twitch.tv/s/article/content-classification-labels" target="_blank">Content Classification Labels</a> that must be added/removed from the channel. Can be one of the following values:<ul><li>DebatedSocialIssuesAndPolitics</li><li>DrugsIntoxication</li><li>SexualThemes</li><li>ViolentGraphic</li><li>Gambling</li><li>ProfanityVulgarity</li></ul></td>
+    </tr>
+    <tr>
+      <td>   is_enabled</td>
+      <td>boolean</td>
+      <td>Yes</td>
+      <td>Boolean flag indicating whether the label should be enabled (true) or disabled for the channel.</td>
+    </tr>
+    <tr>
+      <td>is_branded_content</td>
+      <td>Boolean</td>
+      <td>No</td>
+      <td>Boolean flag indicating if the channel has branded content.</td>
     </tr>
   </tbody>
 </table>
 
 <h3>Response Codes</h3>
 
-<table><thead><tr><th>Code</th><th>Description</th></tr></thead><tbody><tr><td>200 OK</td><td>Successfully started the commercial.</td></tr><tr><td>400 Bad Request</td><td><ul><li>The <i>broadcaster_id</i> query parameter is required.</li><li>The <i>length</i> query parameter is required.</li><li>The ID in <i>broadcaster_id</i> is not valid.</li><li>To start a commercial, the broadcaster must be streaming live.</li><li>The broadcaster may not run another commercial until the cooldown period expires. The <code>retry_after</code> field in the previous start commercial response specifies the amount of time the broadcaster must wait between running commercials.</li></ul></td></tr><tr><td>401 Unauthorized</td><td><ul><li>The ID in <code>broadcaster_id</code> must match the user ID found in the request’s OAuth token.</li><li>The Authorization header is required and must contain a user access token.</li><li>The user access token must include the <b>channel:edit:commercial</b> scope.</li><li>The OAuth token is not valid.</li><li>The client ID specified in the Client-Id header does not match the client ID specified in the OAuth token.</li></ul></td></tr><tr><td>404 Not Found</td><td><ul><li>The ID in <code>broadcaster_id</code> was not found.</li></ul></td></tr><tr><td>429 Too Many Requests</td><td><ul><li>The broadcaster may not run another commercial until the cooldown period expires. The <code>retry_after</code> field in the previous start commercial response specifies the amount of time the broadcaster must wait between running commercials.</li></ul></td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>HTTP Code</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>204 No Content</td>
+      <td>Successfully updated the channel’s properties.</td>
+    </tr>
+    <tr>
+      <td>400 Bad Request</td>
+      <td><ul><li>The <i>broadcaster_id</i> query parameter is required.</li><li>The request must update at least one property.</li><li>The <code>title</code> field may not contain an empty string.</li><li>The ID in <code>game_id</code> is not valid.</li><li>To update the <code>delay</code> field, the broadcaster must have partner status.</li><li>The list in the <code>tags</code> field exceeds the maximum number of tags allowed.</li><li>A tag in the <code>tags</code> field exceeds the maximum length allowed.</li><li>A tag in the <code>tags</code> field is empty.</li><li>A tag in the <code>tags</code> field contains special characters or spaces.</li><li>One or more tags in the <code>tags</code> field failed AutoMod review.</li><li>Game restricted for user's age and region</li></ul></td>
+    </tr>
+    <tr>
+      <td>401 Unauthorized</td>
+      <td><ul><li>User requests CCL for a channel they don’t own</li><li>The ID in <i>broadcaster_id</i> must match the user ID found in the OAuth token.</li><li>The Authorization header is required and must specify a user access token.</li><li>The OAuth token must include the <b>channel:manage:broadcast</b> scope.</li><li>The OAuth token is not valid.</li><li>The ID in the Client-Id header must match the Client ID in the OAuth token.</li></ul></td>
+    </tr>
+    <tr>
+      <td>403 Forbidden</td>
+      <td><ul><li>User requested gaming CCLs to be added to their channel</li><li>Unallowed CCLs declared for underaged authorized user in a restricted country</li></ul></td>
+    </tr>
+    <tr>
+      <td>409 Too Many Requests</td>
+      <td>User set the Branded Content flag too frequently</td>
+    </tr>
+    <tr>
+      <td>500 Internal server error</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
 
 			
 		</section>
@@ -85,30 +148,27 @@
 			<section class="right-code">
 				<h3>Example Request</h3>
 
-<p>This request starts a commercial.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.twitch.tv/helix/channels/commercial'</span> <span class="se">\</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> PATCH <span class="s1">'https://api.twitch.tv/helix/channels?broadcaster_id=41245072'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'Client-Id: wbmytr93xzw8zbg0p1izqyzzc5mbiz'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-<span class="nt">--data-raw</span> <span class="s1">'{
-  "broadcaster_id": "141981764",
-  "length": 60
+<span class="nt">--data-raw</span> <span class="s1">'{"game_id":"33214", "title":"there are helicopters in the game? REASON TO PLAY FORTNITE found", "broadcaster_language":"en", "tags":["LevelingUp"]}'</span>
+</code></pre></div></div>
+<p>Set CCLs for a Channel</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-X</span> PATCH
+<span class="s1">'https://api.twitch.tv/helix/channels?broadcaster_id=41245072'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Authorization: Bearer 2gbdx6oar67tqtcmt49t3wpcgycthx'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Client-Id: wbmytr93xzw8zbg0p1izqyzzc5mbiz'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">--data-raw</span> <span class="s1">'{ 
+    “game_id”: “SomeGameID”,
+    “content_classification_labels”: [
+       {“id”: “Gambling”, “is_enabled”: true}, // adds this label
+       {“id”: “DrugsIntoxication”, “is_enabled”: false}  // removes this label
+     ],
+    “is_branded_content”: true
 }'</span>
 </code></pre></div></div>
-
-<h3>Example Response</h3>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"length"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"message"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"retry_after"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">480</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
 
 			</section>
 	
