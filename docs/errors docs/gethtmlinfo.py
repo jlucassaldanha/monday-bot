@@ -90,6 +90,8 @@ def get_info(functions: list):
         if _i == -1:
             query = False
             _i = f.find('<h3>Request Body')
+            if _i == -1:
+                _i = f.find('<h3>Response Body</h3>')
 
         f_info = f[:_i]
 
@@ -197,6 +199,8 @@ def get_info(functions: list):
         body = True
         if _i == -1:
             body = False
+            if _i == -1:
+                _i = f.find('<h3>Response Body</h3>')
             
         out[f_id]['body'] = {}
 
