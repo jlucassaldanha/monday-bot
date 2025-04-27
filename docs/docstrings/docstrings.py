@@ -29,7 +29,7 @@ for func in INFOS.keys():
         for k in body_params.keys():
             body += f"\t{body_params[k][0]} ({body_params[k][1]}) : {body_params[k][3]}\n\n"
 
-    with open(path+"\\APIdocstrings.md", '+a', encoding="UTF-8") as docstrings_file:
+    with open("APIdocstrings.md", '+a', encoding="UTF-8") as docstrings_file:
         docstrings_file.write(title)
         docstrings_file.write(info)
         docstrings_file.write("\tclient_id (str): Client aplication id.\n\n\ttoken (str) : User oauth token.\n\n")
