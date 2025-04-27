@@ -15,5 +15,5 @@ print(user_info)
 #follows = Basics.Get_Followed_Streams(client_id, token, user_info[0]["id"])
 #print(follows)
 
-clip = Basics.Create_Clip(client_id, token, user_info[0]["id"])
-print(clip)
+#clip = Basics.Create_Clip(client_id, token, user_info[0]["id"])
+#print(clip)
