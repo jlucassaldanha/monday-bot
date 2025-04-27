@@ -12,8 +12,8 @@ token = oauth.token
 user_info = Basics.Get_Users(client_id, token, ['ojoojao'])
 print(user_info)
 
-follows = Basics.Get_Followed_Streams(client_id, token, user_info[0]["id"])
-print(follows)
+#follows = Basics.Get_Followed_Streams(client_id, token, user_info[0]["id"])
+#print(follows)
 
 clip = Basics.Create_Clip(client_id, token, user_info[0]["id"])
 print(clip)

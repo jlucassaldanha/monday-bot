@@ -1,5 +1,5 @@
 import requests, json
-from exceptions import APIRequestsErrors
+from .error_handle import APIRequestsErrors
 # Da para melhorar get_clip depois igual o de users, mas são muitos parametros, então vou com calma
 
 pasta_atual = __file__
@@ -8,7 +8,7 @@ api_dir = "mytwitchapi"
 index_main = pasta_atual.find(api_dir) + len(api_dir) # Acha o indice e adiciona mais 3 da palavra procurada
 path = pasta_atual[:index_main]
 
-with open(path+"\\errors.json", 'r', encoding="UTF-8") as j_error:
+with open(path+"\\error_handle\\errors.json", 'r', encoding="UTF-8") as j_error:
     ERRORS = json.load(j_error)
 j_error.close()
 
@@ -119,16 +119,16 @@ class Basics():
         r = requests.get(url=self.url, headers=self.headers)
 
         # Return response case of success
-        if r.status_code == 200:
+        if r.status_code == int(ERRORS['get-users']['errors']['OK CODE']):
             self.user_data = r.json()
             return self.user_data['data']
+        
+        for k in list(ERRORS['get-users']['errors']):
+            if k != ERRORS['get-users']['errors']['OK CODE'] and k != 'OK CODE':
 
-        # Raise errors codes        
-        if r.status_code == 400:
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
-    
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['get-users']['errors'][k][0]}:\n{ERRORS['get-users']['errors'][k][1]}")
+            
     @classmethod
     def Create_Clip(
                     self, 
@@ -178,21 +178,17 @@ class Basics():
 
         # make the request
         r = requests.post(self.url, params=self.params, headers=self.headers)
+        
+        # Return response case of success
+        if r.status_code == int(ERRORS['create-clip']['errors']['OK CODE']):
+            self.user_data = r.json()
+            return self.user_data['data']
+        
+        for k in list(ERRORS['create-clip']['errors']):
+            if k != ERRORS['create-clip']['errors']['OK CODE'] and k != 'OK CODE':
 
-        # Return value in case of success
-        if r.status_code == 202:
-            self.created_clip_data = r.json()
-            return self.created_clip_data['data'][0]
-
-        # Error codes
-        if r.status_code == 400: 
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
-        if r.status_code == 403:
-            raise Exception("HTTPS response error:\n Can't make clips of this broadcaster")
-        if r.status_code == 404:
-            raise Exception("HTTPS response error:\n Broadcaster must be in live")
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['create-clip']['errors'][k][0]}:\n{ERRORS['create-clip']['errors'][k][1]}")
 
     @classmethod
     def Get_Clip(
@@ -234,16 +230,16 @@ class Basics():
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
-        # Return data in case of success
-        if r.status_code == 200:
-            self.clip_data = r.json()
-            return self.clip_data['data']
+       # Return response case of success
+        if r.status_code == int(ERRORS['get-clips']['errors']['OK CODE']):
+            self.user_data = r.json()
+            return self.user_data['data']
         
-        # Error codes
-        if r.status_code == 400:
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
+        for k in list(ERRORS['get-clips']['errors']):
+            if k != ERRORS['get-clips']['errors']['OK CODE'] and k != 'OK CODE':
+
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['get-clips']['errors'][k][0]}:\n{ERRORS['get-clips']['errors'][k][1]}")
 
     @classmethod    
     def Send_Chat_Message(
@@ -300,20 +296,16 @@ class Basics():
         # Make request
         r = requests.post(self.url, params=self.params, headers=self.headers)
         
-        # Return data in case of success
-        if r.status_code == 200:
-            self.chat_message_data = r.json()
-            return self.chat_message_data['data']
-                
-        # Error codes
-        if r.status_code == 400:
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
-        if r.status_code == 403:
-            raise Exception("HTTPS response error:\n Can't send chat messages to this broadcaster")
-        if r.status_code == 422:
-            raise Exception("HTTPS response error:\n Message too large to send")
+        # Return response case of success
+        if r.status_code == int(ERRORS['send-chat-message']['errors']['OK CODE']):
+            self.user_data = r.json()
+            return self.user_data['data']
+        
+        for k in list(ERRORS['send-chat-message']['errors']):
+            if k != ERRORS['send-chat-message']['errors']['OK CODE'] and k != 'OK CODE':
+
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['send-chat-message']['errors'][k][0]}:\n{ERRORS['send-chat-message']['errors'][k][1]}")
         
     @classmethod
     def Get_Followed_Streams(
@@ -360,16 +352,16 @@ class Basics():
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
-        # Return data in case of success
-        if r.status_code == 200:
-            self.clip_data = r.json()
-            return self.clip_data['data']
+        # Return response case of success
+        if r.status_code == int(ERRORS['get-followed-streams']['errors']['OK CODE']):
+            self.user_data = r.json()
+            return self.user_data['data']
         
-        # Error codes
-        if r.status_code == 400:
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
+        for k in list(ERRORS['get-followed-streams']['errors']):
+            if k != ERRORS['get-followed-streams']['errors']['OK CODE'] and k != 'OK CODE':
+
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['get-followed-streams']['errors'][k][0]}:\n{ERRORS['get-followed-streams']['errors'][k][1]}")
 
     @classmethod  
     def Get_Chatters(
@@ -423,21 +415,19 @@ class Basics():
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
-        # Return data in case of success
-        if r.status_code == 200:
-            self.clip_data = r.json()
-            return self.clip_data['data']
+        # Return response case of success
+        if r.status_code == int(ERRORS['get-chatters']['errors']['OK CODE']):
+            self.user_data = r.json()
+            return self.user_data['data']
         
-        # Error codes
-        if r.status_code == 400:
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
-        if r.status_code == 403:
-            raise Exception("HTTPS response error:\n Not a moderator of thos channel")
+        for k in list(ERRORS['get-chatters']['errors']):
+            if k != ERRORS['get-chatters']['errors']['OK CODE'] and k != 'OK CODE':
+
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['get-chatters']['errors'][k][0]}:\n{ERRORS['get-chatters']['errors'][k][1]}")
         
     @classmethod  
-    def Get_Moderatos(
+    def Get_Moderators(
                         self, 
                         client_id: str, 
                         token: str, 
@@ -484,16 +474,16 @@ class Basics():
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
-        # Return data in case of success
-        if r.status_code == 200:
-            self.clip_data = r.json()
-            return self.clip_data['data']
+        # Return response case of success
+        if r.status_code == int(ERRORS['get-moderators']['errors']['OK CODE']):
+            self.user_data = r.json()
+            return self.user_data['data']
         
-        # Error codes
-        if r.status_code == 400:
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
+        for k in list(ERRORS['get-moderators']['errors']):
+            if k != ERRORS['get-moderators']['errors']['OK CODE'] and k != 'OK CODE':
+
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['get-moderators']['errors'][k][0]}:\n{ERRORS['get-moderators']['errors'][k][1]}")
     
     @classmethod  
     def Get_VIPs(
@@ -542,16 +532,16 @@ class Basics():
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
-        # Return data in case of success
-        if r.status_code == 200:
-            self.clip_data = r.json()
-            return self.clip_data['data']
+        # Return response case of success
+        if r.status_code == int(ERRORS['get-vips']['errors']['OK CODE']):
+            self.user_data = r.json()
+            return self.user_data['data']
         
-        # Error codes
-        if r.status_code == 400:
-            raise Exception("HTTPS response error:\n Bad request with wrong parameters")        
-        if r.status_code == 401:
-            raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
+        for k in list(ERRORS['get-vips']['errors']):
+            if k != ERRORS['get-vips']['errors']['OK CODE'] and k != 'OK CODE':
+
+                if r.status_code == int(k):
+                    raise APIRequestsErrors(f"{ERRORS['get-vips']['errors'][k][0]}:\n{ERRORS['get-vips']['errors'][k][1]}")
     
 # Checklist das funções:
 # __init__ - OK
@@ -562,6 +552,15 @@ class Basics():
 
 if __name__ == "__main__":
 
+    #print(ERRORS['get-users']['errors'])
+
+    for k in list(ERRORS['get-users']['errors']):
+        if k != ERRORS['get-users']['errors']['OK CODE'] and k != 'OK CODE':
+            print("errno:", k)
+            print(f"{ERRORS['get-users']['errors'][k][0]}:\n{ERRORS['get-users']['errors'][k][1]}")
+
+
+    """
     with open(path+"\\infos.json", 'r', encoding="UTF-8") as j_info:
         INFOS = json.load(j_info)
     j_info.close()
@@ -604,7 +603,7 @@ if __name__ == "__main__":
     print(body)
     
     #Basics.Get_Users()
-
+    """
     
 
 
