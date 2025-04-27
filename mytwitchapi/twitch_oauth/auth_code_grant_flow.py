@@ -288,16 +288,6 @@ class Token():
                 error_msg = json.loads(r.content.decode())
                 raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
 
-            """
-            try:
-                r.raise_for_status()
-            except requests.exceptions.HTTPError as error:
-                error_response = r.content.decode()
-                error_code = r.status_code
-                msg = json.loads(error_response)["message"]
-                raise APIOAuthErrors("Failed to refresh token: \n- status code {}: {}".format(error_code, msg))            
-            """
-
     @classmethod
     def validate_token(self, token: str) -> dict:
         """
@@ -310,6 +300,7 @@ class Token():
             If token is valid, return client data, else, return False.
         """
 
+        self.token_data = False
         # URL
         url = self.OAUTH2_URL_BASE + "/validate"
         # params
@@ -319,16 +310,21 @@ class Token():
 
         # Verify if got a response
         if r.status_code == 200:
-            token_data = r.json()
-            if "client_id" in list(token_data):
-                return token_data
-            
+            self.token_data = r.json()
+            if "client_id" in list(self.token_data):
+                
+                return self.token_data            
             else:
                 raise APIOAuthErrors("Token file missing client_id key.")
-            
-        if r.status_code == 401:
-            return False
-       
+        else:
+            if r.status_code == 401:
+                error_msg = json.loads(r.content.decode())["message"]
+                raise APIOAuthErrors("Failed to validate token [status code {}]: {}".format(r.status_code, error_msg))
+
+            else:
+                error_msg = json.loads(r.content.decode())["message"]
+                raise APIOAuthErrors("Failed to validate token [status code {}]: {}".format(r.status_code, error_msg))
+        
 
 # Checklist de funções:
 # __init__ - OK
