@@ -1,12 +1,6 @@
-def doc(docstring):
-    def document(func):
-        func.__doc__ = docstring
-        return func
+import secrets
 
-    return document
+k = secrets.token_urlsafe(32)
 
-@doc("this command accepts these values: {values}".format(values=[1, 2, 3]))
-def do_this(self, arg):
-    pass
-
-print(do_this.__doc__)
+print(k)
+print(type(k))

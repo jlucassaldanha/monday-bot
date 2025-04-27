@@ -1,4 +1,4 @@
-import os, json, requests, webbrowser
+import os, json, requests, webbrowser, secrets
 
 from dotenv import load_dotenv
 
@@ -6,6 +6,7 @@ from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
 from .src.webpage import PSEUDO_HTML
+from ..error_handle import APIOAuthErrors
 
 
 class Credentials():
@@ -16,7 +17,7 @@ class Credentials():
     query_url = ""
 
     OAUTH2_URL_BASE = "https://id.twitch.tv/oauth2"
-    oauth_authorize_params = "/authorize?response_type=code&client_id={}&redirect_uri={}&scope={}"
+    oauth_authorize_params = "/authorize?response_type=code&client_id={}&redirect_uri={}&scope={}&state={}"
     
     def read_credentials_file(self, credentials_json: str) -> dict:
         """
@@ -47,7 +48,11 @@ class Credentials():
             return creds_data
 
         else:
-            raise Exception("Credentials file missing keys")
+            missing_keys = ""
+            for k in list(creds_data):
+                if not k in ["client_id", "client_secrets", "scopes", "redirect_uri"]:
+                    missing_keys += "'" + k + "', "
+                    raise APIOAuthErrors("Credentials file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
     
     def read_credentials_dotenv(self) -> dict:
         load_dotenv()
@@ -82,7 +87,9 @@ class Credentials():
         self.query_url = request_uri(environ)
 
         return PSEUDO_HTML
-
+    
+    def generate_state_key(self) -> str:
+        return secrets.token_urlsafe(32)
     
     def local_server_authorization(self) -> str:
         """
@@ -102,13 +109,16 @@ class Credentials():
 
         server = make_server(host, port, self._localServerApp)
 
+        # Generate random statekey
+        generated_state_key = self.generate_state_key()
+
         # Cronstruct the scopes string                
         scopes = self.scopes[0]
         for scope in self.scopes[1:]:
             scopes += "%20" + scope
 
         # construct the link to the authorization page.
-        self.url = self.OAUTH2_URL_BASE + self.oauth_authorize_params.format(self.client_id, self.redirect_uri, scopes)
+        self.url = self.OAUTH2_URL_BASE + self.oauth_authorize_params.format(self.client_id, self.redirect_uri, scopes, generated_state_key)
 
         try:
             # Open the link
@@ -129,16 +139,40 @@ class Credentials():
 
             # Case got a error response i will be -1
             if i == -1:
-                i = r.find("?error=")
+                error_i = r.find("?error=") + 7
+                error_descr_i = r.find("&error_description=")
+                state_key_i = r.find("&state=")
+                
+                error = r[error_i:error_descr_i]
 
-                raise Exception("Error in the user Authorization:\n"+r[i:])
-            
+                error_descr_i = error_descr_i + 19
+                error_descr = r[error_descr_i:state_key_i]
+
+                state_key_i = state_key_i + 7
+                returned_state_key = r[state_key_i:]
+
+                if returned_state_key == generated_state_key:
+                    raise APIOAuthErrors("Authorization error:\n - {}: {}".format(error, error_descr))
+                else:
+                    raise APIOAuthErrors("Recived state key doesn't match generated state key.")
+                
             else:
                 scope_i = r[i:].find("&scope=")
                 code_i = 6
                 self.oauth_code = r[i:][code_i:scope_i] 
-                
-                return self.oauth_code
+
+                state_key_i = r[scope_i:].find("&state=")
+
+                if state_key_i != -1:
+                    state_key_i = state_key_i + 7
+                    returned_state_key = r[state_key_i:]
+
+                    if returned_state_key == generated_state_key:
+                        return self.oauth_code
+                    else:
+                        raise APIOAuthErrors("Recived state key doesn't match generated state key.")
+                else:
+                    raise APIOAuthErrors("Authorization doesn't returned a state key.")
 
 class Token():
     token_file_data = ""
@@ -158,7 +192,7 @@ class Token():
         """
         Read token file:
 
-        Args:
+        Parameters:
             token_json (str): Path to the token json file.
 
         Returns:
