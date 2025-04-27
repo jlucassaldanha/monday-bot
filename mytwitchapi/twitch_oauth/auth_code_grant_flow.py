@@ -163,7 +163,7 @@ class Credentials():
                 code_i = 6
                 self.oauth_code = r[i:][code_i:scope_i] 
 
-                state_key_i = r[scope_i:].find("&state=")
+                state_key_i = r.find("&state=")
 
                 if state_key_i != -1:
                     state_key_i = state_key_i + 7
@@ -171,8 +171,9 @@ class Credentials():
 
                     if returned_state_key == generated_state_key:
                         return self.oauth_code
+                    
                     else:
-                        raise APIOAuthErrors("Recived state key doesn't match generated state key.")
+                        raise APIOAuthErrors("Recived state key doesn't match generated state key:\n- Gererated: {}\n- Recived: {}".format(generated_state_key, returned_state_key))
                 else:
                     raise APIOAuthErrors("Authorization doesn't returned a state key.")
 
@@ -180,6 +181,8 @@ class Token():
     token_file_data = ""
     access_token = ""
     refresh_token = ""
+
+    valid_token = False
 
     OAUTH2_URL_BASE = "https://id.twitch.tv/oauth2"
     OAUTH2_HEADERS = {
@@ -200,6 +203,7 @@ class Token():
         Returns:
             Token data.
         """
+
         # Read token
         with open(token_json, 'r') as json_file:
             self.token_file_data = json.load(json_file)
@@ -212,8 +216,11 @@ class Token():
 
             self.access_token = self.token_file_data["access_token"]
             self.refresh_token = self.token_file_data["refresh_token"]
-
-            self.valid_token = self.validate_token(self.access_token)
+            
+            try:
+                self.valid_token = self.validate_token(self.access_token)
+            except APIOAuthErrors as e:
+                self.valid_token = False
 
             return self.token_file_data
         
@@ -300,7 +307,7 @@ class Token():
             If token is valid, return client data, else, return False.
         """
 
-        self.token_data = False
+        self.valid_token_data = False
         # URL
         url = self.OAUTH2_URL_BASE + "/validate"
         # params
@@ -310,10 +317,10 @@ class Token():
 
         # Verify if got a response
         if r.status_code == 200:
-            self.token_data = r.json()
-            if "client_id" in list(self.token_data):
+            self.valid_token_data = r.json()
+            if "client_id" in list(self.valid_token_data):
                 
-                return self.token_data            
+                return self.valid_token_data            
             else:
                 raise APIOAuthErrors("Token file missing client_id key.")
         else:
