@@ -33,12 +33,12 @@ class Basics():
         
     @classmethod
     def Get_Users(
-        self, 
-        client_id: str, 
-        token: str, 
-        logins: list = None, 
-        ids: list = None
-        ) -> dict:
+                    self, 
+                    client_id: str, 
+                    token: str, 
+                    logins: list = None, 
+                    ids: list = None
+                    ) -> dict:
         
         """
         #### Gets information about one or more users.  
@@ -130,11 +130,13 @@ class Basics():
             raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
     
     @classmethod
-    def Create_Clip(self, 
+    def Create_Clip(
+                    self, 
                     client_id: str, 
                     token: str, 
                     broadcaster_id: str, 
-                    has_delay: bool = False) -> dict:
+                    has_delay: bool = False
+                    ) -> dict:
         """
         #### Creates a clip from the broadcaster’s stream.
 
@@ -193,10 +195,12 @@ class Basics():
             raise Exception("HTTPS response error:\n Broadcaster must be in live")
 
     @classmethod
-    def Get_Clip(self, 
-                 client_id: str, 
-                 token: str, 
-                 id: str) -> dict:
+    def Get_Clip(
+                self, 
+                client_id: str, 
+                token: str, 
+                id: str
+                ) -> dict:
         """
         #### Gets one video clip that were captured from streams. For information about clips, see [How to use clips](https://help.twitch.tv/s/article/how-to-use-clips).
 
@@ -242,12 +246,14 @@ class Basics():
             raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
 
     @classmethod    
-    def Send_Chat_Message(self, 
-                          client_id: str, 
-                          token: str, 
-                          broadcaster_id: str, 
-                          sender_id: str, 
-                          message: str) -> dict:
+    def Send_Chat_Message(
+                            self, 
+                            client_id: str, 
+                            token: str, 
+                            broadcaster_id: str, 
+                            sender_id: str, 
+                            message: str
+                            ) -> dict:
         """
         #### NEW Sends a message to the broadcaster’s chat room.
 
@@ -310,10 +316,12 @@ class Basics():
             raise Exception("HTTPS response error:\n Message too large to send")
         
     @classmethod
-    def Get_Followed_Streams(self, 
-                 client_id: str, 
-                 token: str, 
-                 user_id: str) -> dict:
+    def Get_Followed_Streams(
+                            self, 
+                            client_id: str, 
+                            token: str, 
+                            user_id: str
+                            ) -> dict:
         """
         #### Gets a list of broadcasters that the specified user follows. You can also use this endpoint to see whether a user follows a specific broadcaster.
 
@@ -364,11 +372,13 @@ class Basics():
             raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
 
     @classmethod  
-    def Get_Chatters(self, 
-                     client_id: str, 
-                     token: str, 
-                     broadcaster_id: str,
-                     moderator_id: str) -> dict:
+    def Get_Chatters(
+                        self, 
+                        client_id: str, 
+                        token: str, 
+                        broadcaster_id: str,
+                        moderator_id: str
+                        ) -> dict:
         """
         #### Gets the list of users that are connected to the broadcaster’s chat session.
 
@@ -427,11 +437,13 @@ class Basics():
             raise Exception("HTTPS response error:\n Not a moderator of thos channel")
         
     @classmethod  
-    def Get_Moderatos(self, 
-                     client_id: str, 
-                     token: str, 
-                     broadcaster_id: str,
-                     user_id: str) -> dict:
+    def Get_Moderatos(
+                        self, 
+                        client_id: str, 
+                        token: str, 
+                        broadcaster_id: str,
+                        user_id: str
+                        ) -> dict:
         """
         #### Gets all users allowed to moderate the broadcaster’s chat room.
 
@@ -484,11 +496,13 @@ class Basics():
             raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
     
     @classmethod  
-    def Get_VIPs(self, 
-                     client_id: str, 
-                     token: str, 
-                     broadcaster_id: str,
-                     user_id: str) -> dict:
+    def Get_VIPs(
+                    self, 
+                    client_id: str, 
+                    token: str, 
+                    broadcaster_id: str,
+                    user_id: str
+                    ) -> dict:
         """
         #### Gets a list of the broadcaster’s VIPs.
 
