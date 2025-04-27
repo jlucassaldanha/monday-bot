@@ -1,4 +1,5 @@
 import requests
+from .exceptions import APIRequestsErrors
 # Da para melhorar get_clip depois igual o de users, mas são muitos parametros, então vou com calma
 
 class Basics():
@@ -147,9 +148,13 @@ class Basics():
         if r.status_code == 202:
             self.created_clip_data = r.json()
             return self.created_clip_data['data'][0]
-        
+
+        else:
+            raise HTTPError("teste erro")
+
+        """
         # Error codes
-        if r.status_code == 400:
+        if r.status_code == 400: 
             raise Exception("HTTPS response error:\n Bad request with wrong parameters")
         if r.status_code == 401:
             raise Exception("HTTPS response error:\n Invalid access token, client id or scopes")
@@ -157,10 +162,10 @@ class Basics():
             raise Exception("HTTPS response error:\n Can't make clips of this broadcaster")
         if r.status_code == 404:
             raise Exception("HTTPS response error:\n Broadcaster must be in live")
-    
+    """
 
 
-    
+
     @classmethod
     def Get_Clip(self, 
                  client_id: str, 
