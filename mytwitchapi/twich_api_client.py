@@ -153,7 +153,6 @@ class Basics():
 
             has_delay (Boolean) : A Boolean value that determines whether the API captures the clip at the moment the viewer requests it or after a delay. If **false** (default), Twitch captures the clip at the moment the viewer requests it (this is the same clip experience as the Twitch UX). If **true**, Twitch adds a delay before capturing the clip (this basically shifts the capture window to the right slightly).
         """
-        needed_scope = "clips:edit"
 
         self.url = self.API_URL_BASE + self.CLIP_URL
 
@@ -474,7 +473,7 @@ class Basics():
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
         """
 
-        self.url = self.API_URL_BASE + self.MODERATORS_URL
+        self.url = self.API_URL_BASE + self.VIPS_URL
 
         # Create header to requests
         self.headers = {
