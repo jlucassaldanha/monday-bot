@@ -54,15 +54,6 @@ class Credentials():
                 if not k in list(creds_data):
                     missing_keys.append(k)
             raise APIOAuthErrors("Credentials file missing keys: Verify for the missing keys.\n- Missing keys -> {}.\n- Read keys -> {}.".format(", ".join(missing_keys), ", ".join(list(creds_data))))
-
-            """
-            # Retornando as keys erradas. Seria melhor mostrar a key que falta e a que esta errada
-            missing_keys = ""
-            for k in list(creds_data):
-                if not k in ["client_id", "client_secrets", "scopes", "redirect_uri"]:
-                    missing_keys += "'" + k + "', "
-            raise APIOAuthErrors("Credentials file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
-            """
     
     def read_credentials_dotenv(self) -> dict:
         load_dotenv()
@@ -312,18 +303,6 @@ class Token():
                 raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
             else:
                 raise APIOAuthErrors("Failed to create or refresh token [status code {}]: {}".format(r.status_code, error_msg))
-
-            """
-            if r.status_code == 400:
-                error_msg = json.loads(r.content.decode())["message"]
-                raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
-            elif r.status_code == 403:
-                error_msg = json.loads(r.content.decode())["message"]
-                raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
-            else:
-                error_msg = json.loads(r.content.decode())
-                raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
-            """
 
     @classmethod
     def validate_token(self, token: str) -> dict:
