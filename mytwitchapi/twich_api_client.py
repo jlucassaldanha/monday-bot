@@ -432,7 +432,7 @@ class Basics():
                         client_id: str, 
                         token: str, 
                         broadcaster_id: str,
-                        user_id: str
+                        user_id: str = None
                         ) -> dict:
         """
         #### Gets all users allowed to moderate the broadcaster’s chat room.
@@ -459,26 +459,38 @@ class Basics():
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
 
         """
-        url_data = "&user_id="+user_id[0]
-
-        if len(user_id) > 1:
-            for id in user_id[1:]:
-                url_data += "&user_id="+id
-
-        self.url = self.API_URL_BASE + self.MODERATORS_URL + "?broadcaster_id="+broadcaster_id+url_data
-
-        # cosntruct params
-        self.params = {
-            'broadcaster_id' : broadcaster_id,
-            'user_id' : url_data
-        } # Aprender a usar pagination
+        self.url = self.API_URL_BASE + self.MODERATORS_URL
 
         # Create header to requests
         self.headers = {
             'Authorization': f'Bearer {token}',
             'Client-Id': client_id}
+        
+        # Caso queira verificar usuarios especificos
+        if user_id != None:
+            if len(user_id) <= 100:
+                ids = "?user_id="+user_id[0]
 
-        r = requests.get(self.url, headers=self.headers)#, params=self.params)
+                if len(user_id) > 1:
+                    for id in user_id[1:]:
+                        ids += "&user_id="+id
+            else:
+                raise Exception("Number of ids exced the maximum")
+
+            broadcaster_id = "?broadcaster_id=" + broadcaster_id
+
+            self.url = self.url + broadcaster_id + ids
+
+            r = requests.get(self.url, headers=self.headers)
+
+        # Retorna todos moderadores
+        if user_id == None:
+            # cosntruct params
+            self.params = {
+                'broadcaster_id' : broadcaster_id
+            } # Aprender a usar pagination
+
+            r = requests.get(self.url, headers=self.headers, params=self.params)       
         
         # Return response case of success
         if r.status_code == int(ERRORS['get-moderators']['errors']['OK CODE']):
@@ -523,28 +535,38 @@ class Basics():
 
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
         """
-
-        url_data = "&user_id="+user_id[0]
-
-        if len(user_id) > 1:
-            for id in user_id[1:]:
-                url_data += "&user_id="+id
-
-        self.url = self.API_URL_BASE + self.VIPS_URL + "?broadcaster_id="+broadcaster_id+url_data
-        
-
-        # cosntruct params
-        self.params = {
-            'broadcaster_id' : broadcaster_id,
-            'user_id' : url_data
-        } # Aprender a usar pagination
+        self.url = self.API_URL_BASE + self.MODERATORS_URL
 
         # Create header to requests
         self.headers = {
             'Authorization': f'Bearer {token}',
             'Client-Id': client_id}
 
-        r = requests.get(self.url, headers=self.headers)#, params=self.params)
+        # Caso queira verificar usuarios especificos
+        if user_id != None:
+            if len(user_id) <= 100:
+                ids = "?user_id="+user_id[0]
+
+                if len(user_id) > 1:
+                    for id in user_id[1:]:
+                        ids += "&user_id="+id
+            else:
+                raise Exception("Number of ids exced the maximum")
+
+            broadcaster_id = "?broadcaster_id=" + broadcaster_id
+
+            self.url = self.url + broadcaster_id + ids
+
+            r = requests.get(self.url, headers=self.headers)
+
+        # Retorna todos moderadores
+        if user_id == None:
+            # cosntruct params
+            self.params = {
+                'broadcaster_id' : broadcaster_id
+            } # Aprender a usar pagination
+
+            r = requests.get(self.url, headers=self.headers, params=self.params) 
         
         # Return response case of success
         if r.status_code == int(ERRORS['get-vips']['errors']['OK CODE']):
