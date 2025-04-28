@@ -43,3 +43,4 @@ class OAuth(Credentials):
             token_file_data = Token.create_refresh_token(self.client_id, self.client_secrets, code=code, redirect_uri=self.redirect_uri)
 
         self.token = token_file_data["access_token"]
+        self.scopes = token_file_data["scope"]

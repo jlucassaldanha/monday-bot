@@ -136,6 +136,7 @@ class Basics():
                     self, 
                     client_id: str, 
                     token: str, 
+                    token_scopes: list,
                     broadcaster_id: str, 
                     has_delay: bool = False
                     ) -> dict:
@@ -165,6 +166,8 @@ class Basics():
 
             has_delay (Boolean) : A Boolean value that determines whether the API captures the clip at the moment the viewer requests it or after a delay. If **false** (default), Twitch captures the clip at the moment the viewer requests it (this is the same clip experience as the Twitch UX). If **true**, Twitch adds a delay before capturing the clip (this basically shifts the capture window to the right slightly).
         """
+        needed_scope = "clips:edit"
+
         self.url = self.API_URL_BASE + self.CLIP_URL
 
         # Construc params
@@ -185,6 +188,9 @@ class Basics():
         if r.status_code == int(ERRORS['create-clip']['errors']['OK CODE']):
             self.user_data = r.json()
             return self.user_data['data']
+        
+        if not needed_scope in token_scopes:
+            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
         
         for k in list(ERRORS['create-clip']['errors']):
             if k != ERRORS['create-clip']['errors']['OK CODE'] and k != 'OK CODE':
@@ -248,6 +254,7 @@ class Basics():
                             self, 
                             client_id: str, 
                             token: str, 
+                            token_scopes: list,
                             broadcaster_id: str, 
                             sender_id: str, 
                             message: str
@@ -280,6 +287,8 @@ class Basics():
             message (String) : The message to send. The message is limited to a maximum of 500 characters. Chat messages can also include emoticons. To include emoticons, use the name of the emote. The names are case sensitive. Don’t include colons around the name (e.g., :bleedPurple:). If Twitch recognizes the name, Twitch converts the name to the emote before writing the chat message to the chat room
 
         """
+        needed_scope = "user:write:chat"
+
         self.url = self.API_URL_BASE + self.MESSAGES_URL
         
         # Construct params
@@ -303,6 +312,9 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
+        if not needed_scope in token_scopes:
+            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
+        
         for k in list(ERRORS['send-chat-message']['errors']):
             if k != ERRORS['send-chat-message']['errors']['OK CODE'] and k != 'OK CODE':
 
@@ -314,6 +326,7 @@ class Basics():
                             self, 
                             client_id: str, 
                             token: str, 
+                            token_scopes: list,
                             user_id: str
                             ) -> dict:
         """
@@ -340,6 +353,7 @@ class Basics():
 
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
         """
+        needed_scope = "user:read:follows"
         
         self.url = self.API_URL_BASE + self.FOLLOWS_URL
         # cosntruct params
@@ -359,6 +373,9 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
+        if not needed_scope in token_scopes:
+            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
+        
         for k in list(ERRORS['get-followed-streams']['errors']):
             if k != ERRORS['get-followed-streams']['errors']['OK CODE'] and k != 'OK CODE':
 
@@ -370,6 +387,7 @@ class Basics():
                         self, 
                         client_id: str, 
                         token: str, 
+                        token_scopes: list,
                         broadcaster_id: str,
                         moderator_id: str
                         ) -> dict:
@@ -402,6 +420,7 @@ class Basics():
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
 
         """
+        needed_scope = "moderator:read:chatters"
         
         self.url = self.API_URL_BASE + self.CHATTERS_URL 
         # cosntruct params
@@ -422,6 +441,9 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
+        if not needed_scope in token_scopes:
+            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
+        
         for k in list(ERRORS['get-chatters']['errors']):
             if k != ERRORS['get-chatters']['errors']['OK CODE'] and k != 'OK CODE':
 
@@ -433,6 +455,7 @@ class Basics():
                         self, 
                         client_id: str, 
                         token: str, 
+                        token_scopes: list,
                         broadcaster_id: str,
                         user_id: str = None
                         ) -> dict:
@@ -461,6 +484,8 @@ class Basics():
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
 
         """
+        needed_scope = "channel:manage:moderators"
+
         self.url = self.API_URL_BASE + self.MODERATORS_URL
 
         # Create header to requests
@@ -499,6 +524,9 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
+        if not needed_scope in token_scopes:
+            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
+
         for k in list(ERRORS['get-moderators']['errors']):
             if k != ERRORS['get-moderators']['errors']['OK CODE'] and k != 'OK CODE':
 
@@ -510,6 +538,7 @@ class Basics():
                     self, 
                     client_id: str, 
                     token: str, 
+                    token_scopes: list,
                     broadcaster_id: str,
                     user_id: str
                     ) -> dict:
@@ -537,6 +566,8 @@ class Basics():
 
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
         """
+        needed_scope = "channel:manage:vips"
+
         self.url = self.API_URL_BASE + self.MODERATORS_URL
 
         # Create header to requests
@@ -574,6 +605,9 @@ class Basics():
         if r.status_code == int(ERRORS['get-vips']['errors']['OK CODE']):
             self.user_data = r.json()
             return self.user_data['data']
+        
+        if not needed_scope in token_scopes:
+            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
         
         for k in list(ERRORS['get-vips']['errors']):
             if k != ERRORS['get-vips']['errors']['OK CODE'] and k != 'OK CODE':
