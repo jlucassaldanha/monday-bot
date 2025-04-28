@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from wsgiref.simple_server import make_server
 from wsgiref.util import request_uri
 
-from .src.webpage import PSEUDO_HTML
 from ..error_handle import APIOAuthErrors
 
 
@@ -97,7 +96,7 @@ class Credentials():
 
         self.query_url = request_uri(environ)
 
-        return PSEUDO_HTML
+        return ['Autenticação realizada. Agora você já pode fechar esta guia...'.encode()]
 
     def generate_state_key(self) -> str:
         return secrets.token_urlsafe(32)
