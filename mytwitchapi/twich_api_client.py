@@ -2,6 +2,8 @@ import requests, json
 from .error_handle import APIRequestsErrors
 # Da para melhorar get_clip depois igual o de users, mas são muitos parametros, então vou com calma
 
+###### CRIAR UMA MANEIRA DE VERIFICAR SE O ESCOPO DA FUNÇÂO CHAMADA ESTA NOS ESCOPOS ###########
+
 pasta_atual = __file__
 api_dir = "mytwitchapi"
 
@@ -469,7 +471,7 @@ class Basics():
         # Caso queira verificar usuarios especificos
         if user_id != None:
             if len(user_id) <= 100:
-                ids = "?user_id="+user_id[0]
+                ids = "&user_id="+user_id[0]
 
                 if len(user_id) > 1:
                     for id in user_id[1:]:
@@ -545,7 +547,7 @@ class Basics():
         # Caso queira verificar usuarios especificos
         if user_id != None:
             if len(user_id) <= 100:
-                ids = "?user_id="+user_id[0]
+                ids = "&user_id="+user_id[0]
 
                 if len(user_id) > 1:
                     for id in user_id[1:]:
@@ -595,11 +597,3 @@ if __name__ == "__main__":
             print("errno:", k)
             print(f"{ERRORS['get-users']['errors'][k][0]}:\n{ERRORS['get-users']['errors'][k][1]}")
 
-
-    
-    
-
-
-
-    
-        
