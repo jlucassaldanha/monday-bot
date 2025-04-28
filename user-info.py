@@ -1,6 +1,8 @@
 from mytwitchapi.creds_flow import OAuth
 from mytwitchapi.twich_api_client import Basics
 
+# Criar uma verificação de escopos?
+
 oauth = OAuth()
 
 oauth.credentials("credentials.json")

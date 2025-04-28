@@ -29,15 +29,17 @@ class OAuth(Credentials):
                 try:
                     token_file_data = Token.create_refresh_token(self.client_id, self.client_secrets, refresh_token=token_file_data['refresh_token'])
                 except APIOAuthErrors:
-                    print("Create Token")
+                    print("No valid Token. Need to create Token")
+                    print("Open local server")
                     code = self.local_server_authorization()
-                    
+                    print("Create Token")
                     token_file_data = Token.create_refresh_token(self.client_id, self.client_secrets, code=code, redirect_uri=self.redirect_uri)
 
         if not token_file_data:
-            print("Create Token")
+            print("No Token. Need to create Token")
+            print("Open local server")
             code = self.local_server_authorization()
-            
+            print("Create Token")
             token_file_data = Token.create_refresh_token(self.client_id, self.client_secrets, code=code, redirect_uri=self.redirect_uri)
 
         self.token = token_file_data["access_token"]

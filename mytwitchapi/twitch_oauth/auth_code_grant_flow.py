@@ -50,11 +50,12 @@ class Credentials():
             return creds_data
 
         else:
+            # Retornando as keys erradas. Seria melhor mostrar a key que falta e a que esta errada
             missing_keys = ""
             for k in list(creds_data):
                 if not k in ["client_id", "client_secrets", "scopes", "redirect_uri"]:
                     missing_keys += "'" + k + "', "
-                    raise APIOAuthErrors("Credentials file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
+            raise APIOAuthErrors("Credentials file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
     
     def read_credentials_dotenv(self) -> dict:
         load_dotenv()
@@ -89,7 +90,7 @@ class Credentials():
         self.query_url = request_uri(environ)
 
         return PSEUDO_HTML
-    
+
     def generate_state_key(self) -> str:
         return secrets.token_urlsafe(32)
     
@@ -122,14 +123,21 @@ class Credentials():
         # construct the link to the authorization page.
         self.url = self.OAUTH2_URL_BASE + self.oauth_authorize_params.format(self.client_id, self.redirect_uri, scopes, generated_state_key)
 
+        # Verify for url data incorrect 
+        r_get = requests.get(self.url)
+        if r_get.status_code != 200:
+            server.server_close()
+            error_msg = json.loads(r_get.content.decode())["message"]
+            raise APIOAuthErrors("Authorization failed [status code {}]: {}".format(r_get.status_code, error_msg))
+
         try:
             # Open the link
             webbrowser.open(self.url)
-            
+
             # Run the server until recive a data
             server.timeout = None
             server.handle_request()
-
+    
             # Get the part of the url with the parameters
             r = self.query_url
 
@@ -141,10 +149,12 @@ class Credentials():
 
             # Case got a error response i will be -1
             if i == -1:
-                error_i = r.find("?error=") + 7
+                error_i = r.find("?error=") 
+                
                 error_descr_i = r.find("&error_description=")
                 state_key_i = r.find("&state=")
                 
+                error_i = error_i + 7
                 error = r[error_i:error_descr_i]
 
                 error_descr_i = error_descr_i + 19
@@ -229,7 +239,7 @@ class Token():
             for k in list(self.token_file_data):
                 if not k in ["access_token", "refresh_token", "token_type"]:
                     missing_keys += "'" + k + "', "
-                    raise APIOAuthErrors("Token file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
+            raise APIOAuthErrors("Token file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
 
     @classmethod
     def create_refresh_token(self, 
@@ -286,15 +296,27 @@ class Token():
                 for k in list(self.token_file_data):
                     if not k in ["access_token", "refresh_token", "token_type"]:
                         missing_keys += "'" + k + "', "
-                        raise APIOAuthErrors("Refreshed or created token file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
+                raise APIOAuthErrors("Refreshed or created token file missing keys: Verify for the keys {}.".format(missing_keys[:-2]))
         else:
+            error_msg = json.loads(r.content.decode())["message"]
+            if code != None:
+                raise APIOAuthErrors("Failed to create token [status code {}]: {}".format(r.status_code, error_msg))
+            elif refresh_token != None:
+                raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
+            else:
+                raise APIOAuthErrors("Failed to create or refresh token [status code {}]: {}".format(r.status_code, error_msg))
+
+            """
             if r.status_code == 400:
+                error_msg = json.loads(r.content.decode())["message"]
+                raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
+            elif r.status_code == 403:
                 error_msg = json.loads(r.content.decode())["message"]
                 raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
             else:
                 error_msg = json.loads(r.content.decode())
                 raise APIOAuthErrors("Failed to refresh token [status code {}]: {}".format(r.status_code, error_msg))
-
+            """
     @classmethod
     def validate_token(self, token: str) -> dict:
         """
