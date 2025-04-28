@@ -15,7 +15,7 @@ while True:
     oauth.access_token("token.json")
     token = oauth.token
 
-    user_info = Basics.users_info(client_id, token, ['pokimane'])
+    user_info = Basics.Get_Users(client_id, token, ['pokimane'])
     broadcaster_id = user_info[0]["id"]
     sender_id = "459116718"
     
@@ -52,7 +52,7 @@ while True:
             token = oauth.token
 
         if calling:
-            Basics.send_chat_message(
+            Basics.Send_Chat_Message(
                 client_id, token, broadcaster_id, sender_id, "Oi, me chamou?"
                 )
 
@@ -72,31 +72,31 @@ while True:
                     break
 
                 else:
-                    Basics.send_chat_message(
+                    Basics.Send_Chat_Message(
                         client_id, token, broadcaster_id, sender_id, 
                         "Tá querendo um clipe e não ta sabendo pedir"
                         )
 
 
-    Basics.send_chat_message(
+    Basics.Send_Chat_Message(
         client_id, token, broadcaster_id, sender_id, "Criando clipe..."
         )
     
     print("Criando clipe...")
 
     # Talvez botar um delay
-    created_clip_info = Basics.create_clip(client_id, token, broadcaster_id)
+    created_clip_info = Basics.Create_Clip(client_id, token, broadcaster_id)
     clip_id = created_clip_info["id"]
 
     clip_info = []
     init_clip_time = time.time()
     while len(clip_info) <= 0:
-        clip_info = Basics.get_clip(client_id, token, clip_id)
+        clip_info = Basics.Get_Clip(client_id, token, clip_id)
         
         new_clip_time = time.time()
 
         if (new_clip_time - init_clip_time) > 15:
-            Basics.send_chat_message(client_id, token, broadcaster_id, sender_id, 
+            Basics.Send_Chat_Message(client_id, token, broadcaster_id, sender_id, 
                                      "Não foi possivel criar o clipe...")
     
             print("Não foi possivel criar o clipe...")
@@ -104,7 +104,7 @@ while True:
             break
 
     if (new_clip_time - init_clip_time) < 15:
-        Basics.send_chat_message(
+        Basics.Send_Chat_Message(
             client_id, token, broadcaster_id, sender_id, clip_info[0]["url"]
             )
     
