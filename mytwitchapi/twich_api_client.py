@@ -38,6 +38,7 @@ class Basics():
     scopes = []
 
     def __init__(self, client_id: str, token: str, scopes: list) -> None:
+        """Iniciste class with the credentials arguments."""
         self.client_id = client_id
         self.token = token
         self.scopes = scopes
@@ -67,7 +68,6 @@ class Basics():
             logins (list) : The list of login name of the user to get. The maximum number of login names you may specify is 100.
 
         """
-        
         # Verify username parameter are used and construct 
         # the string to append with url of request
         # example: ?login=<username>&login=<username>
@@ -153,7 +153,6 @@ class Basics():
 
             has_delay (Boolean) : A Boolean value that determines whether the API captures the clip at the moment the viewer requests it or after a delay. If **false** (default), Twitch captures the clip at the moment the viewer requests it (this is the same clip experience as the Twitch UX). If **true**, Twitch adds a delay before capturing the clip (this basically shifts the capture window to the right slightly).
         """
-
         self.url = self.API_URL_BASE + self.CLIP_URL
 
         # Construc params
@@ -198,7 +197,6 @@ class Basics():
             id (String) : An ID that identifies the clip to get. To specify more than one ID, include this parameter for each clip you want to get. For example, `id=foo&id=bar`. You may specify a maximum of 100 IDs. The API ignores duplicate IDs and IDs that aren’t found.
 
         """
-        
         self.url = self.API_URL_BASE + self.CLIP_URL
         # cosntruct params
         self.params = {
@@ -249,8 +247,6 @@ class Basics():
             message (String) : The message to send. The message is limited to a maximum of 500 characters. Chat messages can also include emoticons. To include emoticons, use the name of the emote. The names are case sensitive. Don’t include colons around the name (e.g., :bleedPurple:). If Twitch recognizes the name, Twitch converts the name to the emote before writing the chat message to the chat room
 
         """
-        needed_scope = "user:write:chat"
-
         self.url = self.API_URL_BASE + self.MESSAGES_URL
         
         # Construct params
