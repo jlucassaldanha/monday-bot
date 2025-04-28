@@ -16,14 +16,6 @@ j_error.close()
 
 
 class Basics():
-    url = ""
-    headers = {}
-    params = {}
-    user_data = {}
-    clip_data = {}
-    chat_message_data = {}
-    created_clip_data = {}
-
     API_URL_BASE = "https://api.twitch.tv/helix/"
     MESSAGES_URL = "chat/messages" # Não são os scopes
     CHATTERS_URL = "chat/chatters"
@@ -32,16 +24,25 @@ class Basics():
     FOLLOWS_URL = "streams/followed" 
     MODERATORS_URL = "moderation/moderators" 
     VIPS_URL = "channels/vips"
+
+    url = ""
+    headers = {}
+    params = {}
+    user_data = {}
+    clip_data = {}
+    chat_message_data = {}
+    created_clip_data = {}
+
+    client_id = ""
+    token = ""
+    scopes = []
+
+    def __init__(self, client_id: str, token: str, scopes: list) -> None:
+        self.client_id = client_id
+        self.token = token
+        self.scopes = scopes
         
-    @classmethod
-    def Get_Users(
-                    self, 
-                    client_id: str, 
-                    token: str, 
-                    logins: list = None, 
-                    ids: list = None
-                    ) -> dict:
-        
+    def Get_Users(self, logins: list = None, ids: list = None) -> dict:
         """
         #### Gets information about one or more users.  
   
@@ -60,9 +61,6 @@ class Basics():
         `GET https://api.twitch.tv/helix/users`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             ids (list) : The list of ID of the user to get. The maximum number of IDs you may specify is 100.
 
@@ -115,8 +113,8 @@ class Basics():
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id}
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id}
 
         r = requests.get(url=self.url, headers=self.headers)
 
@@ -131,15 +129,7 @@ class Basics():
                 if r.status_code == int(k):
                     raise APIRequestsErrors(f"{ERRORS['get-users']['errors'][k][0]}:\n{ERRORS['get-users']['errors'][k][1]}")
             
-    @classmethod
-    def Create_Clip(
-                    self, 
-                    client_id: str, 
-                    token: str, 
-                    token_scopes: list,
-                    broadcaster_id: str, 
-                    has_delay: bool = False
-                    ) -> dict:
+    def Create_Clip(self, broadcaster_id: str, has_delay: bool = False) -> dict:
         """
         #### Creates a clip from the broadcaster’s stream.
 
@@ -158,9 +148,6 @@ class Basics():
         `POST https://api.twitch.tv/helix/clips`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             broadcaster_id (String) : The ID of the broadcaster whose stream you want to create a clip from.
 
@@ -178,8 +165,8 @@ class Basics():
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id}
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id}
 
         # make the request
         r = requests.post(self.url, params=self.params, headers=self.headers)
@@ -189,22 +176,13 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
-        if not needed_scope in token_scopes:
-            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
-        
         for k in list(ERRORS['create-clip']['errors']):
             if k != ERRORS['create-clip']['errors']['OK CODE'] and k != 'OK CODE':
 
                 if r.status_code == int(k):
                     raise APIRequestsErrors(f"{ERRORS['create-clip']['errors'][k][0]}:\n{ERRORS['create-clip']['errors'][k][1]}")
 
-    @classmethod
-    def Get_Clip(
-                self, 
-                client_id: str, 
-                token: str, 
-                id: str
-                ) -> dict:
+    def Get_Clip(self, id: str) -> dict:
         """
         #### Gets one video clip that were captured from streams. For information about clips, see [How to use clips](https://help.twitch.tv/s/article/how-to-use-clips).
 
@@ -217,9 +195,6 @@ class Basics():
         `GET https://api.twitch.tv/helix/clips`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             id (String) : An ID that identifies the clip to get. To specify more than one ID, include this parameter for each clip you want to get. For example, `id=foo&id=bar`. You may specify a maximum of 100 IDs. The API ignores duplicate IDs and IDs that aren’t found.
 
@@ -233,8 +208,8 @@ class Basics():
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id}
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id}
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
@@ -249,16 +224,7 @@ class Basics():
                 if r.status_code == int(k):
                     raise APIRequestsErrors(f"{ERRORS['get-clips']['errors'][k][0]}:\n{ERRORS['get-clips']['errors'][k][1]}")
 
-    @classmethod    
-    def Send_Chat_Message(
-                            self, 
-                            client_id: str, 
-                            token: str, 
-                            token_scopes: list,
-                            broadcaster_id: str, 
-                            sender_id: str, 
-                            message: str
-                            ) -> dict:
+    def Send_Chat_Message(self, broadcaster_id: str, sender_id: str, message: str) -> dict:
         """
         #### NEW Sends a message to the broadcaster’s chat room.
 
@@ -276,9 +242,6 @@ class Basics():
         `POST https://api.twitch.tv/helix/chat/messages`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             broadcaster_id (String) : The ID of the broadcaster whose chat room the message will be sent to.
 
@@ -300,8 +263,8 @@ class Basics():
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id,
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id,
             'Content-Type' : 'application/json'}
 
         # Make request
@@ -312,23 +275,13 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
-        if not needed_scope in token_scopes:
-            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
-        
         for k in list(ERRORS['send-chat-message']['errors']):
             if k != ERRORS['send-chat-message']['errors']['OK CODE'] and k != 'OK CODE':
 
                 if r.status_code == int(k):
                     raise APIRequestsErrors(f"{ERRORS['send-chat-message']['errors'][k][0]}:\n{ERRORS['send-chat-message']['errors'][k][1]}")
-        
-    @classmethod
-    def Get_Followed_Streams(
-                            self, 
-                            client_id: str, 
-                            token: str, 
-                            token_scopes: list,
-                            user_id: str
-                            ) -> dict:
+
+    def Get_Followed_Streams(self, user_id: str) -> dict:
         """
         #### Gets a list of broadcasters that the specified user follows. You can also use this endpoint to see whether a user follows a specific broadcaster.
 
@@ -341,9 +294,6 @@ class Basics():
         `GET https://api.twitch.tv/helix/channels/followed`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             user_id (String) : A user’s ID. Returns the list of broadcasters that this user follows. This ID must match the user ID in the user OAuth token.
 
@@ -353,7 +303,6 @@ class Basics():
 
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
         """
-        needed_scope = "user:read:follows"
         
         self.url = self.API_URL_BASE + self.FOLLOWS_URL
         # cosntruct params
@@ -363,8 +312,8 @@ class Basics():
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id}
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id}
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
@@ -372,25 +321,14 @@ class Basics():
         if r.status_code == int(ERRORS['get-followed-streams']['errors']['OK CODE']):
             self.user_data = r.json()
             return self.user_data['data']
-        
-        if not needed_scope in token_scopes:
-            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
-        
+       
         for k in list(ERRORS['get-followed-streams']['errors']):
             if k != ERRORS['get-followed-streams']['errors']['OK CODE'] and k != 'OK CODE':
 
                 if r.status_code == int(k):
                     raise APIRequestsErrors(f"{ERRORS['get-followed-streams']['errors'][k][0]}:\n{ERRORS['get-followed-streams']['errors'][k][1]}")
-
-    @classmethod  
-    def Get_Chatters(
-                        self, 
-                        client_id: str, 
-                        token: str, 
-                        token_scopes: list,
-                        broadcaster_id: str,
-                        moderator_id: str
-                        ) -> dict:
+  
+    def Get_Chatters(self, broadcaster_id: str, moderator_id: str) -> dict:
         """
         #### Gets the list of users that are connected to the broadcaster’s chat session.
 
@@ -407,9 +345,6 @@ class Basics():
         `GET https://api.twitch.tv/helix/chat/chatters`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             broadcaster_id (String) : The ID of the broadcaster whose list of chatters you want to get.
 
@@ -420,7 +355,6 @@ class Basics():
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
 
         """
-        needed_scope = "moderator:read:chatters"
         
         self.url = self.API_URL_BASE + self.CHATTERS_URL 
         # cosntruct params
@@ -431,8 +365,9 @@ class Basics():
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id}
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id
+            }
 
         r = requests.get(self.url, params=self.params, headers=self.headers)
         
@@ -441,24 +376,13 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
-        if not needed_scope in token_scopes:
-            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
-        
         for k in list(ERRORS['get-chatters']['errors']):
             if k != ERRORS['get-chatters']['errors']['OK CODE'] and k != 'OK CODE':
 
                 if r.status_code == int(k):
                     raise APIRequestsErrors(f"{ERRORS['get-chatters']['errors'][k][0]}:\n{ERRORS['get-chatters']['errors'][k][1]}")
-# melhorar logica do get moderators e vip ######################################################3
-    @classmethod  
-    def Get_Moderators(
-                        self, 
-                        client_id: str, 
-                        token: str, 
-                        token_scopes: list,
-                        broadcaster_id: str,
-                        user_id: str = None
-                        ) -> dict:
+                
+    def Get_Moderators(self, broadcaster_id: str, user_id: list = None) -> dict:
         """
         #### Gets all users allowed to moderate the broadcaster’s chat room.
 
@@ -471,9 +395,6 @@ class Basics():
         `GET https://api.twitch.tv/helix/moderation/moderators`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             broadcaster_id (String) : The ID of the broadcaster whose list of moderators you want to get. This ID must match the user ID in the access token.
 
@@ -484,14 +405,14 @@ class Basics():
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
 
         """
-        needed_scope = "channel:manage:moderators"
 
         self.url = self.API_URL_BASE + self.MODERATORS_URL
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id}
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id
+            }
         
         # Caso queira verificar usuarios especificos
         if user_id != None:
@@ -524,24 +445,13 @@ class Basics():
             self.user_data = r.json()
             return self.user_data['data']
         
-        if not needed_scope in token_scopes:
-            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
-
         for k in list(ERRORS['get-moderators']['errors']):
             if k != ERRORS['get-moderators']['errors']['OK CODE'] and k != 'OK CODE':
 
                 if r.status_code == int(k):
                     raise APIRequestsErrors(f"{ERRORS['get-moderators']['errors'][k][0]}:\n{ERRORS['get-moderators']['errors'][k][1]}")
     
-    @classmethod  
-    def Get_VIPs(
-                    self, 
-                    client_id: str, 
-                    token: str, 
-                    token_scopes: list,
-                    broadcaster_id: str,
-                    user_id: str
-                    ) -> dict:
+    def Get_VIPs(self, broadcaster_id: str, user_id: list = None) -> dict:
         """
         #### Gets a list of the broadcaster’s VIPs.
 
@@ -554,9 +464,6 @@ class Basics():
         `GET https://api.twitch.tv/helix/channels/vips`
 
         Parameters:
-            client_id (str): Client aplication id.
-
-            token (str) : User oauth token.
 
             user_id (String) : Filters the list for specific VIPs. To specify more than one user, include the *user\_id* parameter for each user to get. For example, `&user_id=1234&user_id=5678`. The maximum number of IDs that you may specify is 100. Ignores the ID of those users in the list that aren’t VIPs.
 
@@ -566,14 +473,14 @@ class Basics():
 
             after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
         """
-        needed_scope = "channel:manage:vips"
 
         self.url = self.API_URL_BASE + self.MODERATORS_URL
 
         # Create header to requests
         self.headers = {
-            'Authorization': f'Bearer {token}',
-            'Client-Id': client_id}
+            'Authorization': f'Bearer {self.token}',
+            'Client-Id': self.client_id
+            }
 
         # Caso queira verificar usuarios especificos
         if user_id != None:
@@ -605,9 +512,6 @@ class Basics():
         if r.status_code == int(ERRORS['get-vips']['errors']['OK CODE']):
             self.user_data = r.json()
             return self.user_data['data']
-        
-        if not needed_scope in token_scopes:
-            raise APIRequestsErrors(f"Error {r.status_code}: Missing needed scope '{needed_scope}'.")
         
         for k in list(ERRORS['get-vips']['errors']):
             if k != ERRORS['get-vips']['errors']['OK CODE'] and k != 'OK CODE':

@@ -10,10 +10,13 @@ oauth.access_token("token.json")
 token = oauth.token
 scopes = oauth.scopes
 
-user_info = Basics.Get_Users(client_id, token, ['ojoojao'])
-ojoojao_id = user_info[0]["id"]
+api = Basics(client_id, token, scopes)
 
-chatters = Basics.Get_Chatters(client_id, token, scopes, ojoojao_id, ojoojao_id)
+user_info = api.Get_Users(['ojoojao'])
+ojoojao_id = user_info[0]["id"]
+print(ojoojao_id)
+
+chatters = api.Get_Chatters(ojoojao_id, ojoojao_id)
 print(chatters)
 
 quantidade_viewers = len(chatters)
@@ -24,10 +27,10 @@ for chatter in chatters:
     chatters_ids.append(chatter['user_id'])
     chatters_usernames.append(chatter['user_name'])
 
-mods = Basics.Get_Moderators(client_id, token, scopes, ojoojao_id, chatters_ids)
+mods = api.Get_Moderators(ojoojao_id, chatters_ids)
 print(mods)
 
-vips = Basics.Get_VIPs(client_id, token, scopes, ojoojao_id, chatters_ids)
+vips = api.Get_VIPs(ojoojao_id, chatters_ids)
 print(vips)
 
 mods_usernames = []
