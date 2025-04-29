@@ -87,16 +87,6 @@ class Transcrib():
                     }
                 return self.text
         
-    def reset(self):
-        self.recognizer.Reset()
-
-    def calling(self, name: str) -> bool:
-        """verifica se foi chamado.
-        name deve ser uma lista com as opções de nomes"""
-        words = name.split()
-
-        return self.and_verify(words)
-        
     def and_verify(self, words: list) -> bool:
         if self.partial_result:
             self.result = self.partial["partial"]['list'][1]
@@ -133,8 +123,18 @@ class Transcrib():
             return True
         else: 
             return False
+        
+    def calling(self, name: str) -> bool:
+        """verifica se foi chamado.
+        name deve ser uma lista com as opções de nomes"""
+        words = name.split()
+
+        return self.and_verify(words)
+        
+    def reset(self):
+        self.recognizer.Reset()
     
-    
+
 
 if __name__ == "__main__":
     tc = Transcrib()
