@@ -1,18 +1,13 @@
-from wsgiref.simple_server import make_server
-
-def simple_app(environ, start_response):
-    try:
-        status = '200 OK'
-        headers = [('Content-type', 'text/plain; charset=utf-8')]
-        start_response(status, headers)
-        return [b'Hello World!']
-    except Exception as e:
-        status = '500 Internal Server Error'
-        headers = [('Content-type', 'text/plain; charset=utf-8')]
-        start_response(status, headers)
-        return [b'Internal Server Error: ' + str(e).encode('utf-8')]
+name = "segunda feira"
 
 
-httpd = make_server('', 8000, simple_app)
-print("Serving on port 8000...")
-httpd.handle_request()
+falado = "testando segunda teste"
+
+r = 0
+for i, n in enumerate(name.split(" ")):
+    if n in falado.split(" "):
+        r += 1
+    print(r)
+
+if r == len(name.split(" ")):
+    print("True")
