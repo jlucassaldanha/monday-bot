@@ -61,10 +61,8 @@ while True:
         print("::rec")
 
         #if not calling:
-        if (
-            "segunda" in pvd["partial"]['list'][1] and
-            "feira" in pvd["partial"]['list'][1]
-        ):
+        if ("segunda" in pvd["partial"]['list'][1] and
+            "feira" in pvd["partial"]['list'][1]):
             print(pvd["partial"]['str'])
             calling = True
             tc.reset()
@@ -99,19 +97,14 @@ while True:
             print(viewers_users)
 
         if calling:
-            api.Send_Chat_Message(
-                broadcaster_id, sender_id, "Oi, me chamou?"
-                )
+            api.Send_Chat_Message(broadcaster_id, sender_id, 
+                                    "Oi, me chamou?")
 
             print("::rec")
 
-            if (
-                "faça" in pvd["partial"]['list'][1] or
-                "faz" in pvd["partial"]['list'][1]
-            ):
-                if (
-                    "clipe" in pvd["partial"]['list'][1]
-                ):
+            if ("faça" in pvd["partial"]['list'][1] or
+                "faz" in pvd["partial"]['list'][1]):
+                if ("clipe" in pvd["partial"]['list'][1]):
                     print(pvd["partial"]['str'])
 
                     msg = "Make a clip" 
@@ -119,15 +112,11 @@ while True:
                     break
 
                 else:
-                    api.Send_Chat_Message(
-                        broadcaster_id, sender_id, 
-                        "Tá querendo um clipe e não ta sabendo pedir"
-                        )
+                    api.Send_Chat_Message(broadcaster_id, sender_id, 
+                                            "Tá querendo um clipe e não ta sabendo pedir")
 
-
-    api.Send_Chat_Message(
-        broadcaster_id, sender_id, "Criando clipe..."
-        )
+    api.Send_Chat_Message(broadcaster_id, sender_id, 
+                            "Criando clipe...")
     
     print("Criando clipe...")
 
@@ -151,9 +140,8 @@ while True:
             break
 
     if (new_clip_time - init_clip_time) < 15:
-        api.Send_Chat_Message(
-            broadcaster_id, sender_id, clip_info[0]["url"]
-            )
+        api.Send_Chat_Message(broadcaster_id, sender_id, 
+                                clip_info[0]["url"])
     
         print(clip_info[0]["url"])
 
