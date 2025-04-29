@@ -1,6 +1,6 @@
 import json
 
-with open("infos.json", 'r', encoding="UTF-8") as j_info:
+with open(".\\docs\\docstrings\\infos.json", 'r', encoding="UTF-8") as j_info:
     INFOS = json.load(j_info)
 j_info.close()
 
@@ -29,10 +29,9 @@ for func in INFOS.keys():
         for k in body_params.keys():
             body += f"\t{body_params[k][0]} ({body_params[k][1]}) : {body_params[k][3]}\n\n"
 
-    with open("APIdocstrings.md", '+a', encoding="UTF-8") as docstrings_file:
+    with open(".\\docs\\docstrings\\APIdocstrings.md", '+a', encoding="UTF-8") as docstrings_file:
         docstrings_file.write(title)
         docstrings_file.write(info)
-        docstrings_file.write("\tclient_id (str): Client aplication id.\n\n\ttoken (str) : User oauth token.\n\n")
         docstrings_file.write(query)
         docstrings_file.write(body)
     docstrings_file.close()

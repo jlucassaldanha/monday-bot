@@ -3990,3 +3990,3439 @@ Parameters:
 
 	to_user_id (String) : The ID of the user to receive the whisper.
 
+
+
+start-commercial
+
+#### Starts a commercial on the specified channel.
+
+**NOTE**: Only partners and affiliates may run commercials and they must be streaming live at the time.
+
+**NOTE**: Only the broadcaster may start a commercial; the broadcaster’s editors and moderators may not start commercials on behalf of the broadcaster.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:edit:commercial** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/channels/commercial`
+
+Parameters:
+	broadcaster_id (String) : The ID of the partner or affiliate broadcaster that wants to run the commercial. This ID must match the user ID found in the OAuth token.
+
+	length (Integer) : The length of the commercial to run, in seconds. Twitch tries to serve a commercial that’s the requested length, but it may be shorter or longer. The maximum length you should request is 180 seconds.
+
+
+
+get-ad-schedule
+
+#### This endpoint returns ad schedule related information, including snooze, when the last ad was run, when the next ad is scheduled, and if the channel is currently in pre-roll free time. Note that a new ad cannot be run until 8 minutes after running a previous ad.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:ads** scope. The `user_id` in the user access token must match the `broadcaster_id`.
+
+### URL
+
+`GET https://api.twitch.tv/helix/channels/ads`
+
+Parameters:
+	broadcaster_id (String) : Provided `broadcaster_id` must match the `user_id` in the auth token.
+
+
+
+snooze-next-ad
+
+#### If available, pushes back the timestamp of the upcoming automatic mid-roll ad by 5 minutes. This endpoint duplicates the snooze functionality in the creator dashboard’s Ads Manager.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:ads** scope. The `user_id` in the user access token must match the `broadcaster_id`.
+
+### URL
+
+`POST https://api.twitch.tv/helix/channels/ads/schedule/snooze`
+
+Parameters:
+	broadcaster_id (String) : Provided `broadcaster_id` must match the `user_id` in the auth token.
+
+
+
+get-extension-analytics
+
+#### Gets an analytics report for one or more extensions. The response contains the URLs used to download the reports (CSV files). [Learn More](/docs/insights)
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **analytics:read:extensions** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/analytics/extensions`
+
+Parameters:
+	extension_id (String) : The extension's client ID. If specified, the response contains a report for the specified extension. If not specified, the response includes a report for each extension that the authenticated user owns.
+
+	type (String) : The type of analytics report to get. Possible values are:
+
+* overview\_v2
+
+	started_at (String) : The reporting window's start date, in RFC3339 format. Set the time portion to zeroes (for example, 2021-10-22T00:00:00Z).  
+  
+The start date must be on or after January 31, 2018. If you specify an earlier date, the API ignores it and uses January 31, 2018. If you specify a start date, you must specify an end date. If you don't specify a start and end date, the report includes all available data since January 31, 2018.  
+  
+The report contains one row of data for each day in the reporting window.
+
+	ended_at (String) : The reporting window's end date, in RFC3339 format. Set the time portion to zeroes (for example, 2021-10-27T00:00:00Z). The report is inclusive of the end date.  
+  
+Specify an end date only if you provide a start date. Because it can take up to two days for the data to be available, you must specify an end date that's earlier than today minus one to two days. If not, the API ignores your end date and uses an end date that is today minus one to two days.
+
+	first (Integer) : The maximum number of report URLs to return per page in the response. The minimum page size is 1 URL per page and the maximum is 100 URLs per page. The default is 20.  
+  
+**NOTE**: While you may specify a maximum value of 100, the response will contain at most 20 URLs per page.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)  
+  
+This parameter is ignored if the *extension\_id* parameter is set.
+
+
+
+get-game-analytics
+
+#### Gets an analytics report for one or more games. The response contains the URLs used to download the reports (CSV files). [Learn more](/docs/insights)
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **analytics:read:games** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/analytics/games`
+
+Parameters:
+	game_id (String) : The game’s client ID. If specified, the response contains a report for the specified game. If not specified, the response includes a report for each of the authenticated user’s games.
+
+	type (String) : The type of analytics report to get. Possible values are:
+
+* overview\_v2
+
+	started_at (String) : The reporting window’s start date, in RFC3339 format. Set the time portion to zeroes (for example, 2021-10-22T00:00:00Z). If you specify a start date, you must specify an end date.  
+  
+The start date must be within one year of today’s date. If you specify an earlier date, the API ignores it and uses a date that’s one year prior to today’s date. If you don’t specify a start and end date, the report includes all available data for the last 365 days from today.  
+  
+The report contains one row of data for each day in the reporting window.
+
+	ended_at (String) : The reporting window’s end date, in RFC3339 format. Set the time portion to zeroes (for example, 2021-10-22T00:00:00Z). The report is inclusive of the end date.  
+  
+Specify an end date only if you provide a start date. Because it can take up to two days for the data to be available, you must specify an end date that’s earlier than today minus one to two days. If not, the API ignores your end date and uses an end date that is today minus one to two days.
+
+	first (Integer) : The maximum number of report URLs to return per page in the response. The minimum page size is 1 URL per page and the maximum is 100 URLs per page. The default is 20.  
+  
+**NOTE**: While you may specify a maximum value of 100, the response will contain at most 20 URLs per page.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)  
+  
+This parameter is ignored if *game\_id* parameter is set.
+
+
+
+get-bits-leaderboard
+
+#### Gets the Bits leaderboard for the authenticated broadcaster.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **bits:read** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/bits/leaderboard`
+
+Parameters:
+	count (Integer) : The number of results to return. The minimum count is 1 and the maximum is 100. The default is 10.
+
+	period (String) : The time period over which data is aggregated (uses the PST time zone). Possible values are:
+
+* day — A day spans from 00:00:00 on the day specified in *started\_at* and runs through 00:00:00 of the next day.
+* week — A week spans from 00:00:00 on the Monday of the week specified in *started\_at* and runs through 00:00:00 of the next Monday.
+* month — A month spans from 00:00:00 on the first day of the month specified in *started\_at* and runs through 00:00:00 of the first day of the next month.
+* year — A year spans from 00:00:00 on the first day of the year specified in *started\_at* and runs through 00:00:00 of the first day of the next year.
+* all — Default. The lifetime of the broadcaster's channel.
+
+	started_at (String) : The start date, in RFC3339 format, used for determining the aggregation period. Specify this parameter only if you specify the *period* query parameter. The start date is ignored if *period* is all.  
+  
+Note that the date is converted to PST before being used, so if you set the start time to `2022-01-01T00:00:00.0Z` and *period* to month, the actual reporting period is December 2021, not January 2022. If you want the reporting period to be January 2022, you must set the start time to `2022-01-01T08:00:00.0Z` or `2022-01-01T00:00:00.0-08:00`.  
+  
+If your start date uses the ‘+’ offset operator (for example, `2022-01-01T00:00:00.0+05:00`), you must URL encode the start date.
+
+	user_id (String) : An ID that identifies a user that cheered bits in the channel. If *count* is greater than 1, the response may include users ranked above and below the specified user. To get the leaderboard’s top leaders, don’t specify a user ID.
+
+
+
+get-cheermotes
+
+#### Gets a list of Cheermotes that users can use to cheer Bits in any Bits-enabled channel’s chat room. Cheermotes are animated emotes that viewers can assign Bits to.
+
+### URL
+
+`GET https://api.twitch.tv/helix/bits/cheermotes`
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose custom Cheermotes you want to get. Specify the broadcaster’s ID if you want to include the broadcaster’s Cheermotes in the response (not all broadcasters upload Cheermotes). If not specified, the response contains only global Cheermotes.  
+  
+If the broadcaster uploaded Cheermotes, the `type` field in the response is set to **channel\_custom**.
+
+
+
+get-extension-transactions
+
+#### Gets an extension’s list of transactions. A transaction records the exchange of a currency (for example, Bits) for a digital product.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/extensions/transactions`
+
+Parameters:
+	extension_id (String) : The ID of the extension whose list of transactions you want to get.
+
+	id (String) : A transaction ID used to filter the list of transactions. Specify this parameter for each transaction you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 100 IDs.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-channel-information
+
+#### Gets information about one or more channels.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/channels`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose channel you want to get. To specify more than one ID, include this parameter for each broadcaster you want to get. For example, `broadcaster_id=1234&broadcaster_id=5678`. You may specify a maximum of 100 IDs. The API ignores duplicate IDs and IDs that are not found.
+
+
+
+modify-channel-information
+
+#### Updates a channel’s properties.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:broadcast** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/channels`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose channel you want to update. This ID must match the user ID in the user access token.
+
+
+
+get-channel-editors
+
+#### Gets the broadcaster’s list editors.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:editors** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/channels/editors`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the channel. This ID must match the user ID in the access token.
+
+
+
+get-followed-channels
+
+#### Gets a list of broadcasters that the specified user follows. You can also use this endpoint to see whether a user follows a specific broadcaster.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:read:follows** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/channels/followed`
+
+Parameters:
+	user_id (String) : A user’s ID. Returns the list of broadcasters that this user follows. This ID must match the user ID in the user OAuth token.
+
+	broadcaster_id (String) : A broadcaster’s ID. Use this parameter to see whether the user follows this broadcaster. If specified, the response contains this broadcaster if the user follows them. If not specified, the response contains all broadcasters that the user follows.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
+
+
+
+get-channel-followers
+
+#### Gets a list of users that follow the specified broadcaster. You can also use this endpoint to see whether a specific user follows the broadcaster.
+
+### Authorization
+
+* Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:read:followers** scope.
+* The ID in the broadcaster\_id query parameter must match the user ID in the access token or the user ID in the access token must be a moderator for the specified broadcaster.
+
+This endpoint will return specific follower information only if both of the above are true. If a scope is not provided or the user isn’t the broadcaster or a moderator for the specified channel, only the total follower count will be included in the response.
+
+### URL
+
+`GET https://api.twitch.tv/helix/channels/followers`
+
+Parameters:
+	user_id (String) : A user’s ID. Use this parameter to see whether the user follows this broadcaster. If specified, the response contains this user if they follow the broadcaster. If not specified, the response contains all users that follow the broadcaster.  
+  
+Using this parameter requires both a user access token with the **moderator:read:followers** scope and the user ID in the access token match the broadcaster\_id or be the user ID for a moderator of the specified broadcaster.
+
+	broadcaster_id (String) : The broadcaster’s ID. Returns the list of users that follow this broadcaster.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read more](https://dev.twitch.tv/docs/api/guide#pagination).
+
+
+
+create-custom-rewards
+
+#### Creates a Custom Reward in the broadcaster’s channel. The maximum number of custom rewards per channel is 50, which includes both enabled and disabled rewards.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:redemptions** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/channel_points/custom_rewards`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster to add the custom reward to. This ID must match the user ID found in the OAuth token.
+
+
+
+delete-custom-reward
+
+#### Deletes a custom reward that the broadcaster created.
+
+The app used to create the reward is the only app that may delete it. If the reward’s redemption status is UNFULFILLED at the time the reward is deleted, its redemption status is marked as FULFILLED.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:redemptions** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/channel_points/custom_rewards`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that created the custom reward. This ID must match the user ID found in the OAuth token.
+
+	id (String) : The ID of the custom reward to delete.
+
+
+
+get-custom-reward
+
+#### Gets a list of custom rewards that the specified broadcaster created.
+
+**NOTE**: A channel may offer a maximum of 50 rewards, which includes both enabled and disabled rewards.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:redemptions** or **channel:manage:redemptions** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/channel_points/custom_rewards`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose custom rewards you want to get. This ID must match the user ID found in the OAuth token.
+
+	id (String) : A list of IDs to filter the rewards by. To specify more than one ID, include this parameter for each reward you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.  
+  
+Duplicate IDs are ignored. The response contains only the IDs that were found. If none of the IDs were found, the response is 404 Not Found.
+
+	only_manageable_rewards (Boolean) : A Boolean value that determines whether the response contains only the custom rewards that the app may manage (the app is identified by the ID in the Client-Id header). Set to **true** to get only the custom rewards that the app may manage. The default is **false**.
+
+
+
+get-custom-reward-redemption
+
+#### Gets a list of redemptions for the specified custom reward. The app used to create the reward is the only app that may get the redemptions.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:redemptions** or **channel:manage:redemptions** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the custom reward. This ID must match the user ID found in the user OAuth token.
+
+	reward_id (String) : The ID that identifies the custom reward whose redemptions you want to get.
+
+	status (String) : The status of the redemptions to return. The possible case-sensitive values are:
+
+* CANCELED
+* FULFILLED
+* UNFULFILLED
+
+**NOTE**: This field is required only if you don’t specify the *id* query parameter.  
+  
+**NOTE**: Canceled and fulfilled redemptions are returned for only a few days after they’re canceled or fulfilled.
+
+	id (String) : A list of IDs to filter the redemptions by. To specify more than one ID, include this parameter for each redemption you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.  
+  
+Duplicate IDs are ignored. The response contains only the IDs that were found. If none of the IDs were found, the response is 404 Not Found.
+
+	sort (String) : The order to sort redemptions by. The possible case-sensitive values are:
+
+* OLDEST
+* NEWEST
+
+The default is OLDEST.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read more](/docs/api/guide#pagination)
+
+	first (Integer) : The maximum number of redemptions to return per page in the response. The minimum page size is 1 redemption per page and the maximum is 50. The default is 20.
+
+
+
+update-custom-reward
+
+#### Updates a custom reward. The app used to create the reward is the only app that may update the reward.
+
+### Authorization
+
+Requires a [user access token](/docs/api/authentication#user-access-tokens) that includes the **channel:manage:redemptions** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/channel_points/custom_rewards`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s updating the reward. This ID must match the user ID found in the OAuth token.
+
+	id (String) : The ID of the reward to update.
+
+
+
+update-redemption-status
+
+#### Updates a redemption’s status. You may update a redemption only if its status is UNFULFILLED. The app used to create the reward is the only app that may update the redemption.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:redemptions** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/channel_points/custom_rewards/redemptions`
+
+Parameters:
+	id (String) : A list of IDs that identify the redemptions to update. To specify more than one ID, include this parameter for each redemption you want to update. For example, `id=1234&id=5678`. You may specify a maximum of 50 IDs.
+
+	broadcaster_id (String) : The ID of the broadcaster that’s updating the redemption. This ID must match the user ID in the user access token.
+
+	reward_id (String) : The ID that identifies the reward that’s been redeemed.
+
+
+
+get-charity-campaign
+
+#### Gets information about the charity campaign that a broadcaster is running. For example, the campaign’s fundraising goal and the current amount of donations.
+
+To receive events when progress is made towards the campaign’s goal or the broadcaster changes the fundraising goal, subscribe to the [channel.charity\_campaign.progress](/docs/eventsub/eventsub-subscription-types#channelcharity_campaignprogress) subscription type.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:charity** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/charity/campaigns`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s currently running a charity campaign. This ID must match the user ID in the access token.
+
+
+
+get-charity-campaign-donations
+
+#### Gets the list of donations that users have made to the broadcaster’s active charity campaign.
+
+To receive events as donations occur, subscribe to the [channel.charity\_campaign.donate](/docs/eventsub/eventsub-subscription-types#channelcharity_campaigndonate) subscription type.
+
+### Authorization
+
+Requires a user access token that includes the **channel:read:charity** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/charity/donations`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s currently running a charity campaign. This ID must match the user ID in the access token.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-chatters
+
+#### Gets the list of users that are connected to the broadcaster’s chat session.
+
+**NOTE**: There is a delay between when users join and leave a chat and when the list is updated accordingly.
+
+To determine whether a user is a moderator or VIP, use the [Get Moderators](/docs/api/reference#get-moderators) and [Get VIPs](/docs/api/reference#get-vips) endpoints. You can check the roles of up to 100 users.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:read:chatters** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/chatters`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose list of chatters you want to get.
+
+	moderator_id (String) : The ID of the broadcaster or one of the broadcaster’s moderators. This ID must match the user ID in the user access token.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 1,000. The default is 100.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-channel-emotes
+
+#### Gets the broadcaster’s list of custom emotes. Broadcasters create these custom emotes for users who subscribe to or follow the channel or cheer Bits in the channel’s chat window. [Learn More](/docs/irc/emotes)
+
+For information about the custom emotes, see [subscriber emotes](https://help.twitch.tv/s/article/subscriber-emote-guide), [Bits tier emotes](https://help.twitch.tv/s/article/custom-bit-badges-guide?language=bg#slots), and [follower emotes](https://blog.twitch.tv/en/2021/06/04/kicking-off-10-years-with-our-biggest-emote-update-ever/).
+
+**NOTE:** With the exception of custom follower emotes, users may use custom emotes in any Twitch chat.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/emotes`
+
+Parameters:
+	broadcaster_id (String) : An ID that identifies the broadcaster whose emotes you want to get.
+
+
+
+get-global-emotes
+
+#### Gets the list of [global emotes](https://www.twitch.tv/creatorcamp/en/learn-the-basics/emotes/). Global emotes are Twitch-created emotes that users can use in any Twitch chat.
+
+[Learn More](/docs/irc/emotes)
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/emotes/global`
+
+Parameters:
+	data (Object[]) : The list of global emotes.
+
+	id (String) : An ID that identifies this emote.
+
+	name (String) : The name of the emote. This is the name that viewers type in the chat window to get the emote to appear.
+
+	images (Object) : The image URLs for the emote. These image URLs always provide a static, non-animated emote image with a light background.  
+  
+**NOTE:** You should use the templated URL in the `template` field to fetch the image instead of using these URLs.
+
+	url_1x (String) : A URL to the small version (28px x 28px) of the emote.
+
+	url_2x (String) : A URL to the medium version (56px x 56px) of the emote.
+
+	url_4x (String) : A URL to the large version (112px x 112px) of the emote.
+
+	format (String[]) : The formats that the emote is available in. For example, if the emote is available only as a static PNG, the array contains only `static`. But if the emote is available as a static PNG and an animated GIF, the array contains `static` and `animated`. The possible formats are:
+
+* animated — An animated GIF is available for this emote.
+* static — A static PNG file is available for this emote.
+
+	scale (String[]) : The sizes that the emote is available in. For example, if the emote is available in small and medium sizes, the array contains 1.0 and 2.0. Possible sizes are:
+
+* 1.0 — A small version (28px x 28px) is available.
+* 2.0 — A medium version (56px x 56px) is available.
+* 3.0 — A large version (112px x 112px) is available.
+
+	theme_mode (String[]) : The background themes that the emote is available in. Possible themes are:
+
+* dark
+* light
+
+	template (String) : A templated URL. Use the values from the `id`, `format`, `scale`, and `theme_mode` fields to replace the like-named placeholder strings in the templated URL to create a CDN (content delivery network) URL that you use to fetch the emote. For information about what the template looks like and how to use it to fetch emotes, see [Emote CDN URL format](/docs/irc/emotes#cdn-template). You should use this template instead of using the URLs in the `images` object.
+
+
+
+get-emote-sets
+
+#### Gets emotes for one or more specified emote sets.
+
+An emote set groups emotes that have a similar context. For example, Twitch places all the subscriber emotes that a broadcaster uploads for their channel in the same emote set.
+
+[Learn More](/docs/irc/emotes)
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/emotes/set`
+
+Parameters:
+	emote_set_id (String) : An ID that identifies the emote set to get. Include this parameter for each emote set you want to get. For example, `emote_set_id=1234&emote_set_id=5678`. You may specify a maximum of 25 IDs. The response contains only the IDs that were found and ignores duplicate IDs.  
+  
+To get emote set IDs, use the [Get Channel Emotes](#get-channel-emotes) API.
+
+
+
+get-channel-chat-badges
+
+#### Gets the broadcaster’s list of custom chat badges. The list is empty if the broadcaster hasn’t created custom chat badges. For information about custom badges, see [subscriber badges](https://help.twitch.tv/s/article/subscriber-badge-guide) and [Bits badges](https://help.twitch.tv/s/article/custom-bit-badges-guide).
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/badges`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose chat badges you want to get.
+
+
+
+get-global-chat-badges
+
+#### Gets Twitch’s list of chat badges, which users may use in any channel’s chat room. For information about chat badges, see [Twitch Chat Badges Guide](https://help.twitch.tv/s/article/twitch-chat-badges-guide).
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/badges/global`
+
+Parameters:
+	data (Object[]) : The list of chat badges. The list is sorted in ascending order by `set_id`, and within a set, the list is sorted in ascending order by `id`.
+
+	set_id (String) : An ID that identifies this set of chat badges. For example, Bits or Subscriber.
+
+	versions (Object[]) : The list of chat badges in this set.
+
+	id (String) : An ID that identifies this version of the badge. The ID can be any value. For example, for Bits, the ID is the Bits tier level, but for World of Warcraft, it could be Alliance or Horde.
+
+	image_url_1x (String) : A URL to the small version (18px x 18px) of the badge.
+
+	image_url_2x (String) : A URL to the medium version (36px x 36px) of the badge.
+
+	image_url_4x (String) : A URL to the large version (72px x 72px) of the badge.
+
+	title (String) : The title of the badge.
+
+	description (String) : The description of the badge.
+
+	click_action (String) : The action to take when clicking on the badge. Set to `null` if no action is specified.
+
+	click_url (String) : The URL to navigate to when clicking on the badge. Set to `null` if no URL is specified.
+
+
+
+get-chat-settings
+
+#### Gets the broadcaster’s chat settings.
+
+For an overview of chat settings, see [Chat Commands for Broadcasters and Moderators](https://help.twitch.tv/s/article/chat-commands#AllMods) and [Moderator Preferences](https://help.twitch.tv/s/article/setting-up-moderation-for-your-twitch-channel#modpreferences).
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/settings`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose chat settings you want to get.
+
+	moderator_id (String) : The ID of the broadcaster or one of the broadcaster’s moderators.  
+  
+This field is required only if you want to include the `non_moderator_chat_delay` and `non_moderator_chat_delay_duration` settings in the response.  
+  
+If you specify this field, this ID must match the user ID in the user access token.
+
+
+
+get-shared-chat-session
+
+#### NEW Retrieves the active shared chat session for a channel.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/cli/token-command/#app-access-token) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/shared_chat/session`
+
+Parameters:
+	broadcaster_id (String) : The User ID of the channel broadcaster.
+
+
+
+get-user-emotes
+
+#### NEW Retrieves emotes available to the user across all channels.
+
+### Authorization
+
+* Requires a user access token that includes the **user:read:emotes** scope.
+* Query parameter `user_id` must match the `user_id` in the user access token.
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/emotes/user`
+
+Parameters:
+	user_id (String) : The ID of the user. This ID must match the user ID in the user access token.
+
+	after (String) : The cursor used to get the next page of results. The Pagination object in the response contains the cursor’s value.
+
+	broadcaster_id (String) : The User ID of a broadcaster you wish to get follower emotes of. Using this query parameter will guarantee inclusion of the broadcaster’s follower emotes in the response body.   
+  
+**Note:** If the user specified in `user_id` is subscribed to the broadcaster specified, their follower emotes will appear in the response body regardless if this query parameter is used.
+
+
+
+update-chat-settings
+
+#### Updates the broadcaster’s chat settings.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:chat\_settings** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/chat/settings`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose chat settings you want to update.
+
+	moderator_id (String) : The ID of a user that has permission to moderate the broadcaster’s chat room, or the broadcaster’s ID if they’re making the update. This ID must match the user ID in the user access token.
+
+
+
+send-chat-announcement
+
+#### Sends an announcement to the broadcaster’s chat room.
+
+**Rate Limits**: One announcement may be sent every 2 seconds.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:announcements** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/chat/announcements`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the chat room to send the announcement to.
+
+	moderator_id (String) : The ID of a user who has permission to moderate the broadcaster’s chat room, or the broadcaster’s ID if they’re sending the announcement. This ID must match the user ID in the user access token.
+
+
+
+send-a-shoutout
+
+#### Sends a Shoutout to the specified broadcaster. Typically, you send Shoutouts when you or one of your moderators notice another broadcaster in your chat, the other broadcaster is coming up in conversation, or after they raid your broadcast.
+
+Twitch’s Shoutout feature is a great way for you to show support for other broadcasters and help them grow. Viewers who do not follow the other broadcaster will see a pop-up Follow button in your chat that they can click to follow the other broadcaster. [Learn More](https://help.twitch.tv/s/article/shoutouts)
+
+**Rate Limits**: The broadcaster may send a Shoutout once every 2 minutes. They may send the same broadcaster a Shoutout once every 60 minutes.
+
+To receive notifications when a Shoutout is sent or received, subscribe to the [channel.shoutout.create](/docs/eventsub/eventsub-subscription-types#channelshoutoutcreate) and [channel.shoutout.receive](/docs/eventsub/eventsub-subscription-types#channelshoutoutreceive) subscription types. The **channel.shoutout.create** event includes cooldown periods that indicate when the broadcaster may send another Shoutout without exceeding the endpoint’s rate limit.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:shoutouts** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/chat/shoutouts`
+
+Parameters:
+	from_broadcaster_id (String) : The ID of the broadcaster that’s sending the Shoutout.
+
+	to_broadcaster_id (String) : The ID of the broadcaster that’s receiving the Shoutout.
+
+	moderator_id (String) : The ID of the broadcaster or a user that is one of the broadcaster’s moderators. This ID must match the user ID in the access token.
+
+
+
+send-chat-message
+
+#### NEW Sends a message to the broadcaster’s chat room.
+
+**NOTE:** When sending messages to a Shared Chat session, behaviors differ depending on your authentication token type:
+
+* When using an *App Access Token*, messages will only be sent to the source channel (defined by the `broadcaster_id` parameter) by default starting on May 19, 2025. Messages can be sent to all channels by using the `for_source_only` parameter and setting it to `false`.
+* When using a *User Access Token*, messages will be sent to all channels in the shared chat session, including the source channel. This behavior cannot be changed with this token type.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the `user:write:chat` scope. If app access token used, then additionally requires `user:bot` scope from chatting user, and either `channel:bot` scope from broadcaster or moderator status.
+
+### URL
+
+`POST https://api.twitch.tv/helix/chat/messages`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose chat room the message will be sent to.
+
+	sender_id (String) : The ID of the user sending the message. This ID must match the user ID in the user access token.
+
+	message (String) : The message to send. The message is limited to a maximum of 500 characters. Chat messages can also include emoticons. To include emoticons, use the name of the emote. The names are case sensitive. Don’t include colons around the name (e.g., :bleedPurple:). If Twitch recognizes the name, Twitch converts the name to the emote before writing the chat message to the chat room
+
+	reply_parent_message_id (String) : The ID of the chat message being replied to.
+
+	for_source_only (Bool) : **NOTE:** This parameter can only be set when utilizing an App Access Token. It cannot be specified when a User Access Token is used, and will instead result in an HTTP 400 error.  
+  
+Determines if the chat message is sent only to the source channel (defined by *broadcaster\_id*) during a shared chat session. This has no effect if the message is sent during a shared chat session.  
+  
+If this parameter is not set, the default value when using an App Access Token is `false`. On May 19, 2025 the default value for this parameter will be updated to `true`, and chat messages sent using an App Access Token will only be shared with the source channel by default. If you prefer to send a chat message to both channels in a shared chat session, make sure this parameter is explicitly set to `false` in your API request before May 19.
+
+
+
+get-user-chat-color
+
+#### Gets the color used for the user’s name in chat.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/chat/color`
+
+Parameters:
+	user_id (String) : The ID of the user whose username color you want to get. To specify more than one user, include the *user\_id* parameter for each user to get. For example, `&user_id=1234&user_id=5678`. The maximum number of IDs that you may specify is 100.  
+  
+The API ignores duplicate IDs and IDs that weren’t found.
+
+
+
+update-user-chat-color
+
+#### Updates the color used for the user’s name in chat.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:manage:chat\_color** scope.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/chat/color`
+
+Parameters:
+	user_id (String) : The ID of the user whose chat color you want to update. This ID must match the user ID in the access token.
+
+	color (String) : The color to use for the user's name in chat. All users may specify one of the following named color values.
+
+* blue
+* blue\_violet
+* cadet\_blue
+* chocolate
+* coral
+* dodger\_blue
+* firebrick
+* golden\_rod
+* green
+* hot\_pink
+* orange\_red
+* red
+* sea\_green
+* spring\_green
+* yellow\_green
+
+Turbo and Prime users may specify a named color or a Hex color code like #9146FF. If you use a Hex color code, remember to URL encode it.
+
+
+
+create-clip
+
+#### Creates a clip from the broadcaster’s stream.
+
+This API captures up to 90 seconds of the broadcaster’s stream. The 90 seconds spans the point in the stream from when you called the API. For example, if you call the API at the 4:00 minute mark, the API captures from approximately the 3:35 mark to approximately the 4:05 minute mark. Twitch tries its best to capture 90 seconds of the stream, but the actual length may be less. This may occur if you begin capturing the clip near the beginning or end of the stream.
+
+By default, Twitch publishes up to the last 30 seconds of the 90 seconds window and provides a default title for the clip. To specify the title and the portion of the 90 seconds window that’s used for the clip, use the URL in the response’s `edit_url` field. You can specify a clip that’s from 5 seconds to 60 seconds in length. The URL is valid for up to 24 hours or until the clip is published, whichever comes first.
+
+Creating a clip is an asynchronous process that can take a short amount of time to complete. To determine whether the clip was successfully created, call [Get Clips](#get-clips) using the clip ID that this request returned. If Get Clips returns the clip, the clip was successfully created. If after 15 seconds Get Clips hasn’t returned the clip, assume it failed.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **clips:edit** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/clips`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose stream you want to create a clip from.
+
+	has_delay (Boolean) : A Boolean value that determines whether the API captures the clip at the moment the viewer requests it or after a delay. If **false** (default), Twitch captures the clip at the moment the viewer requests it (this is the same clip experience as the Twitch UX). If **true**, Twitch adds a delay before capturing the clip (this basically shifts the capture window to the right slightly).
+
+
+
+get-clips
+
+#### Gets one or more video clips that were captured from streams. For information about clips, see [How to use clips](https://help.twitch.tv/s/article/how-to-use-clips).
+
+When using pagination for clips, note that the maximum number of results returned over multiple requests will be approximately 1,000. If additional results are necessary, paginate over different query parameters such as multiple `started_at` and `ended_at` timeframes to refine the search.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/clips`
+
+Parameters:
+	broadcaster_id (String) : An ID that identifies the broadcaster whose video clips you want to get. Use this parameter to get clips that were captured from the broadcaster’s streams.
+
+	game_id (String) : An ID that identifies the game whose clips you want to get. Use this parameter to get clips that were captured from streams that were playing this game.
+
+	id (String) : An ID that identifies the clip to get. To specify more than one ID, include this parameter for each clip you want to get. For example, `id=foo&id=bar`. You may specify a maximum of 100 IDs. The API ignores duplicate IDs and IDs that aren’t found.
+
+	started_at (String) : The start date used to filter clips. The API returns only clips within the start and end date window. Specify the date and time in RFC3339 format.
+
+	ended_at (String) : The end date used to filter clips. If not specified, the time window is the start date plus one week. Specify the date and time in RFC3339 format.
+
+	first (Integer) : The maximum number of clips to return per page in the response. The minimum page size is 1 clip per page and the maximum is 100. The default is 20.
+
+	before (String) : The cursor used to get the previous page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	is_featured (Boolean) : A Boolean value that determines whether the response includes featured clips. If **true**, returns only clips that are featured. If **false**, returns only clips that aren’t featured. All clips are returned if this parameter is not present.
+
+
+
+get-conduits
+
+#### NEW Gets the [conduits](/docs/eventsub/handling-conduit-events/) for a client ID.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#app-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/eventsub/conduits`
+
+Parameters:
+
+
+create-conduits
+
+#### NEW Creates a new [conduit](/docs/eventsub/handling-conduit-events/).
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#app-access-tokens).
+
+### URL
+
+`POST https://api.twitch.tv/helix/eventsub/conduits`
+
+Parameters:
+	shard_count (Integer) : The number of shards to create for this conduit.
+
+
+
+update-conduits
+
+#### NEW Updates a [conduit’s](/docs/eventsub/handling-conduit-events/) shard count. To delete shards, update the count to a lower number, and the shards above the count will be deleted. For example, if the existing shard count is 100, by resetting shard count to 50, shards 50-99 are disabled.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#app-access-tokens).
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/eventsub/conduits`
+
+Parameters:
+	id (String) : Conduit ID.
+
+	shard_count (Integer) : The new number of shards for this conduit.
+
+
+
+delete-conduit
+
+#### NEW Deletes a specified [conduit](https://dev.twitch.tv/docs/eventsub/handling-conduit-events/). Note that it may take some time for Eventsub subscriptions on a deleted [conduit](/docs/eventsub/handling-conduit-events/) to show as disabled when calling [Get Eventsub Subscriptions](https://dev.twitch.tv/docs/api/reference/#get-eventsub-subscriptions).
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#app-access-tokens).
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/eventsub/conduits`
+
+Parameters:
+	id (String) : Conduit ID.
+
+
+
+get-conduit-shards
+
+#### NEW Gets a lists of all shards for a [conduit](/docs/eventsub/handling-conduit-events/).
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#app-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/eventsub/conduits/shards`
+
+Parameters:
+	conduit_id (String) : Conduit ID.
+
+	status (String) : Status to filter by.
+
+	after (String) : The cursor used to get the next page of results. The pagination object in the response contains the cursor’s value.
+
+
+
+update-conduit-shards
+
+#### NEW Updates shard(s) for a [conduit](/docs/eventsub/handling-conduit-events/).
+
+**NOTE:** Shard IDs are indexed starting at 0, so a conduit with a `shard_count` of 5 will have shards with IDs 0 through 4.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tvhttps://dev.twitch.tv/docs/authentication/#app-access-tokens).
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/eventsub/conduits/shards`
+
+Parameters:
+	conduit_id (String) : Conduit ID.
+
+	shards (Object[]) : List of shards to update.
+
+	id (String) : Shard ID.
+
+	transport (Object) : The transport details that you want Twitch to use when sending you notifications.
+
+	method (String) : The transport method. Possible values are:
+
+* webhook
+* websocket
+
+	callback (String) : The callback URL where the notifications are sent. The URL must use the HTTPS protocol and port 443. See Processing an event.Specify this field only if method is set to webhook.NOTE: Redirects are not followed.
+
+	secret (String) : The secret used to verify the signature. The secret must be an ASCII string that’s a minimum of 10 characters long and a maximum of 100 characters long. For information about how the secret is used, see Verifying the event message.Specify this field only if method is set to webhook.
+
+	session_id (String) : An ID that identifies the WebSocket to send notifications to. When you connect to EventSub using WebSockets, the server returns the ID in the Welcome message.Specify this field only if method is set to websocket.
+
+
+
+get-content-classification-labels
+
+#### Gets information about Twitch content classification labels.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/content_classification_labels`
+
+Parameters:
+	locale (String) : Locale for the Content Classification Labels. You may specify a maximum of 1 locale. Default: `“en-US”`  
+Supported locales: `"bg-BG", "cs-CZ", "da-DK", "da-DK", "de-DE", "el-GR", "en-GB", "en-US", "es-ES", "es-MX", "fi-FI", "fr-FR", "hu-HU", "it-IT", "ja-JP", "ko-KR", "nl-NL", "no-NO", "pl-PL", "pt-BT", "pt-PT", "ro-RO", "ru-RU", "sk-SK", "sv-SE", "th-TH", "tr-TR", "vi-VN", "zh-CN", "zh-TW"`
+
+
+
+get-drops-entitlements
+
+#### Gets an organization’s list of entitlements that have been granted to a game, a user, or both.
+
+**NOTE:** Entitlements returned in the response body data are not guaranteed to be sorted by any field returned by the API. To retrieve **CLAIMED** or **FULFILLED** entitlements, use the `fulfillment_status` query parameter to filter results. To retrieve entitlements for a specific game, use the `game_id` query parameter to filter results.
+
+The following table identifies the request parameters that you may specify based on the type of access token used.
+
+| Access token type | Parameter | Description |
+| --- | --- | --- |
+| App | None | If you don’t specify request parameters, the request returns all entitlements that your organization owns. |
+| App | user\_id | The request returns all entitlements for any game that the organization granted to the specified user. |
+| App | user\_id, game\_id | The request returns all entitlements that the specified game granted to the specified user. |
+| App | game\_id | The request returns all entitlements that the specified game granted to all entitled users. |
+| User | None | If you don’t specify request parameters, the request returns all entitlements for any game that the organization granted to the user identified in the access token. |
+| User | user\_id | Invalid. |
+| User | user\_id, game\_id | Invalid. |
+| User | game\_id | The request returns all entitlements that the specified game granted to the user identified in the access token. |
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens). The client ID in the access token must own the game.
+
+### URL
+
+`GET https://api.twitch.tv/helix/entitlements/drops`
+
+Parameters:
+	id (String) : An ID that identifies the entitlement to get. Include this parameter for each entitlement you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 100 IDs.
+
+	user_id (String) : An ID that identifies a user that was granted entitlements.
+
+	game_id (String) : An ID that identifies a game that offered entitlements.
+
+	fulfillment_status (String) : The entitlement’s fulfillment status. Used to filter the list to only those with the specified status. Possible values are:
+
+* CLAIMED
+* FULFILLED
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	first (Integer) : The maximum number of entitlements to return per page in the response. The minimum page size is 1 entitlement per page and the maximum is 1000. The default is 20.
+
+
+
+update-drops-entitlements
+
+#### Updates the Drop entitlement’s fulfillment status.
+
+The following table identifies which entitlements are updated based on the type of access token used.
+
+| Access token type | Data that’s updated |
+| --- | --- |
+| App | Updates all entitlements with benefits owned by the organization in the access token. |
+| User | Updates all entitlements owned by the user in the access token and where the benefits are owned by the organization in the access token. |
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens). The client ID in the access token must own the game.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/entitlements/drops`
+
+Parameters:
+	entitlement_ids (String[]) : A list of IDs that identify the entitlements to update. You may specify a maximum of 100 IDs.
+
+	fulfillment_status (String) : The fulfillment status to set the entitlements to. Possible values are:
+
+* CLAIMED — The user claimed the benefit.
+* FULFILLED — The developer granted the benefit that the user claimed.
+
+
+
+get-extension-configuration-segment
+
+#### Gets the specified configuration segment from the specified extension.
+
+**Rate Limits**: You may retrieve each segment a maximum of 20 times per minute.
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an Extension Backend Service (EBS). For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role`, `user_id`, and `exp` fields (see [JWT Schema](/docs/extensions/reference/#jwt-schema)). The `role` field must be set to *external*.
+
+### URL
+
+`GET https://api.twitch.tv/helix/extensions/configurations`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that installed the extension. This parameter is required if you set the *segment* parameter to broadcaster or developer. Do not specify this parameter if you set *segment* to global.
+
+	extension_id (String) : The ID of the extension that contains the configuration segment you want to get.
+
+	segment (String) : The type of configuration segment to get. Possible case-sensitive values are:
+
+* broadcaster
+* developer
+* global
+
+You may specify one or more segments. To specify multiple segments, include the `segment` parameter for each segment to get. For example, `segment=broadcaster&segment=developer`. Ignores duplicate segments.
+
+
+
+set-extension-configuration-segment
+
+#### Updates a configuration segment. The segment is limited to 5 KB. Extensions that are active on a channel do not receive the updated configuration.
+
+**Rate Limits**: You may update the configuration a maximum of 20 times per minute.
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an Extension Backend Service (EBS). For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role`, `user_id`, and `exp` fields (see [JWT Schema](/docs/extensions/reference/#jwt-schema)). The `role` field must be set to *external*.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/extensions/configurations`
+
+Parameters:
+	extension_id (String) : The ID of the extension to update.
+
+	segment (String) : The configuration segment to update. Possible case-sensitive values are:
+
+* broadcaster
+* developer
+* global
+
+	broadcaster_id (String) : The ID of the broadcaster that installed the extension. Include this field only if the `segment` is set to developer or broadcaster.
+
+	content (String) : The contents of the segment. This string may be a plain-text string or a string-encoded JSON object.
+
+	version (String) : The version number that identifies this definition of the segment’s data. If not specified, the latest definition is updated.
+
+
+
+set-extension-required-configuration
+
+#### Updates the extension’s required\_configuration string. Use this endpoint if your extension requires the broadcaster to configure the extension before activating it (to require configuration, you must select **Custom/My Own Service** in Extension [Capabilities](/docs/extensions/life-cycle/#capabilities)). For more information, see [Required Configurations](/docs/extensions/building#required-configurations) and [Setting Required Configuration](/docs/extensions/building#setting-required-configuration-with-the-configuration-service-optional).
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an EBS. For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role`, `user_id`, and `exp` fields (see [JWT Schema](/docs/extensions/reference/#jwt-schema)). Set the `role` field to *external* and the `user_id` field to the ID of the user that owns the extension.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/extensions/required_configuration`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that installed the extension on their channel.
+
+
+
+send-extension-pubsub-message
+
+#### Sends a message to one or more viewers. You can send messages to a specific channel or to all channels where your extension is active. This endpoint uses the same mechanism as the [send](/docs/extensions/reference#send) JavaScript helper function used to send messages.
+
+**Rate Limits**: You may send a maximum of 100 messages per minute per combination of extension client ID and broadcaster ID.
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an Extension Backend Service (EBS). For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role`, `user_id`, and `exp` fields (see [JWT Schema](/docs/extensions/reference/#jwt-schema)) along with the `channel_id` and `pubsub_perms` fields. The `role` field must be set to *external*.
+
+To send the message to a specific channel, set the `channel_id` field in the JWT to the channel’s ID and set the `pubsub_perms.send` array to *broadcast*.
+
+```
+{
+  "exp": 1503343947,
+  "user_id": "27419011",
+  "role": "external",
+  "channel_id": "27419011",
+  "pubsub_perms": {
+    "send":[
+      "broadcast"
+    ]
+  }
+}
+
+```
+
+To send the message to all channels on which your extension is active, set the `channel_id` field to *all* and set the `pubsub_perms.send` array to *global*.
+
+```
+{
+  "exp": 1503343947,
+  "user_id": "27419011",
+  "role": "external",
+  "channel_id": "all",
+  "pubsub_perms": {
+    "send":[
+      "global"
+    ]
+  }
+}
+
+```
+
+### URL
+
+`POST https://api.twitch.tv/helix/extensions/pubsub`
+
+Parameters:
+	target (String[]) : The target of the message. Possible values are:
+
+* broadcast
+* global
+* whisper-<user-id>
+
+If `is_global_broadcast` is **true**, you must set this field to global. The broadcast and global values are mutually exclusive; specify only one of them.
+
+	broadcaster_id (string) : The ID of the broadcaster to send the message to. Don’t include this field if `is_global_broadcast` is set to **true**.
+
+	is_global_broadcast (Boolean) : A Boolean value that determines whether the message should be sent to all channels where your extension is active. Set to **true** if the message should be sent to all channels. The default is **false**.
+
+	message (String) : The message to send. The message can be a plain-text string or a string-encoded JSON object. The message is limited to a maximum of 5 KB.
+
+
+
+get-extension-live-channels
+
+#### Gets a list of broadcasters that are streaming live and have installed or activated the extension.
+
+It may take a few minutes for the list to include or remove broadcasters that have recently gone live or stopped broadcasting.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/extensions/live`
+
+Parameters:
+	extension_id (String) : The ID of the extension to get. Returns the list of broadcasters that are live and that have installed or activated this extension.
+
+	first (Integer) : The specific maximum number of items per page in the response. The actual number returned may be less than this limit. [Read More](/docs/api/guide#pagination)
+
+	after (String) : The cursor used to get the next page of results. The `pagination` field in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-extension-secrets
+
+#### Gets an extension’s list of shared secrets.
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an Extension Backend Service (EBS). For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role`, `user_id`, and `exp` fields (see [JWT Schema](/docs/extensions/reference/#jwt-schema)). The `role` field must be set to *external*.
+
+### URL
+
+`GET https://api.twitch.tv/helix/extensions/jwt/secrets`
+
+Parameters:
+	extension_id (String) : The ID of the extension whose shared secrets you want to get.
+
+
+
+create-extension-secret
+
+#### Creates a shared secret used to sign and verify JWT tokens. Creating a new secret removes the current secrets from service. Use this function only when you are ready to use the new secret it returns.
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an Extension Backend Service (EBS). For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role`, `user_id`, and `exp` fields (see [JWT Schema](/docs/extensions/reference/#jwt-schema)). The `role` field must be set to *external*.
+
+### URL
+
+`POST https://api.twitch.tv/helix/extensions/jwt/secrets`
+
+Parameters:
+	extension_id (String) : The ID of the extension to apply the shared secret to.
+
+	delay (Integer) : The amount of time, in seconds, to delay activating the secret. The delay should provide enough time for instances of the extension to gracefully switch over to the new secret. The minimum delay is 300 seconds (5 minutes). The default is 300 seconds.
+
+
+
+send-extension-chat-message
+
+#### Sends a message to the specified broadcaster’s chat room. The extension’s name is used as the username for the message in the chat room. To send a chat message, your extension must enable **Chat Capabilities** (under your extension’s **Capabilities** tab).
+
+**Rate Limits**: You may send a maximum of 12 messages per minute per channel.
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an Extension Backend Service (EBS). For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role` and `user_id` fields (see [JWT Schema](/docs/extensions/reference/#jwt-schema)). The `role` field must be set to *external*.
+
+### URL
+
+`POST https://api.twitch.tv/helix/extensions/chat`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that has activated the extension.
+
+
+
+get-extensions
+
+#### Gets information about an extension.
+
+### Authorization
+
+Requires a signed JSON Web Token (JWT) created by an Extension Backend Service (EBS). For signing requirements, see [Signing the JWT](/docs/extensions/building/#signing-the-jwt). The signed JWT must include the `role` field (see [JWT Schema](/docs/extensions/reference/#jwt-schema)), and the `role` field must be set to *external*.
+
+### URL
+
+`GET https://api.twitch.tv/helix/extensions`
+
+Parameters:
+	extension_id (String) : The ID of the extension to get.
+
+	extension_version (String) : The version of the extension to get. If not specified, it returns the latest, released version. If you don’t have a released version, you must specify a version; otherwise, the list is empty.
+
+
+
+get-released-extensions
+
+#### Gets information about a released extension. Returns the extension if its `state` is Released.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/extensions/released`
+
+Parameters:
+	extension_id (String) : The ID of the extension to get.
+
+	extension_version (String) : The version of the extension to get. If not specified, it returns the latest version.
+
+
+
+get-extension-bits-products
+
+#### Gets the list of Bits products that belongs to the extension. The client ID in the app access token identifies the extension.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens). The client ID in the app access token must be the extension’s client ID.
+
+### URL
+
+`GET https://api.twitch.tv/helix/bits/extensions`
+
+Parameters:
+	should_include_all (Boolean) : A Boolean value that determines whether to include disabled or expired Bits products in the response. The default is **false**.
+
+
+
+update-extension-bits-product
+
+#### Adds or updates a Bits product that the extension created. If the SKU doesn’t exist, the product is added. You may update all fields except the `sku` field.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens). The client ID in the app access token must match the extension’s client ID.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/bits/extensions`
+
+Parameters:
+	sku (String) : The product's SKU. The SKU must be unique within an extension. The product's SKU cannot be changed. The SKU may contain only alphanumeric characters, dashes (-), underscores (\_), and periods (.) and is limited to a maximum of 255 characters. No spaces.
+
+	cost (Object) : An object that contains the product's cost information.
+
+	amount (Integer) : The product's price.
+
+	type (String) : The type of currency. Possible values are:
+
+* bits — The minimum price is 1 and the maximum is 10000.
+
+	display_name (String) : The product's name as displayed in the extension. The maximum length is 255 characters.
+
+	in_development (Boolean) : A Boolean value that indicates whether the product is in development. Set to **true** if the product is in development and not available for public use. The default is **false**.
+
+	expiration (String) : The date and time, in RFC3339 format, when the product expires. If not set, the product does not expire. To disable the product, set the expiration date to a date in the past.
+
+	is_broadcast (Boolean) : A Boolean value that determines whether Bits product purchase events are broadcast to all instances of the extension on a channel. The events are broadcast via the `onTransactionComplete` helper callback. The default is **false**.
+
+
+
+create-eventsub-subscription
+
+#### Creates an EventSub subscription.
+
+### Authorization
+
+If you use [webhooks to receive events](https://dev.twitch.tv/docs/eventsub/handling-webhook-events), the request must specify an app access token. The request will fail if you use a user access token. If the subscription type requires user authorization, the user must have granted your app (client ID) permissions to receive those events before you subscribe to them. For example, to subscribe to [channel.subscribe](https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types/#channelsubscribe) events, your app must get a user access token that includes the `channel:read:subscriptions` scope, which adds the required permission to your app access token’s client ID.
+
+If you use [WebSockets to receive events](https://dev.twitch.tv/docs/eventsub/handling-websocket-events), the request must specify a user access token. The request will fail if you use an app access token. If the subscription type requires user authorization, the token must include the required scope. However, if the subscription type doesn’t include user authorization, the token may include any scopes or no scopes.
+
+If you use [Conduits](/docs/eventsub/handling-conduit-events/) to receive events, the request must specify an app access token. The request will fail if you use a user access token.
+
+### URL
+
+`POST https://api.twitch.tv/helix/eventsub/subscriptions`
+
+Parameters:
+	type (String) : The type of subscription to create. For a list of subscriptions that you can create, see [Subscription Types](https://dev.twitch.tv/docs/eventsub/eventsub-subscription-types#subscription-types). Set this field to the value in the **Name** column of the Subscription Types table.
+
+	version (String) : The version number that identifies the definition of the subscription type that you want the response to use.
+
+	condition (Object) : A JSON object that contains the parameter values that are specific to the specified subscription type. For the object’s required and optional fields, see the subscription type’s documentation.
+
+	transport (Object) : The transport details that you want Twitch to use when sending you notifications.
+
+	method (String) : The transport method. Possible values are:
+
+* webhook
+* websocket
+* conduit
+
+	callback (String) : The callback URL where the notifications are sent. The URL must use the HTTPS protocol and port 443. See [Processing an event](https://dev.twitch.tv/docs/eventsub/handling-webhook-events#processing-an-event). Specify this field only if `method` is set to **webhook**.
+
+**NOTE**: Redirects are not followed.
+
+	secret (String) : The secret used to verify the signature. The secret must be an ASCII string that’s a minimum of 10 characters long and a maximum of 100 characters long. For information about how the secret is used, see [Verifying the event message](https://dev.twitch.tv/docs/eventsub/handling-webhook-events#verifying-the-event-message). Specify this field only if `method` is set to **webhook**.
+
+	session_id (String) : An ID that identifies the WebSocket to send notifications to. When you connect to EventSub using WebSockets, the server returns the ID in the Welcome message. Specify this field only if `method` is set to **websocket**.
+
+	conduit_id (String) : An ID that identifies the conduit to send notifications to. When you create a conduit, the server returns the conduit ID. Specify this field only if `method` is set to **conduit**.
+
+
+
+delete-eventsub-subscription
+
+#### Deletes an EventSub subscription.
+
+### Authorization
+
+If you use [webhooks to receive events](/docs/eventsub/handling-webhook-events), the request must specify an app access token. The request will fail if you use a user access token.
+
+If you use [WebSockets to receive events](/docs/eventsub/handling-websocket-events), the request must specify a user access token. The request will fail if you use an app access token. The token may include any scopes.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/eventsub/subscriptions`
+
+Parameters:
+	id (String) : The ID of the subscription to delete.
+
+
+
+get-eventsub-subscriptions
+
+#### Gets a list of EventSub subscriptions that the client in the access token created.
+
+### Authorization
+
+If you use [Webhooks](/docs/eventsub/handling-webhook-events) or [Conduits](/docs/eventsub/handling-conduit-events/) to receive events, the request must specify an app access token. The request will fail if you use a user access token.
+
+If you use [WebSockets to receive events](/docs/eventsub/handling-websocket-events), the request must specify a user access token. The request will fail if you use an app access token. The token may include any scopes.
+
+### URL
+
+`GET https://api.twitch.tv/helix/eventsub/subscriptions`
+
+Parameters:
+	status (String) : Filter subscriptions by its status. Possible values are:
+
+* enabled — The subscription is enabled.
+* webhook\_callback\_verification\_pending — The subscription is pending verification of the specified callback URL.
+* webhook\_callback\_verification\_failed — The specified callback URL failed verification.
+* notification\_failures\_exceeded — The notification delivery failure rate was too high.
+* authorization\_revoked — The authorization was revoked for one or more users specified in the **Condition** object.
+* moderator\_removed — The moderator that authorized the subscription is no longer one of the broadcaster's moderators.
+* user\_removed — One of the users specified in the **Condition** object was removed.
+* chat\_user\_banned - The user specified in the **Condition** object was banned from the broadcaster's chat.
+* version\_removed — The subscription to subscription type and version is no longer supported.
+* beta\_maintenance — The subscription to the beta subscription type was removed due to maintenance.
+* websocket\_disconnected — The client closed the connection.
+* websocket\_failed\_ping\_pong — The client failed to respond to a ping message.
+* websocket\_received\_inbound\_traffic — The client sent a non-pong message. Clients may only send pong messages (and only in response to a ping message).
+* websocket\_connection\_unused — The client failed to subscribe to events within the required time.
+* websocket\_internal\_error — The Twitch WebSocket server experienced an unexpected error.
+* websocket\_network\_timeout — The Twitch WebSocket server timed out writing the message to the client.
+* websocket\_network\_error — The Twitch WebSocket server experienced a network error writing the message to the client.
+* websocket\_failed\_to\_reconnect - The client failed to reconnect to the Twitch WebSocket server within the required time after a Reconnect Message.
+
+	type (String) : Filter subscriptions by subscription type. For a list of subscription types, see [Subscription Types](/docs/eventsub/eventsub-subscription-types#subscription-types).
+
+	user_id (String) : Filter subscriptions by user ID. The response contains subscriptions where this ID matches a user ID that you specified in the **Condition** object when you [created the subscription](/docs/api/reference#create-eventsub-subscription).
+
+	after (String) : The cursor used to get the next page of results. The `pagination` object in the response contains the cursor's value.
+
+
+
+get-top-games
+
+#### Gets information about all broadcasts on Twitch.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/games/top`
+
+Parameters:
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	before (String) : The cursor used to get the previous page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-games
+
+#### Gets information about specified categories or games.
+
+You may get up to 100 categories or games by specifying their ID or name. You may specify all IDs, all names, or a combination of IDs and names. If you specify a combination of IDs and names, the total number of IDs and names must not exceed 100.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/games`
+
+Parameters:
+	id (String) : The ID of the category or game to get. Include this parameter for each category or game you want to get. For example, `&id=1234&id=5678`. You may specify a maximum of 100 IDs. The endpoint ignores duplicate and invalid IDs or IDs that weren’t found.
+
+	name (String) : The name of the category or game to get. The name must exactly match the category’s or game’s title. Include this parameter for each category or game you want to get. For example, `&name=foo&name=bar`. You may specify a maximum of 100 names. The endpoint ignores duplicate names and names that weren’t found.
+
+	igdb_id (String) : The [IGDB](https://www.igdb.com/) ID of the game to get. Include this parameter for each game you want to get. For example, `&igdb_id=1234&igdb_id=5678`. You may specify a maximum of 100 IDs. The endpoint ignores duplicate and invalid IDs or IDs that weren’t found.
+
+
+
+get-creator-goals
+
+#### Gets the broadcaster’s list of active goals. Use this endpoint to get the current progress of each goal.
+
+Instead of polling for the progress of a goal, consider [subscribing](/docs/eventsub/manage-subscriptions) to receive notifications when a goal makes progress using the [channel.goal.progress](/docs/eventsub/eventsub-subscription-types#channelgoalprogress) subscription type. [Read More](/docs/api/goals#requesting-event-notifications)
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:goals** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/goals`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that created the goals. This ID must match the user ID in the user access token.
+
+
+
+get-channel-guest-star-settings
+
+#### BETA Gets the channel settings for configuration of the Guest Star feature for a particular host.
+
+### Authorization
+
+* Query parameter `moderator_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:read:guest_star`, `channel:manage:guest_star`, `moderator:read:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`GET https://api.twitch.tv/helix/guest_star/channel_settings`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster you want to get guest star settings for.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+
+
+update-channel-guest-star-settings
+
+#### BETA Mutates the channel settings for configuration of the Guest Star feature for a particular host.
+
+### Authorization
+
+* Query parameter `broadcaster_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star`
+
+### URL
+
+`PUT https://api.twitch.tv/helix/guest_star/channel_settings`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster you want to update Guest Star settings for.
+
+
+
+get-guest-star-session
+
+#### BETA Gets information about an ongoing Guest Star session for a particular channel.
+
+### Authorization
+
+* Requires OAuth Scope: `channel:read:guest_star`, `channel:manage:guest_star`, `moderator:read:guest_star` or `moderator:manage:guest_star`
+* Guests must be either invited or assigned a slot within the session
+
+### URL
+
+`GET https://api.twitch.tv/helix/guest_star/session`
+
+Parameters:
+	broadcaster_id (Yes) : ID for the user hosting the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+
+
+create-guest-star-session
+
+#### BETA Programmatically creates a Guest Star session on behalf of the broadcaster. Requires the broadcaster to be present in the call interface, or the call will be ended automatically.
+
+### Authorization
+
+* Query parameter `broadcaster_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star`
+
+### URL
+
+`POST https://api.twitch.tv/helix/guest_star/session`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster you want to create a Guest Star session for. Provided `broadcaster_id` must match the `user_id` in the auth token.
+
+
+
+end-guest-star-session
+
+#### BETA Programmatically ends a Guest Star session on behalf of the broadcaster. Performs the same action as if the host clicked the “End Call” button in the Guest Star UI.
+
+### Authorization
+
+* Query parameter `broadcaster_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star`
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/guest_star/session`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster you want to end a Guest Star session for. Provided `broadcaster_id` must match the `user_id` in the auth token.
+
+	session_id (Yes) : ID for the session to end on behalf of the broadcaster.
+
+
+
+get-guest-star-invites
+
+#### BETA Provides the caller with a list of pending invites to a Guest Star session, including the invitee’s ready status while joining the waiting room.
+
+### Authorization
+
+* Query parameter `broadcaster_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:read:guest_star`, `channel:manage:guest_star`, `moderator:read:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`GET https://api.twitch.tv/helix/guest_star/invites`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster running the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the `user_id` in the user access token.
+
+	session_id (Yes) : The session ID to query for invite status.
+
+
+
+send-guest-star-invite
+
+#### BETA Sends an invite to a specified guest on behalf of the broadcaster for a Guest Star session in progress.
+
+### Authorization
+
+* Query parameter `moderator_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`POST https://api.twitch.tv/helix/guest_star/invites`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster running the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the `user_id` in the user access token.
+
+	session_id (Yes) : The session ID for the invite to be sent on behalf of the broadcaster.
+
+	guest_id (Yes) : Twitch User ID for the guest to invite to the Guest Star session.
+
+
+
+delete-guest-star-invite
+
+#### BETA Revokes a previously sent invite for a Guest Star session.
+
+### Authorization
+
+* Query parameter `moderator_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/guest_star/invites`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster running the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the `user_id` in the user access token.
+
+	session_id (Yes) : The ID of the session for the invite to be revoked on behalf of the broadcaster.
+
+	guest_id (Yes) : Twitch User ID for the guest to revoke the Guest Star session invite from.
+
+
+
+assign-guest-star-slot
+
+#### BETA Allows a previously invited user to be assigned a slot within the active Guest Star session, once that guest has indicated they are ready to join.
+
+### Authorization
+
+* Query parameter `moderator_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`POST https://api.twitch.tv/helix/guest_star/slot`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster running the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the `user_id` in the user access token.
+
+	session_id (Yes) : The ID of the Guest Star session in which to assign the slot.
+
+	guest_id (Yes) : The Twitch User ID corresponding to the guest to assign a slot in the session. This user must already have an invite to this session, and have indicated that they are ready to join.
+
+	slot_id (Yes) : The slot assignment to give to the user. Must be a numeric identifier between “1” and “N” where N is the max number of slots for the session. Max number of slots allowed for the session is reported by [Get Channel Guest Star Settings](#get-channel-guest-star-settings).
+
+
+
+update-guest-star-slot
+
+#### BETA Allows a user to update the assigned slot for a particular user within the active Guest Star session.
+
+### Authorization
+
+* Query parameter `moderator_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/guest_star/slot`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster running the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the `user_id` in the user access token.
+
+	session_id (Yes) : The ID of the Guest Star session in which to update slot settings.
+
+	source_slot_id (Yes) : The slot assignment previously assigned to a user.
+
+	destination_slot_id (No) : The slot to move this user assignment to. If the destination slot is occupied, the user assigned will be swapped into `source_slot_id`.
+
+
+
+delete-guest-star-slot
+
+#### BETA Allows a caller to remove a slot assignment from a user participating in an active Guest Star session. This revokes their access to the session immediately and disables their access to publish or subscribe to media within the session.
+
+### Authorization
+
+* Query parameter `moderator_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/guest_star/slot`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster running the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+	session_id (Yes) : The ID of the Guest Star session in which to remove the slot assignment.
+
+	guest_id (Yes) : The Twitch User ID corresponding to the guest to remove from the session.
+
+	slot_id (Yes) : The slot ID representing the slot assignment to remove from the session.
+
+	should_reinvite_guest (No) : Flag signaling that the guest should be reinvited to the session, sending them back to the invite queue.
+
+
+
+update-guest-star-slot-settings
+
+#### BETA Allows a user to update slot settings for a particular guest within a Guest Star session, such as allowing the user to share audio or video within the call as a host. These settings will be broadcasted to all subscribers which control their view of the guest in that slot. One or more of the optional parameters to this API can be specified at any time.
+
+### Authorization
+
+* Query parameter `moderator_id` must match the `user_id` in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `channel:manage:guest_star` or `moderator:manage:guest_star`
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/guest_star/slot_settings`
+
+Parameters:
+	broadcaster_id (Yes) : The ID of the broadcaster running the Guest Star session.
+
+	moderator_id (Yes) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+	session_id (Yes) : The ID of the Guest Star session in which to update a slot’s settings.
+
+	slot_id (Yes) : The slot assignment that has previously been assigned to a user.
+
+	is_audio_enabled (No) : Flag indicating whether the slot is allowed to share their audio with the rest of the session. If false, the slot will be muted in any views containing the slot.
+
+	is_video_enabled (No) : Flag indicating whether the slot is allowed to share their video with the rest of the session. If false, the slot will have no video shared in any views containing the slot.
+
+	is_live (No) : Flag indicating whether the user assigned to this slot is visible/can be heard from any public subscriptions. Generally, this determines whether or not the slot is enabled in any broadcasting software integrations.
+
+	volume (No) : Value from 0-100 that controls the audio volume for shared views containing the slot.
+
+
+
+get-hype-train-events
+
+#### Gets information about the broadcaster’s current or most recent Hype Train event.
+
+Instead of polling for events, consider [subscribing](/docs/eventsub/manage-subscriptions) to Hype Train events ([Begin](/docs/eventsub/eventsub-subscription-types#channelhype_trainbegin), [Progress](/docs/eventsub/eventsub-subscription-types#channelhype_trainprogress), [End](/docs/eventsub/eventsub-subscription-types#channelhype_trainend)).
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:hype\_train** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/hypetrain/events`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s running the Hype Train. This ID must match the User ID in the user access token.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 1.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+check-automod-status
+
+#### Checks whether AutoMod would flag the specified message for review.
+
+AutoMod is a moderation tool that holds inappropriate or harassing chat messages for moderators to review. Moderators approve or deny the messages that AutoMod flags; only approved messages are released to chat. AutoMod detects misspellings and evasive language automatically. For information about AutoMod, see [How to Use AutoMod](https://help.twitch.tv/s/article/how-to-use-automod).
+
+**Rate Limits**: Rates are limited per channel based on the account type rather than per access token.
+
+| Account type | Limit per minute | Limit per hour |
+| --- | --- | --- |
+| Normal | 5 | 50 |
+| Affiliate | 10 | 100 |
+| Partner | 30 | 300 |
+
+The above limits are in addition to the standard [Twitch API rate limits](/docs/api/guide#twitch-rate-limits). The rate limit headers in the response represent the Twitch rate limits and not the above limits.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderation:read** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/moderation/enforcements/status`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose AutoMod settings and list of blocked terms are used to check the message. This ID must match the user ID in the access token.
+
+
+
+manage-held-automod-messages
+
+#### Allow or deny the message that AutoMod flagged for review. For information about AutoMod, see [How to Use AutoMod](https://help.twitch.tv/s/article/how-to-use-automod).
+
+To get messages that AutoMod is holding for review, subscribe to the **automod-queue.<moderator\_id>.<channel\_id>** [topic](/docs/pubsub#topics) using [PubSub](/docs/pubsub). PubSub sends a notification to your app when AutoMod holds a message for review.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:automod** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/moderation/automod/message`
+
+Parameters:
+	user_id (String) : The moderator who is approving or denying the held message. This ID must match the user ID in the access token.
+
+	msg_id (String) : The ID of the message to allow or deny.
+
+	action (String) : The action to take for the message. Possible values are:
+
+* ALLOW
+* DENY
+
+
+
+get-automod-settings
+
+#### Gets the broadcaster’s AutoMod settings. The settings are used to automatically block inappropriate or harassing messages from appearing in the broadcaster’s chat room.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:read:automod\_settings** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/moderation/automod/settings`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose AutoMod settings you want to get.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+
+
+update-automod-settings
+
+#### Updates the broadcaster’s AutoMod settings. The settings are used to automatically block inappropriate or harassing messages from appearing in the broadcaster’s chat room.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:automod\_settings** scope.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/moderation/automod/settings`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose AutoMod settings you want to update.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+
+
+get-banned-users
+
+#### Gets all users that the broadcaster banned or put in a timeout.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderation:read** or **moderator:manage:banned\_users** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/moderation/banned`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose list of banned users you want to get. This ID must match the user ID in the access token.
+
+	user_id (String) : A list of user IDs used to filter the results. To specify more than one ID, include this parameter for each user you want to get. For example, `user_id=1234&user_id=5678`. You may specify a maximum of 100 IDs.  
+  
+The returned list includes only those users that were banned or put in a timeout. The list is returned in the same order that you specified the IDs.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	before (String) : The cursor used to get the previous page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+ban-user
+
+#### Bans a user from participating in the specified broadcaster’s chat room or puts them in a timeout.
+
+For information about banning or putting users in a timeout, see [Ban a User](https://help.twitch.tv/s/article/how-to-manage-harassment-in-chat#TheBanFeature) and [Timeout a User](https://help.twitch.tv/s/article/how-to-manage-harassment-in-chat#TheTimeoutFeature).
+
+If the user is currently in a timeout, you can call this endpoint to change the duration of the timeout or ban them altogether. If the user is currently banned, you cannot call this method to put them in a timeout instead.
+
+To remove a ban or end a timeout, see [Unban user](#unban-user).
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:banned\_users** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/moderation/bans`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose chat room the user is being banned from.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+
+
+unban-user
+
+#### Removes the ban or timeout that was placed on the specified user.
+
+To ban a user, see [Ban user](#ban-user).
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:banned\_users** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/moderation/bans`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose chat room the user is banned from chatting in.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+	user_id (String) : The ID of the user to remove the ban or timeout from.
+
+
+
+get-unban-requests
+
+#### NEW Gets a list of unban requests for a broadcaster’s channel.
+
+### Authorization
+
+* Requires a user access token that includes the **moderator:read:unban\_requests** or **moderator:manage:unban\_requests** scope.
+* Query parameter `moderator_id` must match the `user_id` in the [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/moderation/unban_requests`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose channel is receiving unban requests.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s unban requests. This ID must match the user ID in the user access token.
+
+	status (String) : Filter by a status.
+
+* pending
+* approved
+* denied
+* acknowledged
+* canceled
+
+	user_id (String) : The ID used to filter what unban requests are returned.
+
+	after (String) : Cursor used to get next page of results. Pagination object in response contains cursor value.
+
+	first (Integer) : The maximum number of items to return per page in response
+
+
+
+resolve-unban-requests
+
+#### NEW Resolves an unban request by approving or denying it.
+
+### Authorization
+
+* Requires a user access token that includes the **moderator:manage:unban\_requests** scope.
+* Query parameter `moderator_id` must match the `user_id` in the[user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/moderation/unban_requests`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose channel is approving or denying the unban request.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s unban requests. This ID must match the user ID in the user access token.
+
+	unban_request_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s unban requests. This ID must match the user ID in the user access token.
+
+	status (String) : Resolution status.
+
+* approved
+* denied
+
+	resolution_text (String) : Message supplied by the unban request resolver. The message is limited to a maximum of 500 characters.
+
+
+
+get-blocked-terms
+
+#### Gets the broadcaster’s list of non-private, blocked words or phrases. These are the terms that the broadcaster or moderator added manually or that were denied by AutoMod.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:read:blocked\_terms** or **moderator:manage:blocked\_terms** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/moderation/blocked_terms`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose blocked terms you’re getting.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value.
+
+
+
+add-blocked-term
+
+#### Adds a word or phrase to the broadcaster’s list of blocked terms. These are the terms that the broadcaster doesn’t want used in their chat room.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:blocked\_terms** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/moderation/blocked_terms`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the list of blocked terms.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+
+
+remove-blocked-term
+
+#### Removes the word or phrase from the broadcaster’s list of blocked terms.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:blocked\_terms** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/moderation/blocked_terms`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the list of blocked terms.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+	id (String) : The ID of the blocked term to remove from the broadcaster’s list of blocked terms.
+
+
+
+delete-chat-messages
+
+#### Removes a single chat message or all chat messages from the broadcaster’s chat room.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:chat\_messages** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/moderation/chat`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the chat room to remove messages from.
+
+	moderator_id (String) : The ID of the broadcaster or a user that has permission to moderate the broadcaster’s chat room. This ID must match the user ID in the user access token.
+
+	message_id (String) : The ID of the message to remove. The `id` tag in the [PRIVMSG](/docs/irc/tags#privmsg-tags) tag contains the message’s ID. Restrictions:
+
+* The message must have been created within the last 6 hours.
+* The message must not belong to the broadcaster.
+* The message must not belong to another moderator.
+
+If not specified, the request removes all messages in the broadcaster’s chat room.
+
+
+
+get-moderated-channels
+
+#### Gets a list of channels that the specified user has moderator privileges in.
+
+### Authorization
+
+* Query parameter `user_id` must match the user ID in the [User-Access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens)
+* Requires OAuth Scope: `user:read:moderated_channels`
+
+### URL
+
+`GET https://api.twitch.tv/helix/moderation/channels`
+
+Parameters:
+	user_id (String) : A user’s ID. Returns the list of channels that this user has moderator privileges in. This ID must match the user ID in the user OAuth token
+
+	after (String) : The cursor used to get the next page of results. The Pagination object in the response contains the cursor’s value.
+
+	first (Integer) : The maximum number of items to return per page in the response.  
+  
+Minimum page size is 1 item per page and the maximum is 100. The default is 20.
+
+
+
+get-moderators
+
+#### Gets all users allowed to moderate the broadcaster’s chat room.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderation:read** scope. If your app also adds and removes moderators, you can use the **channel:manage:moderators** scope instead.
+
+### URL
+
+`GET https://api.twitch.tv/helix/moderation/moderators`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose list of moderators you want to get. This ID must match the user ID in the access token.
+
+	user_id (String) : A list of user IDs used to filter the results. To specify more than one ID, include this parameter for each moderator you want to get. For example, `user_id=1234&user_id=5678`. You may specify a maximum of 100 IDs.  
+  
+The returned list includes only the users from the list who are moderators in the broadcaster’s channel. The list is returned in the same order as you specified the IDs.
+
+	first (String) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+add-channel-moderator
+
+#### Adds a moderator to the broadcaster’s chat room.
+
+**Rate Limits**: The broadcaster may add a maximum of 10 moderators within a 10-second window.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:moderators** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/moderation/moderators`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the chat room. This ID must match the user ID in the access token.
+
+	user_id (String) : The ID of the user to add as a moderator in the broadcaster’s chat room.
+
+
+
+remove-channel-moderator
+
+#### Removes a moderator from the broadcaster’s chat room.
+
+**Rate Limits**: The broadcaster may remove a maximum of 10 moderators within a 10-second window.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:moderators** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/moderation/moderators`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the chat room. This ID must match the user ID in the access token.
+
+	user_id (String) : The ID of the user to remove as a moderator from the broadcaster’s chat room.
+
+
+
+get-vips
+
+#### Gets a list of the broadcaster’s VIPs.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:vips** scope. If your app also adds and removes VIP status, you can use the **channel:manage:vips** scope instead.
+
+### URL
+
+`GET https://api.twitch.tv/helix/channels/vips`
+
+Parameters:
+	user_id (String) : Filters the list for specific VIPs. To specify more than one user, include the *user\_id* parameter for each user to get. For example, `&user_id=1234&user_id=5678`. The maximum number of IDs that you may specify is 100. Ignores the ID of those users in the list that aren’t VIPs.
+
+	broadcaster_id (String) : The ID of the broadcaster whose list of VIPs you want to get. This ID must match the user ID in the access token.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](https://dev.twitch.tv/docs/api/guide#pagination)
+
+
+
+add-channel-vip
+
+#### Adds the specified user as a VIP in the broadcaster’s channel.
+
+**Rate Limits**: The broadcaster may add a maximum of 10 VIPs within a 10-second window.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:vips** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/channels/vips`
+
+Parameters:
+	user_id (String) : The ID of the user to give VIP status to.
+
+	broadcaster_id (String) : The ID of the broadcaster that’s adding the user as a VIP. This ID must match the user ID in the access token.
+
+
+
+remove-channel-vip
+
+#### Removes the specified user as a VIP in the broadcaster’s channel.
+
+If the broadcaster is removing the user’s VIP status, the ID in the *broadcaster\_id* query parameter must match the user ID in the access token; otherwise, if the user is removing their VIP status themselves, the ID in the *user\_id* query parameter must match the user ID in the access token.
+
+**Rate Limits**: The broadcaster may remove a maximum of 10 VIPs within a 10-second window.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:vips** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/channels/vips`
+
+Parameters:
+	user_id (String) : The ID of the user to remove VIP status from.
+
+	broadcaster_id (String) : The ID of the broadcaster who owns the channel where the user has VIP status.
+
+
+
+update-shield-mode-status
+
+#### Activates or deactivates the broadcaster’s Shield Mode.
+
+Twitch’s Shield Mode feature is like a panic button that broadcasters can push to protect themselves from chat abuse coming from one or more accounts. When activated, Shield Mode applies the overrides that the broadcaster configured in the Twitch UX. If the broadcaster hasn’t configured Shield Mode, it applies default overrides.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:manage:shield\_mode** scope.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/moderation/shield_mode`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose Shield Mode you want to activate or deactivate.
+
+	moderator_id (String) : The ID of the broadcaster or a user that is one of the broadcaster’s moderators. This ID must match the user ID in the access token.
+
+
+
+get-shield-mode-status
+
+#### Gets the broadcaster’s Shield Mode activation status.
+
+To receive notification when the broadcaster activates and deactivates Shield Mode, subscribe to the [channel.shield\_mode.begin](/docs/eventsub/eventsub-subscription-types#channelshield_modebegin) and [channel.shield\_mode.end](/docs/eventsub/eventsub-subscription-types#channelshield_modeend) subscription types.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **moderator:read:shield\_mode** or **moderator:manage:shield\_mode** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/moderation/shield_mode`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose Shield Mode activation status you want to get.
+
+	moderator_id (String) : The ID of the broadcaster or a user that is one of the broadcaster’s moderators. This ID must match the user ID in the access token.
+
+
+
+warn-chat-user
+
+#### NEW Warns a user in the specified broadcaster’s chat room, preventing them from chat interaction until the warning is acknowledged.
+New warnings can be issued to a user when they already have a warning in the channel (new warning will replace old warning).
+
+### Authorization
+
+Requires a user access token that includes the **moderator:manage:warnings** scope. Query parameter `moderator_id` must match the `user_id` in the [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`POST https://api.twitch.tv/helix/moderation/warnings`
+
+Parameters:
+	broadcaster_id (String) : The ID of the channel in which the warning will take effect.
+
+	moderator_id (String) : The ID of the twitch user who requested the warning.
+
+
+
+get-polls
+
+#### Gets a list of polls that the broadcaster created.
+
+Polls are available for 90 days after they’re created.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:polls** or **channel:manage:polls** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/polls`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that created the polls. This ID must match the user ID in the user access token.
+
+	id (String) : A list of IDs that identify the polls to return. To specify more than one ID, include this parameter for each poll you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 20 IDs.  
+  
+Specify this parameter only if you want to filter the list that the request returns. The endpoint ignores duplicate IDs and those not owned by this broadcaster.
+
+	first (String) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 20 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+create-poll
+
+#### Creates a poll that viewers in the broadcaster’s channel can vote on.
+
+The poll begins as soon as it’s created. You may run only one poll at a time.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:polls** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/polls`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s running the poll. This ID must match the user ID in the user access token.
+
+	title (String) : One of the choices the viewer may select. The choice may contain a maximum of 25 characters.
+
+	choices (Object[]) : A list of choices that viewers may choose from. The list must contain a minimum of 2 choices and up to a maximum of 5 choices.
+
+	duration (Integer) : The length of time (in seconds) that the poll will run for. The minimum is 15 seconds and the maximum is 1800 seconds (30 minutes).
+
+	channel_points_voting_enabled (Boolean) : A Boolean value that indicates whether viewers may cast additional votes using Channel Points. If **true**, the viewer may cast more than one vote but each additional vote costs the number of Channel Points specified in `channel_points_per_vote`. The default is **false** (viewers may cast only one vote). For information about Channel Points, see [Channel Points Guide](https://help.twitch.tv/s/article/channel-points-guide).
+
+	channel_points_per_vote (Integer) : The number of points that the viewer must spend to cast one additional vote. The minimum is 1 and the maximum is 1000000. Set only if `ChannelPointsVotingEnabled` is **true**.
+
+
+
+end-poll
+
+#### Ends an active poll. You have the option to end it or end it and archive it.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:polls** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/polls`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s running the poll. This ID must match the user ID in the user access token.
+
+	id (String) : The ID of the poll to update.
+
+	status (String) : The status to set the poll to. Possible case-sensitive values are:
+
+* TERMINATED — Ends the poll before the poll is scheduled to end. The poll remains publicly visible.
+* ARCHIVED — Ends the poll before the poll is scheduled to end, and then archives it so it's no longer publicly visible.
+
+
+
+get-predictions
+
+#### Gets a list of Channel Points Predictions that the broadcaster created.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:predictions** or **channel:manage:predictions** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/predictions`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose predictions you want to get. This ID must match the user ID in the user access token.
+
+	id (String) : The ID of the prediction to get. To specify more than one ID, include this parameter for each prediction you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 25 IDs. The endpoint ignores duplicate IDs and those not owned by the broadcaster.
+
+	first (String) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 25 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+create-prediction
+
+#### Creates a Channel Points Prediction.
+
+With a Channel Points Prediction, the broadcaster poses a question and viewers try to predict the outcome. The prediction runs as soon as it’s created. The broadcaster may run only one prediction at a time.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:predictions** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/predictions`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s running the prediction. This ID must match the user ID in the user access token.
+
+	title (String) : The text of one of the outcomes that the viewer may select. The title is limited to a maximum of 25 characters.
+
+	outcomes (Object[]) : The list of possible outcomes that the viewers may choose from. The list must contain a minimum of 2 choices and up to a maximum of 10 choices.
+
+	prediction_window (Integer) : The length of time (in seconds) that the prediction will run for. The minimum is 30 seconds and the maximum is 1800 seconds (30 minutes).
+
+
+
+end-prediction
+
+#### Locks, resolves, or cancels a Channel Points Prediction.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:predictions** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/predictions`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that’s running the prediction. This ID must match the user ID in the user access token.
+
+	id (String) : The ID of the prediction to update.
+
+	status (String) : The status to set the prediction to. Possible case-sensitive values are:
+
+* RESOLVED — The winning outcome is determined and the Channel Points are distributed to the viewers who predicted the correct outcome.
+* CANCELED — The broadcaster is canceling the prediction and sending refunds to the participants.
+* LOCKED — The broadcaster is locking the prediction, which means viewers may no longer make predictions.
+
+The broadcaster can update an active prediction to LOCKED, RESOLVED, or CANCELED; and update a locked prediction to RESOLVED or CANCELED.  
+  
+The broadcaster has up to 24 hours after the prediction window closes to resolve the prediction. If not, Twitch sets the status to CANCELED and returns the points.
+
+	winning_outcome_id (String) : The ID of the winning outcome. You must set this parameter if you set `status` to RESOLVED.
+
+
+
+start-a-raid
+
+#### Raid another channel by sending the broadcaster’s viewers to the targeted channel.
+
+When you call the API from a chat bot or extension, the Twitch UX pops up a window at the top of the chat room that identifies the number of viewers in the raid. The raid occurs when the broadcaster clicks **Raid Now** or after the 90-second countdown expires.
+
+To determine whether the raid successfully occurred, you must subscribe to the [Channel Raid](/docs/eventsub/eventsub-subscription-types#channelraid) event. For more information, see [Get notified when a raid begins](/docs/api/raids#get-notified-when-a-raid-begins).
+
+To cancel a pending raid, use the [Cancel a raid](#cancel-a-raid) endpoint.
+
+**Rate Limit**: The limit is 10 requests within a 10-minute window.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:raids** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/raids`
+
+Parameters:
+	from_broadcaster_id (String) : The ID of the broadcaster that’s sending the raiding party. This ID must match the user ID in the user access token.
+
+	to_broadcaster_id (String) : The ID of the broadcaster to raid.
+
+
+
+cancel-a-raid
+
+#### Cancel a pending raid.
+
+You can cancel a raid at any point up until the broadcaster clicks **Raid Now** in the Twitch UX or the 90-second countdown expires.
+
+**Rate Limit**: The limit is 10 requests within a 10-minute window.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:raids** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/raids`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that initiated the raid. This ID must match the user ID in the user access token.
+
+
+
+get-channel-stream-schedule
+
+#### Gets the broadcaster’s streaming schedule. You can get the entire schedule or specific segments of the schedule. [Learn More](https://help.twitch.tv/s/article/channel-page-setup#Schedule)
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/schedule`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the streaming schedule you want to get.
+
+	id (String) : The ID of the scheduled segment to return. To specify more than one segment, include the ID of each segment you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 100 IDs.
+
+	start_time (String) : The UTC date and time that identifies when in the broadcaster’s schedule to start returning segments. If not specified, the request returns segments starting after the current UTC date and time. Specify the date and time in RFC3339 format (for example, `2022-09-01T00:00:00Z`).
+
+	utc_offset (String) : Not supported.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 25 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-channel-icalendar
+
+#### Gets the broadcaster’s streaming schedule as an [iCalendar](https://datatracker.ietf.org/doc/html/rfc5545).
+
+### Authorization
+
+The Client-Id and Authorization headers are not required.
+
+### URL
+
+`GET https://api.twitch.tv/helix/schedule/icalendar`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the streaming schedule you want to get.
+
+
+
+update-channel-stream-schedule
+
+#### Updates the broadcaster’s schedule settings, such as scheduling a vacation.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:schedule** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/schedule/settings`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose schedule settings you want to update. The ID must match the user ID in the user access token.
+
+	is_vacation_enabled (Boolean) : A Boolean value that indicates whether the broadcaster has scheduled a vacation. Set to **true** to enable Vacation Mode and add vacation dates, or **false** to cancel a previously scheduled vacation.
+
+	vacation_start_time (String) : The UTC date and time of when the broadcaster’s vacation starts. Specify the date and time in RFC3339 format (for example, 2021-05-16T00:00:00Z). Required if *is\_vacation\_enabled* is **true**.
+
+	vacation_end_time (String) : The UTC date and time of when the broadcaster’s vacation ends. Specify the date and time in RFC3339 format (for example, 2021-05-30T23:59:59Z). Required if *is\_vacation\_enabled* is **true**.
+
+	timezone (String) : The time zone that the broadcaster broadcasts from. Specify the time zone using [IANA time zone database](https://www.iana.org/time-zones) format (for example, America/New\_York). Required if *is\_vacation\_enabled* is **true**.
+
+
+
+create-channel-stream-schedule-segment
+
+#### Adds a single or recurring broadcast to the broadcaster’s streaming schedule. For information about scheduling broadcasts, see [Stream Schedule](https://help.twitch.tv/s/article/channel-page-setup#Schedule).
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:schedule** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/schedule/segment`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the schedule to add the broadcast segment to. This ID must match the user ID in the user access token.
+
+
+
+update-channel-stream-schedule-segment
+
+#### Updates a scheduled broadcast segment.
+
+For recurring segments, updating a segment’s title, category, duration, and timezone, changes all segments in the recurring schedule, not just the specified segment.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:schedule** scope.
+
+### URL
+
+`PATCH https://api.twitch.tv/helix/schedule/segment`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster who owns the broadcast segment to update. This ID must match the user ID in the user access token.
+
+	id (String) : The ID of the broadcast segment to update.
+
+
+
+delete-channel-stream-schedule-segment
+
+#### Removes a broadcast segment from the broadcaster’s streaming schedule.
+
+**NOTE**: For recurring segments, removing a segment removes all segments in the recurring schedule.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:schedule** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/schedule/segment`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the streaming schedule. This ID must match the user ID in the user access token.
+
+	id (String) : The ID of the broadcast segment to remove.
+
+
+
+search-categories
+
+#### Gets the games or categories that match the specified query.
+
+To match, the category’s name must contain all parts of the query string. For example, if the query string is 42, the response includes any category name that contains 42 in the title. If the query string is a phrase like *love computer*, the response includes any category name that contains the words love and computer anywhere in the name. The comparison is case insensitive.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/search/categories`
+
+Parameters:
+	query (String) : The URI-encoded search string. For example, encode *#archery* as `%23archery` and search strings like *angel of death* as `angel%20of%20death`.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+search-channels
+
+#### Gets the channels that match the specified query and have streamed content within the past 6 months.
+
+The fields that the API uses for comparison depends on the value that the *live\_only* query parameter is set to. If *live\_only* is **false**, the API matches on the broadcaster’s login name. However, if *live\_only* is **true**, the API matches on the broadcaster’s name and category name.
+
+To match, the beginning of the broadcaster’s name or category must match the query string. The comparison is case insensitive. If the query string is angel\_of\_death, it matches all names that begin with angel\_of\_death. However, if the query string is a phrase like *angel of death*, it matches to names starting with angelofdeath or names starting with angel\_of\_death.
+
+By default, the results include both live and offline channels. To get only live channels set the *live\_only* query parameter to **true**.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/search/channels`
+
+Parameters:
+	query (String) : The URI-encoded search string. For example, encode search strings like *angel of death* as `angel%20of%20death`.
+
+	live_only (Boolean) : A Boolean value that determines whether the response includes only channels that are currently streaming live. Set to **true** to get only channels that are streaming live; otherwise, **false** to get live and offline channels. The default is **false**.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-stream-key
+
+#### Gets the channel’s stream key.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:stream\_key** scope.
+
+### URL
+
+`https://api.twitch.tv/helix/streams/key`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster that owns the channel. The ID must match the user ID in the access token.
+
+
+
+get-streams
+
+#### Gets a list of all streams. The list is in descending order by the number of viewers watching the stream. Because viewers come and go during a stream, it’s possible to find duplicate or missing streams in the list as you page through the results.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/streams`
+
+Parameters:
+	user_id (String) : A user ID used to filter the list of streams. Returns only the streams of those users that are broadcasting. You may specify a maximum of 100 IDs. To specify multiple IDs, include the *user\_id* parameter for each user. For example, `&user_id=1234&user_id=5678`.
+
+	user_login (String) : A user login name used to filter the list of streams. Returns only the streams of those users that are broadcasting. You may specify a maximum of 100 login names. To specify multiple names, include the *user\_login* parameter for each user. For example, `&user_login=foo&user_login=bar`.
+
+	game_id (String) : A game (category) ID used to filter the list of streams. Returns only the streams that are broadcasting the game (category). You may specify a maximum of 100 IDs. To specify multiple IDs, include the *game\_id* parameter for each game. For example, `&game_id=9876&game_id=5432`.
+
+	type (String) : The type of stream to filter the list of streams by. Possible values are:
+
+* all
+* live
+
+The default is *all*.
+
+	language (String) : A language code used to filter the list of streams. Returns only streams that broadcast in the specified language. Specify the language using an ISO 639-1 two-letter language code or *other* if the broadcast uses a language not in the list of [supported stream languages](https://help.twitch.tv/s/article/languages-on-twitch#streamlang).  
+  
+You may specify a maximum of 100 language codes. To specify multiple languages, include the *language* parameter for each language. For example, `&language=de&language=fr`.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	before (String) : The cursor used to get the previous page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-followed-streams
+
+#### Gets the list of broadcasters that the user follows and that are streaming live.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:read:follows** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/streams/followed`
+
+Parameters:
+	user_id (String) : The ID of the user whose list of followed streams you want to get. This ID must match the user ID in the access token.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 100.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+create-stream-marker
+
+#### Adds a marker to a live stream. A marker is an arbitrary point in a live stream that the broadcaster or editor wants to mark, so they can return to that spot later to create video highlights (see Video Producer, Highlights in the Twitch UX).
+
+You may not add markers:
+
+* If the stream is not live
+* If the stream has not enabled video on demand (VOD)
+* If the stream is a premiere (a live, first-viewing event that combines uploaded videos with live chat)
+* If the stream is a rerun of a past broadcast, including past premieres.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:broadcast** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/streams/markers`
+
+Parameters:
+	user_id (String) : The ID of the broadcaster that’s streaming content. This ID must match the user ID in the access token or the user in the access token must be one of the broadcaster’s editors.
+
+	description (String) : A short description of the marker to help the user remember why they marked the location. The maximum length of the description is 140 characters.
+
+
+
+get-stream-markers
+
+#### Gets a list of markers from the user’s most recent stream or from the specified VOD/video. A marker is an arbitrary point in a live stream that the broadcaster or editor marked, so they can return to that spot later to create video highlights (see Video Producer, Highlights in the Twitch UX).
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:read:broadcast** or **channel:manage:broadcast** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/streams/markers`
+
+Parameters:
+	user_id (String) : A user ID. The request returns the markers from this user’s most recent video. This ID must match the user ID in the access token or the user in the access token must be one of the broadcaster’s editors.  
+  
+This parameter and the *video\_id* query parameter are mutually exclusive.
+
+	video_id (String) : A video on demand (VOD)/video ID. The request returns the markers from this VOD/video. The user in the access token must own the video or the user must be one of the broadcaster’s editors.  
+  
+This parameter and the *user\_id* query parameter are mutually exclusive.
+
+	first (String) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	before (String) : The cursor used to get the previous page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-broadcaster-subscriptions
+
+#### Gets a list of users that subscribe to the specified broadcaster.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:read:subscriptions** scope.
+
+A Twitch extensions may use an app access token if the broadcaster has granted the **channel:read:subscriptions** scope from within the Twitch Extensions manager.
+
+### URL
+
+`GET https://api.twitch.tv/helix/subscriptions`
+
+Parameters:
+	broadcaster_id (String) : The broadcaster’s ID. This ID must match the user ID in the access token.
+
+	user_id (String) : Filters the list to include only the specified subscribers. To specify more than one subscriber, include this parameter for each subscriber. For example, `&user_id=1234&user_id=5678`. You may specify a maximum of 100 subscribers.
+
+	first (String) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100 items per page. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. Do not specify if you set the *user\_id* query parameter. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+	before (String) : The cursor used to get the previous page of results. Do not specify if you set the *user\_id* query parameter. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+check-user-subscription
+
+#### Checks whether the user subscribes to the broadcaster’s channel.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:read:subscriptions** scope.
+
+A Twitch extensions may use an app access token if the broadcaster has granted the **user:read:subscriptions** scope from within the Twitch Extensions manager.
+
+### URL
+
+`GET https://api.twitch.tv/helix/subscriptions/user`
+
+Parameters:
+	broadcaster_id (String) : The ID of a partner or affiliate broadcaster.
+
+	user_id (String) : The ID of the user that you’re checking to see whether they subscribe to the broadcaster in *broadcaster\_id*. This ID must match the user ID in the access Token.
+
+
+
+get-all-stream-tags
+
+#### **IMPORTANT** Twitch is moving from Twitch-defined tags to channel-defined tags. **IMPORTANT** As of February 28, 2023, this endpoint returns an empty array. On July 13, 2023, it will return a 410 response.
+
+Gets a list of all stream tags that Twitch defines. The broadcaster may apply any of these to their channel except automatic tags. For an online list of the possible tags, see [List of All Tags](https://www.twitch.tv/directory/all/tags).
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/tags/streams`
+
+Parameters:
+	tag_id (String) : The ID of the tag to get. Used to filter the list of tags. To specify more than one tag, include the *tag\_id* parameter for each tag to get. For example, `tag_id=1234&tag_id=5678`. The maximum number of IDs you may specify is 100. Ignores invalid IDs but not duplicate IDs.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+get-stream-tags
+
+#### **IMPORTANT** Twitch is moving from Twitch-defined tags to channel-defined tags. **IMPORTANT** As of February 28, 2023, this endpoint returns an empty array. On July 13, 2023, it will return a 410 response. If you use this endpoint, please update your code to use [Get Channel Information](#get-channel-information).
+
+Gets the list of stream tags that the broadcaster or Twitch added to their channel.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/streams/tags`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose stream tags you want to get.
+
+
+
+get-channel-teams
+
+#### Gets the list of Twitch teams that the broadcaster is a member of.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/teams/channel`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose teams you want to get.
+
+
+
+get-teams
+
+#### Gets information about the specified Twitch team. [Read More](https://help.twitch.tv/s/article/twitch-teams)
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/teams`
+
+Parameters:
+	name (String) : The name of the team to get. This parameter and the *id* parameter are mutually exclusive; you must specify the team’s name or ID but not both.
+
+	id (String) : The ID of the team to get. This parameter and the *name* parameter are mutually exclusive; you must specify the team’s name or ID but not both.
+
+
+
+get-users
+
+#### Gets information about one or more users.  
+  
+You may look up users using their user ID, login name, or both but the sum total of the number of users you may look up is 100. For example, you may specify 50 IDs and 50 names or 100 IDs or names, but you cannot specify 100 IDs and 100 names.  
+  
+If you don’t specify IDs or login names, the request returns information about the user in the access token if you specify a user access token.  
+  
+To include the user’s verified email address in the response, you must use a user access token that includes the **user:read:email** scope.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/users`
+
+Parameters:
+	id (String) : The ID of the user to get. To specify more than one user, include the *id* parameter for each user to get. For example, `id=1234&id=5678`. The maximum number of IDs you may specify is 100.
+
+	login (String) : The login name of the user to get. To specify more than one user, include the *login* parameter for each user to get. For example, `login=foo&login=bar`. The maximum number of login names you may specify is 100.
+
+
+
+update-user
+
+#### Updates the specified user’s information. The user ID in the OAuth token identifies the user whose information you want to update.
+
+To include the user’s verified email address in the response, the user access token must also include the **user:read:email** scope.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:edit** scope.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/users`
+
+Parameters:
+	description (string) : The string to update the channel’s description to. The description is limited to a maximum of 300 characters.  
+  
+To remove the description, specify this parameter but don’t set it’s value (for example, `?description=`).
+
+
+
+get-user-block-list
+
+#### Gets the list of users that the broadcaster has blocked. [Read More](https://help.twitch.tv/s/article/how-to-manage-harassment-in-chat?language=en_US#BlockWhispersandMessagesfromStrangers)
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:read:blocked\_users** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/users/blocks`
+
+Parameters:
+	broadcaster_id (String) : The ID of the broadcaster whose list of blocked users you want to get.
+
+	first (Integer) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)
+
+
+
+block-user
+
+#### Blocks the specified user from interacting with or having contact with the broadcaster. The user ID in the OAuth token identifies the broadcaster who is blocking the user.
+
+To learn more about blocking users, see [Block Other Users on Twitch](https://help.twitch.tv/s/article/how-to-manage-harassment-in-chat?language=en_US#BlockWhispersandMessagesfromStrangers).
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:manage:blocked\_users** scope.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/users/blocks`
+
+Parameters:
+	target_user_id (String) : The ID of the user to block. The API ignores the request if the broadcaster has already blocked the user.
+
+	source_context (String) : The location where the harassment took place that is causing the brodcaster to block the user. Possible values are:
+
+* chat
+* whisper
+
+.
+
+	reason (String) : The reason that the broadcaster is blocking the user. Possible values are:
+
+* harassment
+* spam
+* other
+
+
+
+unblock-user
+
+#### Removes the user from the broadcaster’s list of blocked users. The user ID in the OAuth token identifies the broadcaster who’s removing the block.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:manage:blocked\_users** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/users/blocks`
+
+Parameters:
+	target_user_id (String) : The ID of the user to remove from the broadcaster’s list of blocked users. The API ignores the request if the broadcaster hasn’t blocked the user.
+
+
+
+get-user-extensions
+
+#### Gets a list of all extensions (both active and inactive) that the broadcaster has installed. The user ID in the access token identifies the broadcaster.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:read:broadcast** or **user:edit:broadcast** scope. To include inactive extensions, you must include the **user:edit:broadcast** scope.
+
+### URL
+
+`GET https://api.twitch.tv/helix/users/extensions/list`
+
+Parameters:
+
+
+get-user-active-extensions
+
+#### Gets the active extensions that the broadcaster has installed for each configuration.
+
+NOTE: To include extensions that you have under development, you must specify a user access token that includes the **user:read:broadcast** or **user:edit:broadcast** scope.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/users/extensions`
+
+Parameters:
+	user_id (String) : The ID of the broadcaster whose active extensions you want to get.  
+  
+This parameter is required if you specify an app access token and is optional if you specify a user access token. If you specify a user access token and don’t specify this parameter, the API uses the user ID from the access token.
+
+
+
+update-user-extensions
+
+#### Updates an installed extension’s information. You can update the extension’s activation state, ID, and version number. The user ID in the access token identifies the broadcaster whose extensions you’re updating.
+
+NOTE: If you try to activate an extension under multiple extension types, the last write wins (and there is no guarantee of write order).
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:edit:broadcast** scope.
+
+### URL
+
+`PUT https://api.twitch.tv/helix/users/extensions`
+
+Parameters:
+	data (map[string]string) : The extensions to update. The `data` field is a dictionary of extension types. The dictionary’s possible keys are: panel, overlay, or component. The key’s value is a dictionary of extensions.  
+  
+For the extension’s dictionary, the key is a sequential number beginning with 1. For panel and overlay extensions, the key’s value is an object that contains the following fields: `active` (true/false), `id` (the extension’s ID), and `version` (the extension’s version).  
+  
+For component extensions, the key’s value includes the above fields plus the `x` and `y` fields, which identify the coordinate where the extension is placed.
+
+
+
+get-videos
+
+#### Gets information about one or more published videos. You may get videos by ID, by user, or by game/category.
+
+You may apply several filters to get a subset of the videos. The filters are applied as an AND operation to each video. For example, if *language* is set to ‘de’ and *game\_id* is set to 21779, the response includes only videos that show playing League of Legends by users that stream in German. The filters apply only if you get videos by user ID or game ID.
+
+### Authorization
+
+Requires an [app access token](https://dev.twitch.tv/docs/authentication/#app-access-tokens) or [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens).
+
+### URL
+
+`GET https://api.twitch.tv/helix/videos`
+
+Parameters:
+	id (String) : A list of IDs that identify the videos you want to get. To get more than one video, include this parameter for each video you want to get. For example, `id=1234&id=5678`. You may specify a maximum of 100 IDs. The endpoint ignores duplicate IDs and IDs that weren't found (if there's at least one valid ID).  
+  
+The *id*, *user\_id*, and *game\_id* parameters are mutually exclusive.
+
+	user_id (String) : The ID of the user whose list of videos you want to get.  
+  
+The *id*, *user\_id*, and *game\_id* parameters are mutually exclusive.
+
+	game_id (String) : A category or game ID. The response contains a maximum of 500 videos that show this content. To get category/game IDs, use the [Search Categories](#search-categories) endpoint.  
+  
+The *id*, *user\_id*, and *game\_id* parameters are mutually exclusive.
+
+	language (String) : A filter used to filter the list of videos by the language that the video owner broadcasts in. For example, to get videos that were broadcast in German, set this parameter to the ISO 639-1 two-letter code for German (i.e., DE). For a list of supported languages, see [Supported Stream Language](https://help.twitch.tv/s/article/languages-on-twitch#streamlang). If the language is not supported, use “other.”  
+  
+Specify this parameter only if you specify the *game\_id* query parameter.
+
+	period (String) : A filter used to filter the list of videos by when they were published. For example, videos published in the last week. Possible values are:
+
+* all
+* day
+* month
+* week
+
+The default is "all," which returns videos published in all periods.  
+  
+Specify this parameter only if you specify the *game\_id* or *user\_id* query parameter.
+
+	sort (String) : The order to sort the returned videos in. Possible values are:
+
+* time — Sort the results in descending order by when they were created (i.e., latest video first).
+* trending — Sort the results in descending order by biggest gains in viewership (i.e., highest trending video first).
+* views — Sort the results in descending order by most views (i.e., highest number of views first).
+
+The default is "time."  
+  
+Specify this parameter only if you specify the *game\_id* or *user\_id* query parameter.
+
+	type (String) : A filter used to filter the list of videos by the video's type. Possible case-sensitive values are:
+
+* all
+* archive — On-demand videos (VODs) of past streams.
+* highlight — Highlight reels of past streams.
+* upload — External videos that the broadcaster uploaded using the Video Producer.
+
+The default is "all," which returns all video types.  
+  
+Specify this parameter only if you specify the *game\_id* or *user\_id* query parameter.
+
+	first (String) : The maximum number of items to return per page in the response. The minimum page size is 1 item per page and the maximum is 100. The default is 20.  
+  
+Specify this parameter only if you specify the *game\_id* or *user\_id* query parameter.
+
+	after (String) : The cursor used to get the next page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)  
+  
+Specify this parameter only if you specify the *user\_id* query parameter.
+
+	before (String) : The cursor used to get the previous page of results. The **Pagination** object in the response contains the cursor’s value. [Read More](/docs/api/guide#pagination)  
+  
+Specify this parameter only if you specify the *user\_id* query parameter.
+
+
+
+delete-videos
+
+#### Deletes one or more videos. You may delete past broadcasts, highlights, or uploads.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **channel:manage:videos** scope.
+
+### URL
+
+`DELETE https://api.twitch.tv/helix/videos`
+
+Parameters:
+	id (String) : The list of videos to delete. To specify more than one video, include the *id* parameter for each video to delete. For example, `id=1234&id=5678`. You can delete a maximum of 5 videos per request. Ignores invalid video IDs.  
+  
+If the user doesn’t have permission to delete one of the videos in the list, none of the videos are deleted.
+
+
+
+send-whisper
+
+#### Sends a whisper message to the specified user.
+
+NOTE: The user sending the whisper must have a verified phone number (see the **Phone Number** setting in your [Security and Privacy](https://www.twitch.tv/settings/security) settings).
+
+NOTE: The API may silently drop whispers that it suspects of violating Twitch policies. (The API does not indicate that it dropped the whisper; it returns a 204 status code as if it succeeded.)
+
+**Rate Limits**: You may whisper to a maximum of 40 unique recipients per day. Within the per day limit, you may whisper a maximum of 3 whispers per second and a maximum of 100 whispers per minute.
+
+### Authorization
+
+Requires a [user access token](https://dev.twitch.tv/docs/authentication/#user-access-tokens) that includes the **user:manage:whispers** scope.
+
+### URL
+
+`POST https://api.twitch.tv/helix/whispers`
+
+Parameters:
+	from_user_id (String) : The ID of the user sending the whisper. This user must have a verified phone number. This ID must match the user ID in the user access token.
+
+	to_user_id (String) : The ID of the user to receive the whisper.
+

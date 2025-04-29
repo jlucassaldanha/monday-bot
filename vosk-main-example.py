@@ -31,7 +31,7 @@ def get_viewers(broadcaster_id, mod_id):
         print(viewers_users)
 
 
-while True:    
+while True:  
     oauth.credentials("credentials.json")
     client_id = oauth.client_id
 
@@ -45,21 +45,33 @@ while True:
     broadcaster_id = user_info[0]["id"]
     mod_id = "459116718"
 
-    get_viewers(broadcaster_id, mod_id)
-    
-    print("::getting user id")
+    chatters = api.Get_Chatters(broadcaster_id, mod_id)
 
-    print("::main while")
-    
+    if len(chatters) != len_chatters:
+        viewers_ids = [chatter['user_id'] for chatter in chatters]
+        viewers_users = [chatter['user_name'] for chatter in chatters]
+
+        mods = api.Get_Moderators(broadcaster_id, viewers_ids)
+        vips = api.Get_VIPs(broadcaster_id, viewers_ids)
+
+        mods_users = [mod['user_name'] for mod in mods]
+        vips_users = [vip['user_name'] for vip in vips]
+
+        viewers_users = list(set(viewers_users) - set(mods_users))
+        viewers_users = list(set(viewers_users) - set(vips_users))
+
+        len_chatters = len(chatters)
+
+        print(mods_users)
+        print(vips_users)
+        print(viewers_users)
+
     calling = False
     init_voice_time = time.time()
     while True:
-        print("::voice while")
-    
         # Read voice
         tc.listen_bigbrain()
         pvd = tc.partial
-    
         print("::rec")
 
         #if not calling:
@@ -77,12 +89,30 @@ while True:
             oauth.access_token("token.json")
             token = oauth.token
 
-        get_viewers(broadcaster_id, mod_id)
+        chatters = api.Get_Chatters(broadcaster_id, mod_id)
+
+        if len(chatters) != len_chatters:
+            viewers_ids = [chatter['user_id'] for chatter in chatters]
+            viewers_users = [chatter['user_name'] for chatter in chatters]
+
+            mods = api.Get_Moderators(broadcaster_id, viewers_ids)
+            vips = api.Get_VIPs(broadcaster_id, viewers_ids)
+
+            mods_users = [mod['user_name'] for mod in mods]
+            vips_users = [vip['user_name'] for vip in vips]
+
+            viewers_users = list(set(viewers_users) - set(mods_users))
+            viewers_users = list(set(viewers_users) - set(vips_users))
+
+            len_chatters = len(chatters)
+
+            print(mods_users)
+            print(vips_users)
+            print(viewers_users)
 
         if calling:
             api.Send_Chat_Message(broadcaster_id, mod_id, 
                                     "Oi, me chamou?")
-
             print("::rec")
 
             if ("faça" in pvd["partial"]['list'][1] or
@@ -100,8 +130,7 @@ while True:
 
     api.Send_Chat_Message(broadcaster_id, mod_id, 
                             "Criando clipe...")
-    
-    print("Criando clipe...")
+
 
     # Talvez botar um delay
     created_clip_info = api.Create_Clip(broadcaster_id)
@@ -117,9 +146,6 @@ while True:
         if (new_clip_time - init_clip_time) > 15:
             api.Send_Chat_Message(broadcaster_id, mod_id, 
                                      "Não foi possivel criar o clipe...")
-    
-            print("Não foi possivel criar o clipe...")
-    
             break
 
     if (new_clip_time - init_clip_time) < 15:
