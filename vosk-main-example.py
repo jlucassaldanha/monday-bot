@@ -8,29 +8,15 @@ len_chatters = 0
 oauth = OAuth()
 tc = Transcrib()
 
-while True:    
-    oauth.credentials("credentials.json")
-    client_id = oauth.client_id
-
-    oauth.access_token("token.json")
-    token = oauth.token
-    scopes = oauth.scopes
-
-    api = Basics(client_id, token, scopes)
-
-    user_info = api.Get_Users(['ojoojao'])
-    broadcaster_id = user_info[0]["id"]
-    sender_id = "459116718"
-    ojoojao_id = sender_id
-
-    chatters = api.Get_Chatters(ojoojao_id, ojoojao_id)
+def get_viewers(broadcaster_id, mod_id):
+    chatters = api.Get_Chatters(broadcaster_id, mod_id)
 
     if len(chatters) != len_chatters:
         viewers_ids = [chatter['user_id'] for chatter in chatters]
         viewers_users = [chatter['user_name'] for chatter in chatters]
 
-        mods = api.Get_Moderators(ojoojao_id, viewers_ids)
-        vips = api.Get_VIPs(ojoojao_id, viewers_ids)
+        mods = api.Get_Moderators(broadcaster_id, viewers_ids)
+        vips = api.Get_VIPs(broadcaster_id, viewers_ids)
 
         mods_users = [mod['user_name'] for mod in mods]
         vips_users = [vip['user_name'] for vip in vips]
@@ -44,6 +30,22 @@ while True:
         print(vips_users)
         print(viewers_users)
 
+
+while True:    
+    oauth.credentials("credentials.json")
+    client_id = oauth.client_id
+
+    oauth.access_token("token.json")
+    token = oauth.token
+    scopes = oauth.scopes
+
+    api = Basics(client_id, token, scopes)
+
+    user_info = api.Get_Users(['ojoojao'])
+    broadcaster_id = user_info[0]["id"]
+    mod_id = "459116718"
+
+    get_viewers(broadcaster_id, mod_id)
     
     print("::getting user id")
 
@@ -75,29 +77,10 @@ while True:
             oauth.access_token("token.json")
             token = oauth.token
 
-        chatters = api.Get_Chatters(ojoojao_id, ojoojao_id)
-
-        if len(chatters) != len_chatters:
-            viewers_ids = [chatter['user_id'] for chatter in chatters]
-            viewers_users = [chatter['user_name'] for chatter in chatters]
-
-            mods = api.Get_Moderators(ojoojao_id, viewers_ids)
-            vips = api.Get_VIPs(ojoojao_id, viewers_ids)
-
-            mods_users = [mod['user_name'] for mod in mods]
-            vips_users = [vip['user_name'] for vip in vips]
-
-            viewers_users = list(set(viewers_users) - set(mods_users))
-            viewers_users = list(set(viewers_users) - set(vips_users))
-
-            len_chatters = len(chatters)
-
-            print(mods_users)
-            print(vips_users)
-            print(viewers_users)
+        get_viewers(broadcaster_id, mod_id)
 
         if calling:
-            api.Send_Chat_Message(broadcaster_id, sender_id, 
+            api.Send_Chat_Message(broadcaster_id, mod_id, 
                                     "Oi, me chamou?")
 
             print("::rec")
@@ -112,10 +95,10 @@ while True:
                     break
 
                 else:
-                    api.Send_Chat_Message(broadcaster_id, sender_id, 
+                    api.Send_Chat_Message(broadcaster_id, mod_id, 
                                             "Tá querendo um clipe e não ta sabendo pedir")
 
-    api.Send_Chat_Message(broadcaster_id, sender_id, 
+    api.Send_Chat_Message(broadcaster_id, mod_id, 
                             "Criando clipe...")
     
     print("Criando clipe...")
@@ -132,7 +115,7 @@ while True:
         new_clip_time = time.time()
 
         if (new_clip_time - init_clip_time) > 15:
-            api.Send_Chat_Message(broadcaster_id, sender_id, 
+            api.Send_Chat_Message(broadcaster_id, mod_id, 
                                      "Não foi possivel criar o clipe...")
     
             print("Não foi possivel criar o clipe...")
@@ -140,7 +123,7 @@ while True:
             break
 
     if (new_clip_time - init_clip_time) < 15:
-        api.Send_Chat_Message(broadcaster_id, sender_id, 
+        api.Send_Chat_Message(broadcaster_id, mod_id, 
                                 clip_info[0]["url"])
     
         print(clip_info[0]["url"])
