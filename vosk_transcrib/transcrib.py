@@ -5,20 +5,12 @@ import pyaudio, json
 class Transcrib():
     stream = None
     recognizer = None
-    partial = {
-        'partial': {
-            'list': [0, []], 
-            'str': ''
-            }
-        }
-    text = {
-        'text': {
-            'list': [0, []], 
-            'str': ''
-            }
-        }
+    partial = {}
+    text = {}
+    result = []
+    partial_result = False
 
-    def __init__(self, model_path: str = r".\vosk_transcrib\vosk-model-small-pt-0.3"):
+    def __init__(self, model_path: str = r".\vosk_transcrib\vosk-model-small-pt-0.3", partial_result: bool = False):
         """Inicia o modelo e o objeto de captura do microfone"""
         model = Model(model_path)
         self.recognizer = KaldiRecognizer(model, 16000)
@@ -33,40 +25,9 @@ class Transcrib():
             )
         self.stream.start_stream()
 
-    def partial_listen(self) -> dict:
-        data = self.stream.read(4096)
-
-        if not self.recognizer.AcceptWaveform(data):
-            json_data = json.loads(self.recognizer.PartialResult())
-            words_list = str(json_data["partial"]).split()
-
-            self.partial = {
-                "partial": {
-                    "list" : [len(words_list), words_list],
-                    "str" : json_data["partial"]
-                    }   
-                }
-
-            return self.partial
-        else:
-            self.recognizer.Reset()
-
-    def result_listen(self) -> dict:
-        data = self.stream.read(4096)
-
-        if self.recognizer.AcceptWaveform(data):
-            json_data = json.loads(self.recognizer.Result())
-            words_list = str(json_data["text"]).split()
-
-            self.text = {
-                "text": {
-                    "list" : [len(words_list), words_list],
-                    "str" : json_data["text"]
-                    }   
-                }
-            return self.text
+        self.partial_result = partial_result
             
-    def listen(self):
+    def listen_bigbrain(self):
         """Faz a leitura dos dados"""
         data = self.stream.read(4096)
         
@@ -95,84 +56,85 @@ class Transcrib():
             
             return self.partial
         
+    def listen(self) -> dict:
+        data = self.stream.read(4096)
+
+        if self.partial_result:
+            if not self.recognizer.AcceptWaveform(data):
+                json_data = json.loads(self.recognizer.PartialResult())
+                words_list = str(json_data["partial"]).split()
+
+                self.partial = {
+                    "partial": {
+                        "list" : [len(words_list), words_list],
+                        "str" : json_data["partial"]
+                        }   
+                    }
+
+                return self.partial
+            else:
+                self.recognizer.Reset()
+        else:
+            if self.recognizer.AcceptWaveform(data):
+                json_data = json.loads(self.recognizer.Result())
+                words_list = str(json_data["text"]).split()
+
+                self.text = {
+                    "text": {
+                        "list" : [len(words_list), words_list],
+                        "str" : json_data["text"]
+                        }   
+                    }
+                return self.text
+        
     def reset(self):
         self.recognizer.Reset()
 
-    def partial_calling(self, name: str) -> bool:
+    def calling(self, name: str) -> bool:
         """verifica se foi chamado.
         name deve ser uma lista com as opções de nomes"""
-        r = 0
-        for n in name.split(" "):
-            if n in self.partial:
-                r += 1
+        words = name.split()
 
-        if r == len(name.split(" ")):
-            return True
-        else:
-            return False
-    
-    def text_calling(self, name: str) -> bool:
-        """verifica se foi chamado.
-        name deve ser uma lista com as opções de nomes"""
-        r = 0
-        for n in name.split(" "):
-            if n in self.text:
-                r += 1
-
-        if r == len(name.split(" ")):
-            return True
-        else:
-            return False
+        return self.and_verify(words)
         
-    def partial_and_verify(self, words: list) -> bool:
+    def and_verify(self, words: list) -> bool:
+        if self.partial_result:
+            self.result = self.partial["partial"]['list'][1]
+        else:
+            self.result = self.text["text"]['list'][1]
+
         r = 0
         for w in words:
-            if w in self.partial:
+            if w in self.result:
                 r += 1
+
+        self.recognizer.Reset()
 
         if r == len(words):
             return True
         else:
             return False
         
-    def result_and_verify(self, words: list) -> bool:
-        r = 0
-        for w in words:
-            if w in self.text:
-                r += 1
-
-        if r == len(words):
-            return True
+    def or_verify(self, words: list) -> bool:
+        if self.partial_result:
+            self.result = self.partial["partial"]['list'][1]
         else:
-            return False
-        
-    def partial_or_verify(self, words: list) -> bool:
+            self.result = self.text["text"]['list'][1]
+
         r = False
         for w in words:
-            if w in self.partial:
+            if w in self.result:
                 r = True
                 break
 
-        if r:
-            return True
-        else: 
-            return False
-        
-    def result_or_verify(self, words: list) -> bool:
-        r = False
-        for w in words:
-            if w in self.text:
-                r = True
-                break
+        self.recognizer.Reset()
 
         if r:
             return True
         else: 
             return False
     
-
-
-
+    
 
 if __name__ == "__main__":
     tc = Transcrib()
