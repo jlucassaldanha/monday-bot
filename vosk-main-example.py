@@ -4,12 +4,11 @@ from vosk_transcrib import Transcrib
 from mytwitchapi.creds_flow import OAuth
 from mytwitchapi.twich_api_client import Basics
 
+len_chatters = 0
 oauth = OAuth()
 tc = Transcrib()
 
-init_viewer_time = time.time()
 while True:    
-
     oauth.credentials("credentials.json")
     client_id = oauth.client_id
 
@@ -24,15 +23,11 @@ while True:
     sender_id = "459116718"
     ojoojao_id = sender_id
 
-    new_viewers_time = time.time()
-    if (new_viewers_time -  init_viewer_time) > 600:
-        init_viewer_time = time.time()
+    chatters = api.Get_Chatters(ojoojao_id, ojoojao_id)
 
-        chatters = api.Get_Chatters(ojoojao_id, ojoojao_id)
-
+    if len(chatters) != len_chatters:
         viewers_ids = [chatter['user_id'] for chatter in chatters]
         viewers_users = [chatter['user_name'] for chatter in chatters]
-        #print(viewers_ids, viewers_users)
 
         mods = api.Get_Moderators(ojoojao_id, viewers_ids)
         vips = api.Get_VIPs(ojoojao_id, viewers_ids)
@@ -43,9 +38,12 @@ while True:
         viewers_users = list(set(viewers_users) - set(mods_users))
         viewers_users = list(set(viewers_users) - set(vips_users))
 
+        len_chatters = len(chatters)
+
         print(mods_users)
         print(vips_users)
         print(viewers_users)
+
     
     print("::getting user id")
 
@@ -78,6 +76,27 @@ while True:
 
             oauth.access_token("token.json")
             token = oauth.token
+
+        chatters = api.Get_Chatters(ojoojao_id, ojoojao_id)
+
+        if len(chatters) != len_chatters:
+            viewers_ids = [chatter['user_id'] for chatter in chatters]
+            viewers_users = [chatter['user_name'] for chatter in chatters]
+
+            mods = api.Get_Moderators(ojoojao_id, viewers_ids)
+            vips = api.Get_VIPs(ojoojao_id, viewers_ids)
+
+            mods_users = [mod['user_name'] for mod in mods]
+            vips_users = [vip['user_name'] for vip in vips]
+
+            viewers_users = list(set(viewers_users) - set(mods_users))
+            viewers_users = list(set(viewers_users) - set(vips_users))
+
+            len_chatters = len(chatters)
+
+            print(mods_users)
+            print(vips_users)
+            print(viewers_users)
 
         if calling:
             api.Send_Chat_Message(
