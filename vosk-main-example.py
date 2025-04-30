@@ -18,9 +18,9 @@ while True:
 
     api = Basics(client_id, token, scopes)
     
-    user_info = api.Get_Users(['ojoojao'])
-    broadcaster_id = user_info[0]["id"]
-    mod_id = "459116718"
+    user_info = api.Get_Users(['ASegundaFeira'])
+    mod_id = user_info[0]["id"]
+    broadcaster_id = "459116718"
         
     make_clip = False
     calling = False
@@ -68,6 +68,7 @@ while True:
                     if not sent_clip[0]["is_sent"]:
                         sent_clip = api.Send_Chat_Message(broadcaster_id, mod_id, 
                                                 "Tá querendo um clipe e não ta sabendo pedir") 
+                        
 
             if (("esquece" in tc.text["text"]['list'][1]) or 
                 ("deixa" in tc.text["text"]['list'][1] and 
