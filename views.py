@@ -22,31 +22,30 @@ cred_time = time.time()
 while True:
     chatters = api.Get_Chatters(ojoojao_id, ojoojao_id)
 
-    if len(chatters) != len_chatters:
+    viewers_ids = [chatter['user_id'] for chatter in chatters]
+    viewers_users = [chatter['user_name'] for chatter in chatters]
 
-        viewers_ids = [chatter['user_id'] for chatter in chatters]
-        viewers_users = [chatter['user_name'] for chatter in chatters]
+    mods = api.Get_Moderators(ojoojao_id, viewers_ids)
+    mods_users = [mod['user_name'] for mod in mods]
+    viewers_users = list(set(viewers_users) - set(mods_users))
 
-        mods = api.Get_Moderators(ojoojao_id, viewers_ids)
-        mods_users = [mod['user_name'] for mod in mods]
-        viewers_users = list(set(viewers_users) - set(mods_users))
+    len_chatters = len(chatters)
 
-        len_chatters = len(chatters)
+    viewers = [c for c in chatters if c["user_name"] != "ojoojao" and c["user_name"] != "Nightbot" and c["user_name"] != "StreamElements"]
 
-        viewers = [c for c in chatters if c["user_name"] != "ojoojao" and c["user_name"] != "Nightbot" and c["user_name"] != "StreamElements"]
+    os.system("cls")
+    
+    print("\033[0;31;40mEspectadores:\033[m", len(viewers))
 
-        os.system("cls")
-        print("\033[0;31;40mEspectadores:\033[m", len(viewers))
+    print("Moderadores:")
+    for m in mods_users:
+        if m != 'Nightbot' and m != 'StreamElements':
+            print(f"\033[0;32;40m{m}:\033[m")
 
-        print("Moderadores:")
-        for m in mods_users:
-            if m != 'Nightbot' and m != 'StreamElements':
-                print(f"\033[0;32;40m{m}:\033[m")
-
-        print("Viewers:")
-        for v in viewers_users:
-            if v != 'ojoojao':
-                print(f"\033[0;33;40m{v}:\033[m")
+    print("Viewers:")
+    for v in viewers_users:
+        if v != 'ojoojao':
+            print(f"\033[0;33;40m{v}:\033[m")
 
 
     if (time.time() - cred_time) > 3600:
