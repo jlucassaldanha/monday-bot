@@ -21,27 +21,6 @@ while True:
     user_info = api.Get_Users(['ojoojao'])
     broadcaster_id = user_info[0]["id"]
     mod_id = "459116718"
-    
-    chatters = api.Get_Chatters(broadcaster_id, mod_id)
-
-    if len(chatters) != len_chatters:
-        viewers_ids = [chatter['user_id'] for chatter in chatters]
-        viewers_users = [chatter['user_name'] for chatter in chatters]
-
-        mods = api.Get_Moderators(broadcaster_id, viewers_ids)
-        vips = api.Get_VIPs(broadcaster_id, viewers_ids)
-
-        mods_users = [mod['user_name'] for mod in mods]
-        vips_users = [vip['user_name'] for vip in vips]
-
-        viewers_users = list(set(viewers_users) - set(mods_users))
-        viewers_users = list(set(viewers_users) - set(vips_users))
-
-        len_chatters = len(chatters)
-
-        print(mods_users)
-        print(vips_users)
-        print(viewers_users)
         
     make_clip = False
     calling = False
@@ -95,6 +74,9 @@ while True:
                  "pra" in tc.text["text"]['list'][1] and 
                  "lá" in tc.text["text"]['list'][1])):
                 print(tc.text["text"]['str'])
+
+                api.Send_Chat_Message(broadcaster_id, mod_id, 
+                                        "Ok. Já esqueci...")
                 make_clip = False
                 calling = False
                 break 

@@ -9,7 +9,7 @@ class OAuth(Credentials):
         if os.path.exists(credentials_file):
             self.read_credentials_file(credentials_file)
 
-            print("Read Credentials")
+            #print("Read Credentials")
         else:
             raise APIOAuthErrors("Credentials json file not found")
         
@@ -20,26 +20,26 @@ class OAuth(Credentials):
         token_file_data = None
 
         if os.path.exists(token_file):
-            print("Read Token")
+            #print("Read Token")
         
             token_file_data = Token.read_token_file(token_file)
         
             if not Token.valid_token:
-                print("Refresh Token")
+                #print("Refresh Token")
                 try:
                     token_file_data = Token.create_refresh_token(self.client_id, self.client_secrets, refresh_token=token_file_data['refresh_token'])
                 except APIOAuthErrors:
-                    print("No valid Token. Need to create Token")
-                    print("Open local server")
+                    #print("No valid Token. Need to create Token")
+                    #print("Open local server")
                     code = self.local_server_authorization()
-                    print("Create Token")
+                    #print("Create Token")
                     token_file_data = Token.create_refresh_token(self.client_id, self.client_secrets, code=code, redirect_uri=self.redirect_uri)
 
         if not token_file_data:
-            print("No Token. Need to create Token")
-            print("Open local server")
+            #print("No Token. Need to create Token")
+            #print("Open local server")
             code = self.local_server_authorization()
-            print("Create Token")
+            #print("Create Token")
             token_file_data = Token.create_refresh_token(self.client_id, self.client_secrets, code=code, redirect_uri=self.redirect_uri)
 
         self.token = token_file_data["access_token"]
