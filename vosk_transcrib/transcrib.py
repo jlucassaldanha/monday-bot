@@ -5,9 +5,19 @@ import pyaudio, json
 class Transcrib():
     stream = None
     recognizer = None
-    partial = {}
-    text = {}
-    result = []
+    partial = {
+        'partial': {
+            'list': [0, []], 
+            'str': ''
+            }
+        }
+    text = {
+        'text': {
+            'list': [0, []], 
+            'str': ''
+            }
+        }
+    result = {}
     partial_result = False
 
     def __init__(self, model_path: str = r".\vosk_transcrib\vosk-model-small-pt-0.3", partial_result: bool = False):
@@ -29,7 +39,7 @@ class Transcrib():
             
     def listen_bigbrain(self):
         """Faz a leitura dos dados"""
-        data = self.stream.read(4096)
+        data = self.stream.read(4096, exception_on_overflow=False)
         
         if self.recognizer.AcceptWaveform(data):
             json_data = json.loads(self.recognizer.Result())
@@ -57,7 +67,7 @@ class Transcrib():
             return self.partial
         
     def listen(self) -> dict:
-        data = self.stream.read(4096)
+        data = self.stream.read(4096, exception_on_overflow=False)
 
         if self.partial_result:
             if not self.recognizer.AcceptWaveform(data):
@@ -85,7 +95,12 @@ class Transcrib():
                         "str" : json_data["text"]
                         }   
                     }
+                
+                self.recognizer.Reset()
+                
                 return self.text
+            
+                
         
     def and_verify(self, words: list) -> bool:
         if self.partial_result:
@@ -139,13 +154,12 @@ class Transcrib():
 if __name__ == "__main__":
     tc = Transcrib()
     ok = False
-
+    cu = True
     while True:
         tc.listen_bigbrain()
         pd = tc.partial
         pt = tc.text
-         
-        print(pd)
+        print(pt)
 
         if not ok:
             if (
@@ -154,19 +168,25 @@ if __name__ == "__main__":
             ):
                 print(pd["partial"]['str'])
                 ok = True
+                tc.reset()
                 #break
 
         if ok:
+            
             if (
                 "faça" in pd["partial"]['list'][1] or
                 "faz" in pd["partial"]['list'][1]
             ):
+                
+                print(pd["partial"]['list'][1])
                 if (
                     "clipe" in pd["partial"]['list'][1]
                 ):
-                    print(pd["partial"]['str'])
+                    #print(pd["partial"]['str'])
                     ok = True
+                    
                     break
+                
 
 
                     

@@ -11,6 +11,7 @@ while True:
         # Read voice
         tc.listen_bigbrain()
         pvd = tc.partial
+        print(pvd["partial"]['list'][1])
         
         #if not calling:
         if (

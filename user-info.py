@@ -11,8 +11,12 @@ client_id = oauth.client_id
 oauth.access_token("token.json")
 token = oauth.token
 
-user_info = Basics.Get_Users(client_id, token, ['ojoojao'])
-print(user_info)
+api = Basics(client_id, token, oauth.scopes)
+
+#user_info = api.Get_Users(['ojoojao'])
+#print(user_info)
+mod_id = "459116718"
+api.Send_Chat_Message(mod_id, mod_id, "teste")
 
 #follows = Basics.Get_Followed_Streams(client_id, token, user_info[0]["id"])
 #print(follows)

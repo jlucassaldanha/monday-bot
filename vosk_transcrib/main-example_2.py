@@ -9,14 +9,15 @@ while True:
 
     while True: 
         # Read voice
-        tc.listen()
+        tc.listen_bigbrain()
         
         calling = tc.calling("segunda feira")
+        print(tc.partial["partial"]["list"][1])
 
         if calling:
             if tc.or_verify(["faz", "faça"]):
                 if tc.and_verify(["clip"]):
-                    print(tc.result)
+                    print(print(tc.partial["partial"]["list"][1]))
 
                     msg = "Make a clip" 
                     tc.reset()    
