@@ -26,7 +26,7 @@ while True:
     calling = False
     sent_oi = [{"is_sent" : False}]
     sent_clip = [{"is_sent" : False}]
-    init_voice_time = time.time()
+    cred_time = time.time()
     while True:
         # Read voice
         tc.listen_bigbrain()
@@ -41,12 +41,12 @@ while True:
                 tc.reset()
             calling_time = time.time()
 
-        if (time.time() - init_voice_time) > 3600:
-            oauth.credentials("credentials.json")
-            client_id = oauth.client_id
-
-            oauth.access_token("token.json")
-            token = oauth.token
+        #if (time.time() - cred_time) > 3600:
+        #    oauth.credentials("credentials.json")
+        #    client_id = oauth.client_id
+        #
+        #    oauth.access_token("token.json")
+        #    token = oauth.token
 
         if calling:
             if not sent_oi[0]["is_sent"]:
@@ -81,7 +81,7 @@ while True:
                 calling = False
                 break 
     
-        if (time.time() - init_voice_time) > 60:
+        if (time.time() - cred_time) > 60:
                 make_clip = False
                 calling = False
                 break        
