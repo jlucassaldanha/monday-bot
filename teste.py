@@ -1,4 +1,2 @@
-import os
-while True:
-    os.system("cls")
-    print("\033[0;31;40mTeste\033[m")
+from playsound import playsound
+playsound('Reasons - Anno Domini Beats.mp3')
