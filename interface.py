@@ -65,20 +65,15 @@ def update_values():
 # Create object
 root = Tk()
  
-# Adjust size
-#root.geometry("400x400")
- 
-# Create transparent window
-#root.attributes('-alpha', 0.1)
 root.wm_attributes('-transparentcolor', root['bg'])
 root.attributes("-topmost", True)
 
-v_count = Label(root, text="placeholder", fg="red", font=("helvetica", 18))
+v_count = Label(root, text="placeholder", fg="red", font=("helvetica", 15))
 v_count.grid(row=0, column=0)
-v = Label(root, text="placeholder", fg="green", font=("helvetica", 18))
-v.grid(row=0, column=1)
-m = Label(root, text="placeholder", fg="yellow", font=("helvetica", 18))
-m.grid(row=0, column=2)
+v = Label(root, text="placeholder", fg="green", font=("helvetica", 15))
+v.grid(row=1, column=0)
+m = Label(root, text="placeholder", fg="yellow", font=("helvetica", 15))
+m.grid(row=2, column=0)
 
 creds() 
 update_values()
