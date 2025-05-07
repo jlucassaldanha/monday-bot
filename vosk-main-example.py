@@ -1,4 +1,6 @@
 import time
+from playsound import playsound
+from random import randint
 
 from vosk_transcrib import Transcrib
 from mytwitchapi.creds_flow import OAuth
@@ -52,6 +54,8 @@ while True:
             if not sent_oi[0]["is_sent"]:
                 sent_oi = api.Send_Chat_Message(broadcaster_id, mod_id, 
                                         "Oi, me chamou?")
+                n = randint(1, 2)
+                playsound(f'./audios/chamou_{n}.mp3')
                 
             if ("faça" in tc.text["text"]['list'][1] or
                 "faz" in tc.text["text"]['list'][1]): 
@@ -68,6 +72,8 @@ while True:
                     if not sent_clip[0]["is_sent"]:
                         sent_clip = api.Send_Chat_Message(broadcaster_id, mod_id, 
                                                 "Tá querendo um clipe e não ta sabendo pedir") 
+                        n = randint(1, 3)
+                        playsound(f'./audios/pedido_{n}.mp3')
                         
 
             if (("esquece" in tc.text["text"]['list'][1]) or 
@@ -78,6 +84,8 @@ while True:
 
                 api.Send_Chat_Message(broadcaster_id, mod_id, 
                                         "Ok. Já esqueci...")
+                n = randint(1, 4)
+                playsound(f'./audios/esqueca_{n}.mp3')
                 make_clip = False
                 calling = False
                 break 
@@ -90,6 +98,7 @@ while True:
     if make_clip:            
         api.Send_Chat_Message(broadcaster_id, mod_id, 
                                 "Criando clipe...")
+        playsound(f'./audios/criando_1.mp3')
 
         # Talvez botar um delay
         created_clip_info = api.Create_Clip(broadcaster_id)
@@ -105,11 +114,13 @@ while True:
             if (new_clip_time - init_clip_time) > 15:
                 api.Send_Chat_Message(broadcaster_id, mod_id, 
                                         "Não foi possivel criar o clipe...")
+                playsound(f'./audios/impossivel_1.mp3', True)
                 break
 
         if (new_clip_time - init_clip_time) < 15:
             api.Send_Chat_Message(broadcaster_id, mod_id, 
                                     clip_info[0]["url"])
+            playsound(f'./audios/pronto_1.mp3')
         
             print(clip_info[0]["url"])
 
