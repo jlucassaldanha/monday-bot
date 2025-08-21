@@ -19,3 +19,7 @@ O **Monday Bot** é um bot desenvolvido em **Python** que cria clipes automatica
 - Adicionar suporte a múltiplos comandos de voz
 - Melhorar precisão do reconhecimento de voz com modelos customizados
 - Mudança no armazenamento das credenciais
+
+## 📫 Contato
+- [GitHub: jlucassaldanha](https://github.com/jlucassaldanha)
+- [LinkedIn: João Lucas Saldanha](https://www.linkedin.com/in/joao-lucas-saldanha/)
